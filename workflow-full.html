@@ -860,6 +860,25 @@
     display: block;
   }
 
+  /* Connector Labels & SVG Diamond Typography */
+  .flowchart-connector-label {
+    position: absolute;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    background: #fafaf5;
+    padding: 3px 8px;
+    border-radius: 4px;
+    pointer-events: none;
+    white-space: nowrap;
+    border: 1px solid var(--hairline);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    z-index: 5;
+  }
+  .flowchart-diamond-container svg text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
   /* Filter dimming for flowchart */
   .tab-content-pane.filter-auto .flowchart-card:not(.lane-auto),
   .tab-content-pane.filter-auto .flowchart-diamond-container:not(.lane-auto) {
@@ -1140,7 +1159,7 @@
         <!-- Row 1: Onboard Level 1 -->
         <div class="flowchart-side-label" style="grid-row: 1 / span 8;">Onboard</div>
         
-        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-1" style="grid-column: 3;" data-phase="1">
+        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-1" style="grid-column: 3; grid-row: 1;" data-phase="1">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#1a6b3a;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
             Customer installs app
@@ -1160,15 +1179,15 @@
         </div>
         
         <!-- Row 3: Onboard Level 2 -->
-        <div class="flowchart-card fc-setup lane-auto phase ph-1" style="grid-column: 2;" data-phase="1">
+        <div class="flowchart-card fc-setup lane-auto phase ph-1" style="grid-column: 2; grid-row: 3;" data-phase="1">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5c7c4c;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20M4 19.5v-15A2.5 2.5 0 0 1 6.5 2M20 2v20"/></svg>
             Admin sets catalog
           </h3>
           <p>App administrator configures ground truth catalog details.</p>
         </div>
-        <div class="flowchart-note">No catalog?<br>AI auto-infers or coordinator</div>
-        <div class="flowchart-card fc-setup lane-human phase ph-1" style="grid-column: 4;" data-phase="1">
+        <div class="flowchart-note" style="grid-column: 3; grid-row: 3;">No catalog?<br>AI auto-infers or coordinator</div>
+        <div class="flowchart-card fc-setup lane-human phase ph-1" style="grid-column: 4; grid-row: 3;" data-phase="1">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5c7c4c;"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
             Customer selects
@@ -1184,7 +1203,7 @@
         </div>
         
         <!-- Row 5: Onboard Level 3 -->
-        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-1" style="grid-column: 3;" data-phase="1">
+        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-1" style="grid-column: 3; grid-row: 5;" data-phase="1">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5c7c4c;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
             Customer provides references
@@ -1200,7 +1219,7 @@
         </div>
         
         <!-- Row 7: Onboard Level 4 -->
-        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-1" style="grid-column: 3;" data-phase="1">
+        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-1" style="grid-column: 3; grid-row: 7;" data-phase="1">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5c7c4c;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             Output spec locked
@@ -1219,14 +1238,14 @@
         <!-- Row 9: Import Level 1 -->
         <div class="flowchart-side-label" style="grid-row: 9 / span 4;">Import</div>
         
-        <div class="flowchart-card fc-auto lane-auto phase ph-2" style="grid-column: 2;" data-phase="2">
+        <div class="flowchart-card fc-auto lane-auto phase ph-2" style="grid-column: 2; grid-row: 9;" data-phase="2">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             Auto webhook trigger
           </h3>
           <p>Product creation or image update webhooks fired from Shopify API in real-time.</p>
         </div>
-        <div class="flowchart-card fc-auto lane-auto phase ph-2" style="grid-column: 4;" data-phase="2">
+        <div class="flowchart-card fc-auto lane-auto phase ph-2" style="grid-column: 4; grid-row: 9;" data-phase="2">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             On-demand trigger
@@ -1242,7 +1261,7 @@
         </div>
         
         <!-- Row 11: Import Level 2 -->
-        <div class="flowchart-card fc-auto lane-auto phase ph-2" style="grid-column: 3;" data-phase="2">
+        <div class="flowchart-card fc-auto lane-auto phase ph-2" style="grid-column: 3; grid-row: 11;" data-phase="2">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
             Auto-organize images
@@ -1261,7 +1280,7 @@
         <!-- Row 13: Analyze Level 1 -->
         <div class="flowchart-side-label" style="grid-row: 13 / span 8;">Analyze</div>
         
-        <div class="flowchart-card fc-auto lane-auto phase ph-3" style="grid-column: 3;" data-phase="3">
+        <div class="flowchart-card fc-auto lane-auto phase ph-3" style="grid-column: 3; grid-row: 13;" data-phase="3">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             AI analyzes each image
@@ -1277,7 +1296,7 @@
         </div>
         
         <!-- Row 15: Confidence Gate Diamond -->
-        <div class="flowchart-diamond-container lane-auto" data-phase="3">
+        <div class="flowchart-diamond-container lane-auto" style="grid-row: 15;" data-phase="3">
           <svg width="140" height="80" viewBox="0 0 140 80">
             <polygon points="70,2 138,40 70,78 2,40" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
             <text x="70" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">Confidence</text>
@@ -1290,27 +1309,27 @@
           <svg viewBox="0 0 640 50" preserveAspectRatio="none" style="display:block; width:100%; height:100%;">
             <path d="M 320,0 L 320,12 Q 320,20 300,20 L 120,20 Q 100,20 100,28 L 100,50 M 320,0 L 320,50 M 320,12 Q 320,20 340,20 L 520,20 Q 540,20 540,28 L 540,50" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
-          <div style="position: absolute; left: 20%; top: 8px; transform: translateX(-50%); font-size: 14px; font-weight: 700; color: #ef4444; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Low &lt; 0.50</div>
-          <div style="position: absolute; left: 50%; top: 22px; transform: translateX(-50%); font-size: 14px; font-weight: 700; color: #d97706; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Mid 0.50-0.79</div>
-          <div style="position: absolute; left: 80%; top: 8px; transform: translateX(-50%); font-size: 14px; font-weight: 700; color: #22c55e; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">High &ge; 0.80</div>
+          <div class="flowchart-connector-label" style="left: 20%; top: 8px; transform: translateX(-50%); color: #ef4444;">Low &lt; 0.50</div>
+          <div class="flowchart-connector-label" style="left: 50%; top: 22px; transform: translateX(-50%); color: #d97706;">Mid 0.50-0.79</div>
+          <div class="flowchart-connector-label" style="left: 80%; top: 8px; transform: translateX(-50%); color: #22c55e;">High &ge; 0.80</div>
         </div>
         
         <!-- Row 17: Triage Split Cards -->
-        <div class="flowchart-card fc-human lane-human phase ph-3" style="grid-column: 2;" data-phase="3">
+        <div class="flowchart-card fc-human lane-human phase ph-3" style="grid-column: 2; grid-row: 17;" data-phase="3">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#e05c3c;"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             Manual triage
           </h3>
           <p>Flagged for admin manual review due to low AI vision model confidence.</p>
         </div>
-        <div class="flowchart-card fc-editor lane-human phase ph-3" style="grid-column: 3;" data-phase="3">
+        <div class="flowchart-card fc-editor lane-human phase ph-3" style="grid-column: 3; grid-row: 17;" data-phase="3">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             Coordinator reviews findings
           </h3>
           <p>Catalog specialist verifies auto-generated metadata findings and crops.</p>
         </div>
-        <div class="flowchart-card fc-setup lane-auto phase ph-3" style="grid-column: 4;" data-phase="3">
+        <div class="flowchart-card fc-setup lane-auto phase ph-3" style="grid-column: 4; grid-row: 17;" data-phase="3">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#22c55e;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             Auto-proceed
@@ -1326,7 +1345,7 @@
         </div>
         
         <!-- Row 19: Analyze Level 4 -->
-        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-4" style="grid-column: 3;" data-phase="4">
+        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-4" style="grid-column: 3; grid-row: 19;" data-phase="4">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5c7c4c;"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
             Rules engine — package matching
@@ -1345,14 +1364,14 @@
         <!-- Row 21: Match Level 1 -->
         <div class="flowchart-side-label" style="grid-row: 21 / span 2;">Match</div>
         
-        <div class="flowchart-card fc-auto lane-auto phase ph-4" style="grid-column: 2;" data-phase="4">
+        <div class="flowchart-card fc-auto lane-auto phase ph-4" style="grid-column: 2; grid-row: 21;" data-phase="4">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="21" y1="12" x2="9" y2="12"/><line x1="12" y1="21" x2="12" y2="9"/></svg>
             Auto lane
           </h3>
           <p>BG cutout, AI upscale, compose alignments, and catalog aspect resizing.</p>
         </div>
-        <div class="flowchart-card fc-human lane-human phase ph-4" style="grid-column: 4;" data-phase="4">
+        <div class="flowchart-card fc-human lane-human phase ph-4" style="grid-column: 4; grid-row: 21;" data-phase="4">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#e05c3c;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             Human lane
@@ -1372,7 +1391,7 @@
         <!-- Row 23: Auto Level 1 -->
         <div class="flowchart-side-label" style="grid-row: 23 / span 4;">Auto</div>
         
-        <div class="flowchart-card fc-auto lane-auto phase ph-5" style="grid-column: 2;" data-phase="5">
+        <div class="flowchart-card fc-auto lane-auto phase ph-5" style="grid-column: 2; grid-row: 23;" data-phase="5">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><circle cx="12" cy="12" r="10"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
             Automation runs
@@ -1380,7 +1399,7 @@
           <p>Applies automated processing services and saves the output locally as Version 1.</p>
         </div>
         <!-- Right side vertical line for Human lane -->
-        <div style="grid-column: 4; align-self: stretch; display: flex; justify-content: center; z-index: 1;">
+        <div style="grid-column: 4; grid-row: 23; align-self: stretch; display: flex; justify-content: center; z-index: 1;">
           <svg width="2" height="100%"><line x1="1" y1="0" x2="1" y2="100%" stroke="#94a3b8" stroke-width="2"/></svg>
         </div>
         
@@ -1393,7 +1412,7 @@
         </div>
         
         <!-- Row 25: Human needed gate -->
-        <div class="flowchart-diamond-container col-2 lane-auto" data-phase="5">
+        <div class="flowchart-diamond-container col-2 lane-auto" style="grid-row: 25;" data-phase="5">
           <svg width="120" height="70" viewBox="0 0 120 70">
             <polygon points="60,2 118,35 60,68 2,35" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
             <text x="60" y="31" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">Human</text>
@@ -1401,7 +1420,7 @@
           </svg>
         </div>
         <!-- Right side vertical line for Human lane -->
-        <div style="grid-column: 4; align-self: stretch; display: flex; justify-content: center; z-index: 1;">
+        <div style="grid-column: 4; grid-row: 25; align-self: stretch; display: flex; justify-content: center; z-index: 1;">
           <svg width="2" height="100%"><line x1="1" y1="0" x2="1" y2="100%" stroke="#94a3b8" stroke-width="2"/></svg>
         </div>
         
@@ -1415,8 +1434,8 @@
             <!-- Human Lane Path (right column 540 to Center column Editor assigned 320) -->
             <path d="M 540,0 C 540,20 320,10 320,40" fill="none" stroke="#94a3b8" stroke-width="2"/>
           </svg>
-          <div style="position: absolute; left: calc(15.625% - 75px); top: 8px; transform: translateX(-100%); font-size: 14px; font-weight: 700; color: #22c55e; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">No (skip to QC)</div>
-          <div style="position: absolute; left: calc(15.625% + 75px); top: 8px; font-size: 14px; font-weight: 700; color: #d97706; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Yes</div>
+          <div class="flowchart-connector-label" style="left: calc(15.625% - 75px); top: 8px; transform: translateX(-100%); color: #22c55e;">No (skip to QC)</div>
+          <div class="flowchart-connector-label" style="left: calc(15.625% + 75px); top: 8px; color: #d97706;">Yes</div>
         </div>
         
         <!-- ================= EDIT PHASE ================= -->
@@ -1424,12 +1443,12 @@
         <div class="flowchart-side-label" style="grid-row: 27 / span 6;">Edit</div>
         
         <!-- Left column bypass line and rework loop line -->
-        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+        <div style="grid-column: 2; grid-row: 27; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
             <line x1="50" y1="0" x2="50" y2="80" stroke="#94a3b8" stroke-width="2"/>
           </svg>
         </div>
-        <div class="flowchart-card fc-editor lane-human phase ph-6" style="grid-column: 3;" data-phase="6">
+        <div class="flowchart-card fc-editor lane-human phase ph-6" style="grid-column: 3; grid-row: 27;" data-phase="6">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
             Editor assigned + briefed
@@ -1446,14 +1465,14 @@
         </div>
         
         <!-- Row 29: Edit Level 2 (Rework connection) -->
-        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+        <div style="grid-column: 2; grid-row: 29; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block; width:100%; height:100%;">
             <line x1="50" y1="0" x2="50" y2="80" stroke="#94a3b8" stroke-width="2"/>
             <path d="M 100,80 L 100,48 Q 100,40 120,40 L 200,40" fill="none" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-down-red)"/>
           </svg>
-          <div style="position: absolute; left: 55%; top: 30px; font-size: 14px; color: #f87171; font-weight: 700; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">rework</div>
+          <div class="flowchart-connector-label" style="left: 55%; top: 30px; color: #f87171;">rework</div>
         </div>
-        <div class="flowchart-card fc-editor lane-human phase ph-7" style="grid-column: 3;" data-phase="7">
+        <div class="flowchart-card fc-editor lane-human phase ph-7" style="grid-column: 3; grid-row: 29;" data-phase="7">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             Editor checks automation output
@@ -1471,13 +1490,13 @@
         </div>
         
         <!-- Row 31: Edit Level 3 -->
-        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+        <div style="grid-column: 2; grid-row: 31; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
             <line x1="50" y1="0" x2="50" y2="80" stroke="#94a3b8" stroke-width="2"/>
             <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
-        <div class="flowchart-card fc-editor lane-human phase ph-7" style="grid-column: 3;" data-phase="7">
+        <div class="flowchart-card fc-editor lane-human phase ph-7" style="grid-column: 3; grid-row: 31;" data-phase="7">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             Editor submits final image
@@ -1499,12 +1518,12 @@
         <!-- Row 33: QC Level 1 -->
         <div class="flowchart-side-label" style="grid-row: 33 / span 8;">QC</div>
         
-        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+        <div style="grid-column: 2; grid-row: 33; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
             <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
-        <div class="flowchart-card fc-auto lane-auto phase ph-8" style="grid-column: 3;" data-phase="8">
+        <div class="flowchart-card fc-auto lane-auto phase ph-8" style="grid-column: 3; grid-row: 33;" data-phase="8">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
             AI QC cross-check
@@ -1521,13 +1540,13 @@
         </div>
         
         <!-- Row 35: Score Gate Diamond -->
-        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+        <div style="grid-column: 2; grid-row: 35; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
             <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
         <!-- Row 35: Score Gate Diamond -->
-        <div class="flowchart-diamond-container lane-auto" data-phase="8">
+        <div class="flowchart-diamond-container lane-auto" style="grid-row: 35;" data-phase="8">
           <svg width="120" height="70" viewBox="0 0 120 70">
             <polygon points="60,2 118,35 60,68 2,35" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
             <text x="60" y="31" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">Score</text>
@@ -1544,24 +1563,24 @@
             <path d="M 378,15 C 420,15 540,15 540,40" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow-down)"/>
             <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
-          <div style="position: absolute; left: calc(50% + 15px); top: 10px; font-size: 14px; font-weight: 700; color: #ef4444; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Fail</div>
-          <div style="position: absolute; left: calc(50% + 75px); top: 2px; font-size: 14px; font-weight: 700; color: #22c55e; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Pass</div>
+          <div class="flowchart-connector-label" style="left: calc(50% + 15px); top: 10px; color: #ef4444;">Fail</div>
+          <div class="flowchart-connector-label" style="left: calc(50% + 75px); top: 2px; color: #22c55e;">Pass</div>
         </div>
         
         <!-- Row 37: Triage Level 3 -->
-        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+        <div style="grid-column: 2; grid-row: 37; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
             <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
-        <div class="flowchart-card fc-editor lane-auto phase ph-8" style="grid-column: 3;" data-phase="8">
+        <div class="flowchart-card fc-editor lane-auto phase ph-8" style="grid-column: 3; grid-row: 37;" data-phase="8">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             Rework request generated
           </h3>
           <p>Defect coordinates logged, annotation brief generated, and queued for updates.</p>
         </div>
-        <div class="flowchart-card fc-setup lane-auto phase ph-9" style="grid-column: 4;" data-phase="9">
+        <div class="flowchart-card fc-setup lane-auto phase ph-9" style="grid-column: 4; grid-row: 37;" data-phase="9">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#22c55e;"><polyline points="20 6 9 17 4 12"/></svg>
             Delivery (QC pass)
@@ -1579,12 +1598,12 @@
         </div>
         
         <!-- Row 39: Rework Cap Hit Diamond -->
-        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+        <div style="grid-column: 2; grid-row: 39; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
             <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
-        <div class="flowchart-diamond-container lane-auto" data-phase="8">
+        <div class="flowchart-diamond-container lane-auto" style="grid-row: 39;" data-phase="8">
           <svg width="120" height="70" viewBox="0 0 120 70">
             <polygon points="60,2 118,35 60,68 2,35" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
             <text x="60" y="31" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">Rework</text>
@@ -1592,7 +1611,7 @@
           </svg>
         </div>
         <!-- Right side vertical line for Delivery -->
-        <div style="grid-column: 4; align-self: stretch; display: flex; justify-content: center; z-index: 1;">
+        <div style="grid-column: 4; grid-row: 39; align-self: stretch; display: flex; justify-content: center; z-index: 1;">
           <svg width="2" height="100%"><line x1="1" y1="0" x2="1" y2="100%" stroke="#22c55e" stroke-width="2"/></svg>
         </div>
         
@@ -1606,21 +1625,21 @@
             <!-- Delivery Path (going down) -->
             <line x1="540" y1="0" x2="540" y2="40" stroke="#22c55e" stroke-width="2"/>
           </svg>
-          <div style="position: absolute; left: calc(50% + 75px); top: 2px; font-size: 14px; font-weight: 700; color: #ef4444; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Yes [3x]</div>
-          <div style="position: absolute; left: 30%; top: 5px; transform: translateX(-50%); font-size: 14px; font-weight: 700; color: #5f6368; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">No (back to editor)</div>
+          <div class="flowchart-connector-label" style="left: calc(50% + 75px); top: 2px; color: #ef4444;">Yes [3x]</div>
+          <div class="flowchart-connector-label" style="left: 30%; top: 5px; transform: translateX(-50%); color: #5f6368;">No (back to editor)</div>
         </div>
         
         <!-- ================= DELIVER PHASE ================= -->
         <!-- Row 41: Deliver Level 1 -->
         <div class="flowchart-side-label" style="grid-row: 41 / span 6;">Deliver</div>
         
-        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+        <div style="grid-column: 2; grid-row: 41; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <!-- Empty column 2 -->
         </div>
-        <div style="grid-column: 3; align-self: stretch; display: flex; position: relative; z-index: 1;">
+        <div style="grid-column: 3; grid-row: 41; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <!-- Empty column 3 -->
         </div>
-        <div class="flowchart-card fc-human lane-human phase ph-8" style="grid-column: 4;" data-phase="8">
+        <div class="flowchart-card fc-human lane-human phase ph-8" style="grid-column: 4; grid-row: 41;" data-phase="8">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#e05c3c;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             Human QC
@@ -1637,14 +1656,14 @@
         </div>
         
         <!-- Row 43: Deliver Level 2 -->
-        <div class="flowchart-card fc-purple lane-auto phase ph-9" style="grid-column: 3;" data-phase="9">
+        <div class="flowchart-card fc-purple lane-auto phase ph-9" style="grid-column: 3; grid-row: 43;" data-phase="9">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5f5ec2;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             Delivered to Shopify
           </h3>
           <p>Original source image replaced in the customer store catalog via GraphQL media updates.</p>
         </div>
-        <div class="flowchart-note">Write-back fails?<br>Auto-retry / admin alerted</div>
+        <div class="flowchart-note" style="grid-column: 2; grid-row: 43;">Write-back fails?<br>Auto-retry / admin alerted</div>
         
         <!-- Row 44: Connector straight -->
         <div class="flowchart-connector" style="grid-row: 44;">
@@ -1654,7 +1673,7 @@
         </div>
         
         <!-- Row 45: Deliver Level 3 -->
-        <div class="flowchart-card fc-setup lane-auto phase ph-9" style="grid-column: 3;" data-phase="9">
+        <div class="flowchart-card fc-setup lane-auto phase ph-9" style="grid-column: 3; grid-row: 45;" data-phase="9">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#22c55e;"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>
             Customer notified
@@ -1673,7 +1692,7 @@
         <!-- Row 47: Revision Level 1 -->
         <div class="flowchart-side-label" style="grid-row: 47 / span 7;">Revision</div>
         
-        <div class="flowchart-card fc-human lane-human phase ph-10" style="grid-column: 3;" data-phase="10">
+        <div class="flowchart-card fc-human lane-human phase ph-10" style="grid-column: 3; grid-row: 47;" data-phase="10">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#e05c3c;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
             Customer logs revision
@@ -1689,7 +1708,7 @@
         </div>
         
         <!-- Row 49: Revision Level 2 -->
-        <div class="flowchart-card fc-editor lane-human phase ph-10" style="grid-column: 3;" data-phase="10">
+        <div class="flowchart-card fc-editor lane-human phase ph-10" style="grid-column: 3; grid-row: 49;" data-phase="10">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
             Direct to editor
@@ -1705,7 +1724,7 @@
         </div>
         
         <!-- Row 51: Revision Level 3 -->
-        <div class="flowchart-card fc-auto lane-auto phase ph-10" style="grid-column: 3;" data-phase="10">
+        <div class="flowchart-card fc-auto lane-auto phase ph-10" style="grid-column: 3; grid-row: 51;" data-phase="10">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
             AI QC — revision-aware
@@ -1721,7 +1740,7 @@
         </div>
         
         <!-- Row 53: Revision Level 4 -->
-        <div class="flowchart-card fc-setup lane-auto phase ph-10" style="grid-column: 3;" data-phase="10">
+        <div class="flowchart-card fc-setup lane-auto phase ph-10" style="grid-column: 3; grid-row: 53;" data-phase="10">
           <h3 style="display:flex; align-items:center; gap:8px;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#22c55e;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             Delivered · Record updated
