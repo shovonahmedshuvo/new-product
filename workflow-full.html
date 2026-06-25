@@ -712,6 +712,196 @@
     stroke-width: 2.5px;
   }
 
+  /* ─── Flowchart Redesign Styles ─── */
+  .flowchart-container {
+    background: #fafaf5; /* slightly softer off-white for the canvas */
+    border: 1px solid var(--hairline);
+    border-radius: 16px;
+    padding: 32px 20px;
+    margin-top: 24px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  }
+  
+  .flowchart-grid {
+    display: grid;
+    grid-template-columns: 90px 1fr 1.2fr 1fr;
+    gap: 10px 20px;
+    align-items: center;
+    position: relative;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  
+  /* Vertical Lane labels on the left */
+  .flowchart-side-label {
+    grid-column: 1;
+    justify-self: center;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f4f4ee;
+    border-radius: 8px;
+    border: 1px solid var(--hairline);
+    padding: 16px 6px;
+    color: var(--muted);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-transform: uppercase;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03);
+    min-height: 120px;
+  }
+  
+  /* Grid Node Cards */
+  .flowchart-card {
+    background: var(--surface);
+    border: 1.5px solid var(--hairline);
+    border-radius: 10px;
+    padding: 14px 16px;
+    width: 100%;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+  }
+  
+  .flowchart-card:hover {
+    border-color: var(--ink);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+  }
+  
+  .flowchart-card.highlighted {
+    border-color: var(--ink);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transform: scale(1.02);
+  }
+  
+  .flowchart-card h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+  
+  .flowchart-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  
+  .flowchart-note {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+    text-align: center;
+    background: #f5f5ee;
+    border: 1px dashed var(--shade);
+    padding: 8px 12px;
+    border-radius: 6px;
+    grid-column: 3;
+    justify-self: center;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Custom pastel categories for cards */
+  .fc-setup { background: #f6fbf0; border-color: #d2e4c4; }
+  .fc-setup:hover, .fc-setup.highlighted { border-color: #a2c484; }
+  
+  .fc-auto { background: #f3f8fd; border-color: #c4d8ed; }
+  .fc-auto:hover, .fc-auto.highlighted { border-color: #94b8db; }
+  
+  .fc-human { background: #fff8f5; border-color: #ebd2c5; }
+  .fc-human:hover, .fc-human.highlighted { border-color: #dbb3a0; }
+  
+  .fc-purple { background: #fafaff; border-color: #dad9f3; }
+  .fc-purple:hover, .fc-purple.highlighted { border-color: #b7b4e7; }
+  
+  .fc-editor { background: #fdfaf2; border-color: #ebdcb9; }
+  .fc-editor:hover, .fc-editor.highlighted { border-color: #dbbf88; }
+  
+  /* Decision Diamonds */
+  .flowchart-diamond-container {
+    grid-column: 3;
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px;
+    position: relative;
+    z-index: 2;
+  }
+  .flowchart-diamond-container.col-2 {
+    grid-column: 2;
+  }
+  
+  /* Connector Rows */
+  .flowchart-connector {
+    grid-column: 2 / span 3;
+    height: 40px;
+    display: block;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .flowchart-connector svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Filter dimming for flowchart */
+  .tab-content-pane.filter-auto .flowchart-card:not(.lane-auto),
+  .tab-content-pane.filter-auto .flowchart-diamond-container:not(.lane-auto) {
+    opacity: 0.12 !important;
+    filter: grayscale(90%);
+    pointer-events: none;
+  }
+  .tab-content-pane.filter-human .flowchart-card:not(.lane-human),
+  .tab-content-pane.filter-human .flowchart-diamond-container:not(.lane-human) {
+    opacity: 0.12 !important;
+    filter: grayscale(90%);
+    pointer-events: none;
+  }
+
+  /* Responsive styling for flowchart on mobile */
+  @media (max-width: 768px) {
+    .flowchart-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .flowchart-side-label {
+      writing-mode: horizontal-tb;
+      transform: none;
+      width: 100%;
+      min-height: auto;
+      padding: 8px 16px;
+      margin-top: 16px;
+    }
+    .flowchart-connector {
+      display: none !important;
+    }
+    .flowchart-card {
+      width: 100%;
+    }
+    .flowchart-diamond-container {
+      width: 100%;
+    }
+    .flowchart-note {
+      width: 100%;
+      margin: 8px 0;
+    }
+  }
+
   /* Responsive details */
   @media (max-width: 640px) {
     :root {
@@ -863,235 +1053,601 @@
       </div>
     </div>
 
-    <!-- Pipeline Timeline -->
-    <div class="flow">
-      <!-- 1 -->
-      <div class="phase ph-1 lane-auto lane-human">
-        <div class="phase-circle">1</div>
-        <div class="phase-card">
-          <div class="phase-top"><h2>Onboarding</h2><span class="phase-tag">Customer + Admin</span></div>
-          <div class="phase-body">
-            <div class="step-row">
-              <span class="step-chip">Shopify OAuth</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Catalog assigned</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">References uploaded</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Output spec locked</span>
-            </div>
-            <div class="lane-row">
-              <div class="lane auto-l"><h4>Catalog source</h4><ul><li>Admin sets catalog</li><li>Customer selects their own</li><li>No catalog? AI infers from store</li></ul></div>
-              <div class="lane human-l"><h4>Locked spec</h4><ul><li>Dimensions, format, color profile</li><li>Customer done — app takes over</li></ul></div>
-            </div>
-          </div>
+    <!-- Pipeline Timeline (Flowchart Grid) -->
+    <div class="flowchart-container">
+      <div class="flowchart-grid">
+        
+        <!-- ================= ONBOARD PHASE ================= -->
+        <!-- Row 1: Onboard Level 1 -->
+        <div class="flowchart-side-label" style="grid-row: 1 / span 8;">Onboard</div>
+        
+        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-1" style="grid-column: 3;" data-phase="1">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#1a6b3a;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Customer installs app
+          </h3>
+          <p>Shopify OAuth authorization completed and secure api access token saved.</p>
         </div>
-        <div class="connector">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        
+        <!-- Row 2: Connector split -->
+        <div class="flowchart-connector" style="grid-row: 2;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <defs><marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>
+            <path d="M 300,0 L 300,12 Q 300,20 280,20 L 120,20 Q 100,20 100,28 L 100,40 M 300,12 Q 300,20 320,20 L 480,20 Q 500,20 500,28 L 500,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
         </div>
-      </div>
-
-      <!-- 2 -->
-      <div class="phase ph-2 lane-auto">
-        <div class="phase-circle">2</div>
-        <div class="phase-card">
-          <div class="phase-top"><h2>Image Import</h2><span class="phase-tag">Shopify</span></div>
-          <div class="phase-body">
-            <div class="step-row">
-              <span class="step-chip">Webhook: new/updated</span>
-              <span class="step-chip arr">or</span>
-              <span class="step-chip">On-demand request</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Pulled from Shopify</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Organized + queued</span>
-            </div>
-            <div class="lane-row">
-              <div class="lane auto-l"><h4>Organization</h4><ul><li>Grouped by SKU</li><li>Tagged by shot type</li><li>Duplicates skipped</li><li>Missing angles flagged</li></ul></div>
-              <div class="lane human-l"><h4>Corrupt images?</h4><ul><li>Quarantined, admin notified</li><li>Rest continues</li></ul></div>
-            </div>
-          </div>
+        
+        <!-- Row 3: Onboard Level 2 -->
+        <div class="flowchart-card fc-setup lane-auto phase ph-1" style="grid-column: 2;" data-phase="1">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5c7c4c;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20M4 19.5v-15A2.5 2.5 0 0 1 6.5 2M20 2v20"/></svg>
+            Admin sets catalog
+          </h3>
+          <p>App administrator configures ground truth catalog details.</p>
         </div>
-        <div class="connector">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <div class="flowchart-note">No catalog?<br>AI auto-infers or coordinator</div>
+        <div class="flowchart-card fc-setup lane-human phase ph-1" style="grid-column: 4;" data-phase="1">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5c7c4c;"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+            Customer selects
+          </h3>
+          <p>Picks styling guidelines from active templates library.</p>
         </div>
-      </div>
-
-      <!-- 3 -->
-      <div class="phase ph-3 lane-auto">
-        <div class="phase-circle">3</div>
-        <div class="phase-card">
-          <div class="phase-top"><h2>AI Analysis</h2><span class="phase-tag">AI</span></div>
-          <div class="phase-body">
-            <div style="margin-bottom:8px;color:var(--muted);font-size:15px;">Each image measured against catalog + customer references</div>
-            <div class="grid-2">
-              <div class="info-box"><h4>AI checks</h4><ul><li>Background issues</li><li>Color accuracy</li><li>Defects (dust, wrinkles, reflections)</li><li>Framing &amp; alignment</li><li>Resolution</li><li>Lighting &amp; shadows</li><li>Overall deviation score</li></ul></div>
-              <div class="info-box"><h4>Confidence gate</h4><ul><li><strong>High (≥0.80)</strong> → auto proceed</li><li><strong>Medium (0.50–0.79)</strong> → coordinator reviews</li><li><strong>Low (&lt;0.50)</strong> → manual triage</li></ul></div>
-            </div>
-          </div>
+        
+        <!-- Row 4: Connector merge -->
+        <div class="flowchart-connector" style="grid-row: 4;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <path d="M 100,0 L 100,12 Q 100,20 120,20 L 280,20 Q 300,20 300,28 L 300,40 M 500,0 L 500,12 Q 500,20 480,20 L 320,20 Q 300,20 300,28 L 300,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
         </div>
-        <div class="connector">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        
+        <!-- Row 5: Onboard Level 3 -->
+        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-1" style="grid-column: 3;" data-phase="1">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5c7c4c;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            Customer provides references
+          </h3>
+          <p>Uploads source product images, layout notes, and brand doc specifications.</p>
         </div>
-      </div>
-
-      <!-- 4 -->
-      <div class="phase ph-4 lane-auto">
-        <div class="phase-circle">4</div>
-        <div class="phase-card">
-          <div class="phase-top"><h2>Package Matching</h2><span class="phase-tag">Rules Engine</span></div>
-          <div class="phase-body">
-            <div style="margin-bottom:8px;color:var(--muted);font-size:15px;">Deterministic rules — not AI — map facts to services</div>
-            <div class="lane-row">
-              <div class="lane auto-l"><h4>Auto — runs immediately</h4><ul><li>Background removal</li><li>Resolution upscale</li><li>Straightening &amp; crop</li><li>Resize to spec</li><li>Basic color normalization</li></ul></div>
-              <div class="lane human-l"><h4>Human — needs editor</h4><ul><li>Image retouch</li><li>Ghost mannequin</li><li>Shadow add / edit</li><li>Complex color work</li></ul></div>
-            </div>
-            <div class="callout">Auto lane: no approval needed. Human lane: assigned to editor.</div>
-          </div>
+        
+        <!-- Row 6: Connector straight -->
+        <div class="flowchart-connector" style="grid-row: 6;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
         </div>
-        <div class="connector">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        
+        <!-- Row 7: Onboard Level 4 -->
+        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-1" style="grid-column: 3;" data-phase="1">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5c7c4c;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Output spec locked
+          </h3>
+          <p>Ground truth dimensions, final aspect ratios, file format, and color profiles set.</p>
         </div>
-      </div>
-
-      <!-- 5 -->
-      <div class="phase ph-5 lane-auto">
-        <div class="phase-circle">5</div>
-        <div class="phase-card">
-          <div class="phase-top"><h2>Automation Run</h2><span class="phase-tag">Auto</span></div>
-          <div class="phase-body">
-            <div class="step-row">
-              <span class="step-chip">Background cutout</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Upscale</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Straighten + crop</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Resize</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Color normalize</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Saved as v1</span>
-            </div>
-            <div class="callout">No human services needed? → skip to QC. Otherwise → editor assignment.</div>
-          </div>
+        
+        <!-- Row 8: Connector split to trigger -->
+        <div class="flowchart-connector" style="grid-row: 8;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <path d="M 300,0 L 300,12 Q 300,20 280,20 L 120,20 Q 100,20 100,28 L 100,40 M 300,12 Q 300,20 320,20 L 480,20 Q 500,20 500,28 L 500,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
         </div>
-        <div class="connector">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        
+        <!-- ================= IMPORT PHASE ================= -->
+        <!-- Row 9: Import Level 1 -->
+        <div class="flowchart-side-label" style="grid-row: 9 / span 4;">Import</div>
+        
+        <div class="flowchart-card fc-auto lane-auto phase ph-2" style="grid-column: 2;" data-phase="2">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Auto webhook trigger
+          </h3>
+          <p>Product creation or image update webhooks fired from Shopify API in real-time.</p>
         </div>
-      </div>
-
-      <!-- 6 -->
-      <div class="phase ph-6 lane-human">
-        <div class="phase-circle">6</div>
-        <div class="phase-card">
-          <div class="phase-top"><h2>Editor Assignment</h2><span class="phase-tag">Human</span></div>
-          <div class="phase-body">
-            <div class="lane-row">
-              <div class="lane auto-l"><h4>Assignment by</h4><ul><li>Skill match (specialist per job type)</li><li>Workload capacity</li><li>Priority</li></ul></div>
-              <div class="lane human-l"><h4>Brief includes</h4><ul><li>Original + auto-processed image</li><li>AI findings with regions highlighted</li><li>Remaining services checklist</li><li>Catalog + references side by side</li><li>Output spec</li></ul></div>
-            </div>
-          </div>
+        <div class="flowchart-card fc-auto lane-auto phase ph-2" style="grid-column: 4;" data-phase="2">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            On-demand trigger
+          </h3>
+          <p>Customer triggers catalog import manually via application dashboard interface.</p>
         </div>
-        <div class="connector">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        
+        <!-- Row 10: Connector merge -->
+        <div class="flowchart-connector" style="grid-row: 10;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <path d="M 100,0 L 100,12 Q 100,20 120,20 L 280,20 Q 300,20 300,28 L 300,40 M 500,0 L 500,12 Q 500,20 480,20 L 320,20 Q 300,20 300,28 L 300,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
         </div>
-      </div>
-
-      <!-- 7 -->
-      <div class="phase ph-7 lane-human">
-        <div class="phase-circle">7</div>
-        <div class="phase-card">
-          <div class="phase-top"><h2>Editing</h2><span class="phase-tag">Editor</span></div>
-          <div class="phase-body">
-            <div class="step-row">
-              <span class="step-chip">Review auto output</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Fix errors if any</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Apply human services</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Submit final</span>
-            </div>
-            <div class="grid-2">
-              <div class="info-box"><h4>Editor does</h4><ul><li>Checks automation — corrects if wrong</li><li>Retouch, ghost mannequin, shadow, color</li></ul></div>
-              <div class="info-box"><h4>Versioning</h4><ul><li>Original never overwritten</li><li>Submitted as versioned edit</li></ul></div>
-            </div>
-          </div>
+        
+        <!-- Row 11: Import Level 2 -->
+        <div class="flowchart-card fc-auto lane-auto phase ph-2" style="grid-column: 3;" data-phase="2">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            Auto-organize images
+          </h3>
+          <p>Images grouped by SKU, deduped, catalog items tagged, and missing angles identified.</p>
         </div>
-        <div class="connector">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        
+        <!-- Row 12: Connector straight -->
+        <div class="flowchart-connector" style="grid-row: 12;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
         </div>
-      </div>
-
-      <!-- 8 -->
-      <div class="phase ph-8 lane-auto">
-        <div class="phase-circle">8</div>
-        <div class="phase-card">
-          <div class="phase-top"><h2>AI QC</h2><span class="phase-tag">AI</span></div>
-          <div class="phase-body">
-            <div style="margin-bottom:8px;color:var(--muted);font-size:15px;">Same model that did analysis checks the edited result</div>
-            <div class="grid-2">
-              <div class="info-box"><h4>Checks against</h4><ul><li>Original issues — were they fixed?</li><li>Catalog standard</li><li>Customer references</li><li>Batch consistency</li></ul></div>
-              <div class="info-box"><h4>Score</h4><ul><li><strong>≥ 90</strong> → passes → delivery</li><li><strong>&lt; 90</strong> → fails → rework</li></ul></div>
-            </div>
-            <div class="note"><strong>Rework:</strong> exact issues + region annotations + reference → editor. <strong>Cap: 3 cycles.</strong> Still failing → human QC reviewer.</div>
-          </div>
+        
+        <!-- ================= ANALYZE PHASE ================= -->
+        <!-- Row 13: Analyze Level 1 -->
+        <div class="flowchart-side-label" style="grid-row: 13 / span 8;">Analyze</div>
+        
+        <div class="flowchart-card fc-auto lane-auto phase ph-3" style="grid-column: 3;" data-phase="3">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            AI analyzes each image
+          </h3>
+          <p>AI vision model runs, extracting visual properties and logging catalog mismatch tags.</p>
         </div>
-        <div class="connector">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        
+        <!-- Row 14: Connector straight -->
+        <div class="flowchart-connector" style="grid-row: 14;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
         </div>
-      </div>
-
-      <!-- 9 -->
-      <div class="phase ph-9 lane-auto">
-        <div class="phase-circle">9</div>
-        <div class="phase-card">
-          <div class="phase-top"><h2>Delivery</h2><span class="phase-tag">Shopify</span></div>
-          <div class="phase-body">
-            <div class="step-row">
-              <span class="step-chip">Written to Shopify (GraphQL)</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Replaces original</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Customer notified</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Before/after logged</span>
-            </div>
-            <div class="lane-row">
-              <div class="lane auto-l"><h4>On success</h4><ul><li>In-app + email notification</li><li>Delivery record saved</li></ul></div>
-              <div class="lane human-l"><h4>Write-back fails</h4><ul><li>Auto-retry 3×</li><li>Still failing → admin alerted</li></ul></div>
-            </div>
-          </div>
+        
+        <!-- Row 15: Confidence Gate Diamond -->
+        <div class="flowchart-diamond-container lane-auto" data-phase="3">
+          <svg width="140" height="80" viewBox="0 0 140 80">
+            <polygon points="70,2 138,40 70,78 2,40" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+            <text x="70" y="38" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2937">Confidence</text>
+            <text x="70" y="52" text-anchor="middle" font-size="11" font-weight="600" fill="#6b7280">gate?</text>
+          </svg>
         </div>
-        <div class="connector">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        
+        <!-- Row 16: Connector 3-way split -->
+        <div class="flowchart-connector" style="grid-row: 16; height: 50px;">
+          <svg viewBox="0 0 600 50" preserveAspectRatio="none">
+            <path d="M 300,0 L 300,12 Q 300,20 280,20 L 120,20 Q 100,20 100,28 L 100,50 M 300,0 L 300,50 M 300,12 Q 300,20 320,20 L 480,20 Q 500,20 500,28 L 500,50" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <text x="180" y="16" font-size="11" fill="#ef4444" font-weight="700" text-anchor="end">Low &lt; 0.50</text>
+            <text x="310" y="30" font-size="11" fill="#d97706" font-weight="700" text-anchor="start">Mid 0.50-0.79</text>
+            <text x="420" y="16" font-size="11" fill="#22c55e" font-weight="700" text-anchor="start">High &ge; 0.80</text>
+          </svg>
         </div>
-      </div>
-
-      <!-- 10 -->
-      <div class="phase ph-10 lane-human">
-        <div class="phase-circle">10</div>
-        <div class="phase-card">
-          <div class="phase-top"><h2>Customer Revision</h2><span class="phase-tag">Customer + Editor</span></div>
-          <div class="phase-body">
-            <div class="step-row">
-              <span class="step-chip">Select image</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Annotate region</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Pick category</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Add comment</span>
-              <span class="step-chip arr">→</span>
-              <span class="step-chip">Sent to editor</span>
-            </div>
-            <div class="lane-row">
-              <div class="lane auto-l"><h4>Customer submits</h4><ul><li>Select specific image</li><li>Mark region on image</li><li>Category (shadow, color, bg, retouch)</li><li>Free text comment</li></ul></div>
-              <div class="lane human-l"><h4>Editor + QC</h4><ul><li>Editor gets annotation + context</li><li>QC: request addressed? New issues? Still meets standard?</li><li>Passes → delivered. Fails → rework (3 cycles)</li></ul></div>
-            </div>
-          </div>
+        
+        <!-- Row 17: Triage Split Cards -->
+        <div class="flowchart-card fc-human lane-human phase ph-3" style="grid-column: 2;" data-phase="3">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#e05c3c;"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Manual triage
+          </h3>
+          <p>Flagged for admin manual review due to low AI vision model confidence.</p>
         </div>
+        <div class="flowchart-card fc-editor lane-human phase ph-3" style="grid-column: 3;" data-phase="3">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Coordinator reviews findings
+          </h3>
+          <p>Catalog specialist verifies auto-generated metadata findings and crops.</p>
+        </div>
+        <div class="flowchart-card fc-setup lane-auto phase ph-3" style="grid-column: 4;" data-phase="3">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#22c55e;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Auto-proceed
+          </h3>
+          <p>Confidence score is high. Pipeline bypasses review and goes to next phase.</p>
+        </div>
+        
+        <!-- Row 18: Connector merge -->
+        <div class="flowchart-connector" style="grid-row: 18;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <path d="M 100,0 L 100,12 Q 100,20 120,20 L 280,20 Q 300,20 300,28 L 300,40 M 300,0 L 300,40 M 500,0 L 500,12 Q 500,20 480,20 L 320,20 Q 300,20 300,28 L 300,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
+        </div>
+        
+        <!-- Row 19: Analyze Level 4 -->
+        <div class="flowchart-card fc-setup lane-auto lane-human phase ph-4" style="grid-column: 3;" data-phase="4">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5c7c4c;"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+            Rules engine — package matching
+          </h3>
+          <p>Deterministic system rules (no AI) match detected visual facts to required services.</p>
+        </div>
+        
+        <!-- Row 20: Connector split to lanes -->
+        <div class="flowchart-connector" style="grid-row: 20;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <path d="M 300,0 L 300,12 Q 300,20 280,20 L 120,20 Q 100,20 100,28 L 100,40 M 300,12 Q 300,20 320,20 L 480,20 Q 500,20 500,28 L 500,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
+        </div>
+        
+        <!-- ================= MATCH PHASE ================= -->
+        <!-- Row 21: Match Level 1 -->
+        <div class="flowchart-side-label" style="grid-row: 21 / span 2;">Match</div>
+        
+        <div class="flowchart-card fc-auto lane-auto phase ph-4" style="grid-column: 2;" data-phase="4">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="21" y1="12" x2="9" y2="12"/><line x1="12" y1="21" x2="12" y2="9"/></svg>
+            Auto lane
+          </h3>
+          <p>BG cutout, AI upscale, compose alignments, and catalog aspect resizing.</p>
+        </div>
+        <div class="flowchart-card fc-human lane-human phase ph-4" style="grid-column: 4;" data-phase="4">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#e05c3c;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Human lane
+          </h3>
+          <p>Detailed image retouch, ghost mannequin edits, shadow additions, and advanced color grading.</p>
+        </div>
+        
+        <!-- Row 22: Connector split lane flows -->
+        <div class="flowchart-connector" style="grid-row: 22;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="100" y1="0" x2="100" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <line x1="500" y1="0" x2="500" y2="40" stroke="#94a3b8" stroke-width="2"/>
+          </svg>
+        </div>
+        
+        <!-- ================= AUTO PHASE ================= -->
+        <!-- Row 23: Auto Level 1 -->
+        <div class="flowchart-side-label" style="grid-row: 23 / span 4;">Auto</div>
+        
+        <div class="flowchart-card fc-auto lane-auto phase ph-5" style="grid-column: 2;" data-phase="5">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><circle cx="12" cy="12" r="10"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            Automation runs
+          </h3>
+          <p>Applies automated processing services and saves the output locally as Version 1.</p>
+        </div>
+        <!-- Right side vertical line for Human lane -->
+        <div style="grid-column: 4; align-self: stretch; display: flex; justify-content: center; z-index: 1;">
+          <svg width="2" height="100%"><line x1="1" y1="0" x2="1" y2="100%" stroke="#94a3b8" stroke-width="2"/></svg>
+        </div>
+        
+        <!-- Row 24: Connector split -->
+        <div class="flowchart-connector" style="grid-row: 24;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="100" y1="0" x2="100" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <line x1="500" y1="0" x2="500" y2="40" stroke="#94a3b8" stroke-width="2"/>
+          </svg>
+        </div>
+        
+        <!-- Row 25: Human needed gate -->
+        <div class="flowchart-diamond-container col-2 lane-auto" data-phase="5">
+          <svg width="120" height="70" viewBox="0 0 120 70">
+            <polygon points="60,2 118,35 60,68 2,35" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+            <text x="60" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">Human</text>
+            <text x="60" y="45" text-anchor="middle" font-size="10" font-weight="600" fill="#6b7280">needed?</text>
+          </svg>
+        </div>
+        <!-- Right side vertical line for Human lane -->
+        <div style="grid-column: 4; align-self: stretch; display: flex; justify-content: center; z-index: 1;">
+          <svg width="2" height="100%"><line x1="1" y1="0" x2="1" y2="100%" stroke="#94a3b8" stroke-width="2"/></svg>
+        </div>
+        
+        <!-- Row 26: Connector to editing merge & bypass -->
+        <div class="flowchart-connector" style="grid-row: 26;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <!-- Yes Path (center of diamond to Center column Editor assigned) -->
+            <path d="M 100,20 C 140,20 300,10 300,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <!-- No Path (left of diamond to Left column bypass line at x=50) -->
+            <path d="M 40,20 L 50,20 L 50,40" fill="none" stroke="#94a3b8" stroke-width="2"/>
+            <!-- Human Lane Path (right column to Center column Editor assigned) -->
+            <path d="M 500,0 C 500,20 300,10 300,40" fill="none" stroke="#94a3b8" stroke-width="2"/>
+            <text x="140" y="15" font-size="11" fill="#d97706" font-weight="700">Yes</text>
+            <text x="70" y="15" font-size="11" fill="#22c55e" font-weight="700">No (skip to QC)</text>
+          </svg>
+        </div>
+        
+        <!-- ================= EDIT PHASE ================= -->
+        <!-- Row 27: Edit Level 1 -->
+        <div class="flowchart-side-label" style="grid-row: 27 / span 6;">Edit</div>
+        
+        <!-- Left column bypass line and rework loop line -->
+        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+          <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
+            <line x1="50" y1="0" x2="50" y2="80" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        <div class="flowchart-card fc-editor lane-human phase ph-6" style="grid-column: 3;" data-phase="6">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            Editor assigned + briefed
+          </h3>
+          <p>Routing to a specialist designer with clear issue highlights and catalog spec criteria.</p>
+        </div>
+        
+        <!-- Row 28: Connector -->
+        <div class="flowchart-connector" style="grid-row: 28;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <line x1="50" y1="0" x2="50" y2="40" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        
+        <!-- Row 29: Edit Level 2 (Rework connection) -->
+        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+          <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
+            <line x1="50" y1="0" x2="50" y2="80" stroke="#94a3b8" stroke-width="2"/>
+            <path d="M 100,0 L 100,32 Q 100,40 120,40 L 200,40" fill="none" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-down)"/>
+            <text x="110" y="24" font-size="11" fill="#f87171" font-weight="700">rework</text>
+          </svg>
+        </div>
+        <div class="flowchart-card fc-editor lane-human phase ph-7" style="grid-column: 3;" data-phase="7">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Editor checks automation output
+          </h3>
+          <p>Fixes any automation faults and carries out remaining human services checklist.</p>
+        </div>
+        
+        <!-- Row 30: Connector -->
+        <div class="flowchart-connector" style="grid-row: 30;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <line x1="50" y1="0" x2="50" y2="40" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        
+        <!-- Row 31: Edit Level 3 -->
+        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+          <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
+            <line x1="50" y1="0" x2="50" y2="80" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        <div class="flowchart-card fc-editor lane-human phase ph-7" style="grid-column: 3;" data-phase="7">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Editor submits final image
+          </h3>
+          <p>Completed file is stored in S3 and registered as a versioned job update.</p>
+        </div>
+        
+        <!-- Row 32: Connector to QC merge -->
+        <div class="flowchart-connector" style="grid-row: 32;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <!-- Bypass line curves into center -->
+            <path d="M 50,0 L 50,15 C 50,30 300,20 300,40" fill="none" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        
+        <!-- ================= QC PHASE ================= -->
+        <!-- Row 33: QC Level 1 -->
+        <div class="flowchart-side-label" style="grid-row: 33 / span 8;">QC</div>
+        
+        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+          <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
+            <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        <div class="flowchart-card fc-auto lane-auto phase ph-8" style="grid-column: 3;" data-phase="8">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            AI QC cross-check
+          </h3>
+          <p>Identical Vision AI checks file against the catalog checklist and reference rules.</p>
+        </div>
+        
+        <!-- Row 34: Connector -->
+        <div class="flowchart-connector" style="grid-row: 34;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        
+        <!-- Row 35: Score Gate Diamond -->
+        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+          <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
+            <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        <div class="flowchart-diamond-container lane-auto" data-phase="8">
+          <svg width="120" height="70" viewBox="0 0 120 70">
+            <polygon points="60,2 118,35 60,68 2,35" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+            <text x="60" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">Score</text>
+            <text x="60" y="45" text-anchor="middle" font-size="10" font-weight="600" fill="#6b7280">&ge; 90?</text>
+          </svg>
+        </div>
+        
+        <!-- Row 36: Connector -->
+        <div class="flowchart-connector" style="grid-row: 36;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <!-- Fail Path (straight down) -->
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <!-- Pass Path (diamond to Right column Delivery) -->
+            <path d="M 350,15 C 400,15 500,15 500,40" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+            <text x="315" y="25" font-size="11" fill="#ef4444" font-weight="700">Fail</text>
+            <text x="420" y="12" font-size="11" fill="#22c55e" font-weight="700">Pass</text>
+          </svg>
+        </div>
+        
+        <!-- Row 37: Triage Level 3 -->
+        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+          <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
+            <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        <div class="flowchart-card fc-editor lane-auto phase ph-8" style="grid-column: 3;" data-phase="8">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Rework request generated
+          </h3>
+          <p>Defect coordinates logged, annotation brief generated, and queued for updates.</p>
+        </div>
+        <div class="flowchart-card fc-setup lane-auto phase ph-9" style="grid-column: 4;" data-phase="9">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#22c55e;"><polyline points="20 6 9 17 4 12"/></svg>
+            Delivery (QC pass)
+          </h3>
+          <p>Job complete. File queued for synchronization write-back workers.</p>
+        </div>
+        
+        <!-- Row 38: Connector -->
+        <div class="flowchart-connector" style="grid-row: 38;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <line x1="500" y1="0" x2="500" y2="40" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        
+        <!-- Row 39: Rework Cap Hit Diamond -->
+        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+          <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
+            <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
+          </svg>
+        </div>
+        <div class="flowchart-diamond-container lane-auto" data-phase="8">
+          <svg width="120" height="70" viewBox="0 0 120 70">
+            <polygon points="60,2 118,35 60,68 2,35" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+            <text x="60" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">Rework</text>
+            <text x="60" y="45" text-anchor="middle" font-size="10" font-weight="600" fill="#6b7280">cap hit?</text>
+          </svg>
+        </div>
+        <!-- Right side vertical line for Delivery -->
+        <div style="grid-column: 4; align-self: stretch; display: flex; justify-content: center; z-index: 1;">
+          <svg width="2" height="100%"><line x1="1" y1="0" x2="1" y2="100%" stroke="#22c55e" stroke-width="2"/></svg>
+        </div>
+        
+        <!-- Row 40: Connector split rework / loops -->
+        <div class="flowchart-connector" style="grid-row: 40;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <!-- Yes Path (diamond to Col 4 Human QC) -->
+            <path d="M 350,15 C 400,15 500,15 500,40" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <!-- No Path (left of diamond to Left column rework loop line at x=100) -->
+            <path d="M 250,20 L 100,20 L 100,0" fill="none" stroke="#f87171" stroke-width="2"/>
+            <!-- Delivery Path (going down) -->
+            <line x1="500" y1="0" x2="500" y2="40" stroke="#22c55e" stroke-width="2"/>
+            <text x="380" y="12" font-size="11" fill="#ef4444" font-weight="700">Yes [3x]</text>
+            <text x="130" y="15" font-size="11" fill="#5f6368" font-weight="700">No (back to editor)</text>
+          </svg>
+        </div>
+        
+        <!-- ================= DELIVER PHASE ================= -->
+        <!-- Row 41: Deliver Level 1 -->
+        <div class="flowchart-side-label" style="grid-row: 41 / span 6;">Deliver</div>
+        
+        <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
+          <!-- Empty column 2 -->
+        </div>
+        <div style="grid-column: 3; align-self: stretch; display: flex; position: relative; z-index: 1;">
+          <!-- Empty column 3 -->
+        </div>
+        <div class="flowchart-card fc-human lane-human phase ph-8" style="grid-column: 4;" data-phase="8">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#e05c3c;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Human QC
+          </h3>
+          <p>Manual review fallback completed by a senior coordinator (max rework cap hit).</p>
+        </div>
+        
+        <!-- Row 42: Connector merge to delivery -->
+        <div class="flowchart-connector" style="grid-row: 42;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <!-- Merging Col 4 (Delivery path and Human QC path) to Center Delivered to Shopify -->
+            <path d="M 500,0 C 500,20 300,10 300,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
+        </div>
+        
+        <!-- Row 43: Deliver Level 2 -->
+        <div class="flowchart-card fc-purple lane-auto phase ph-9" style="grid-column: 3;" data-phase="9">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#5f5ec2;"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            Delivered to Shopify
+          </h3>
+          <p>Original source image replaced in the customer store catalog via GraphQL media updates.</p>
+        </div>
+        <div class="flowchart-note">Write-back fails?<br>Auto-retry / admin alerted</div>
+        
+        <!-- Row 44: Connector straight -->
+        <div class="flowchart-connector" style="grid-row: 44;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
+        </div>
+        
+        <!-- Row 45: Deliver Level 3 -->
+        <div class="flowchart-card fc-setup lane-auto phase ph-9" style="grid-column: 3;" data-phase="9">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#22c55e;"><path d="M22 17H2a3 3 0 0 0 3-3V9a7 7 0 0 1 14 0v5a3 3 0 0 0 3 3zm-8.27 4a2 2 0 0 1-3.46 0"/></svg>
+            Customer notified
+          </h3>
+          <p>In-app alerts, email updates, and comparison logs saved.</p>
+        </div>
+        
+        <!-- Row 46: Connector straight -->
+        <div class="flowchart-connector" style="grid-row: 46;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
+        </div>
+        
+        <!-- ================= REVISION PHASE ================= -->
+        <!-- Row 47: Revision Level 1 -->
+        <div class="flowchart-side-label" style="grid-row: 47 / span 8;">Revision</div>
+        
+        <div class="flowchart-card fc-human lane-human phase ph-10" style="grid-column: 3;" data-phase="10">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#e05c3c;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            Customer logs revision
+          </h3>
+          <p>Customer marks specific defect coordinates and attaches descriptive comments.</p>
+        </div>
+        
+        <!-- Row 48: Connector straight -->
+        <div class="flowchart-connector" style="grid-row: 48;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
+        </div>
+        
+        <!-- Row 49: Revision Level 2 -->
+        <div class="flowchart-card fc-editor lane-human phase ph-10" style="grid-column: 3;" data-phase="10">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            Direct to editor
+          </h3>
+          <p>Brief is re-routed directly to the active editor with full feedback context.</p>
+        </div>
+        
+        <!-- Row 50: Connector straight -->
+        <div class="flowchart-connector" style="grid-row: 50;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
+        </div>
+        
+        <!-- Row 51: Revision Level 3 -->
+        <div class="flowchart-card fc-auto lane-auto phase ph-10" style="grid-column: 3;" data-phase="10">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#3b82f6;"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            AI QC — revision-aware
+          </h3>
+          <p>AI vision re-checks if the customer annotations have been correctly resolved.</p>
+        </div>
+        
+        <!-- Row 52: Connector straight -->
+        <div class="flowchart-connector" style="grid-row: 52;">
+          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          </svg>
+        </div>
+        
+        <!-- Row 53: Revision Level 4 -->
+        <div class="flowchart-card fc-setup lane-auto phase ph-10" style="grid-column: 3;" data-phase="10">
+          <h3 style="display:flex; align-items:center; gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#22c55e;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Delivered · Record updated
+          </h3>
+          <p>Final image write-back successful, record stored, and billing trail completed.</p>
+        </div>
+        
       </div>
     </div>
   </div>
@@ -1841,7 +2397,7 @@
 
     // ─── 2. Visual View: Lane Filtering ───
     const filterButtons = document.querySelectorAll('.filter-btn');
-    const flowContainer = document.querySelector('.flow');
+    const visualPane = document.getElementById('tab-content-visual');
 
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1849,9 +2405,9 @@
         btn.classList.add('active');
 
         const filterValue = btn.getAttribute('data-filter');
-        flowContainer.className = 'flow'; // Reset
+        visualPane.classList.remove('filter-auto', 'filter-human'); // Reset
         if (filterValue !== 'all') {
-          flowContainer.classList.add('filter-' + filterValue);
+          visualPane.classList.add('filter-' + filterValue);
         }
       });
     });
@@ -1862,23 +2418,23 @@
 
     svgNodes.forEach(node => {
       const phaseNum = node.getAttribute('data-phase');
-      const targetCard = document.querySelector(`.phase.ph-${phaseNum}`);
+      const targets = document.querySelectorAll(`.phase.ph-${phaseNum}`);
 
       node.addEventListener('mouseenter', () => {
-        if (targetCard) targetCard.classList.add('highlighted');
+        targets.forEach(t => t.classList.add('highlighted'));
       });
 
       node.addEventListener('mouseleave', () => {
-        if (targetCard) targetCard.classList.remove('highlighted');
+        targets.forEach(t => t.classList.remove('highlighted'));
       });
 
       node.addEventListener('click', () => {
-        if (targetCard) {
-          targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          targetCard.classList.add('highlighted');
+        if (targets.length > 0) {
+          targets[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+          targets.forEach(t => t.classList.add('highlighted'));
           setTimeout(() => {
             if (!node.matches(':hover')) {
-              targetCard.classList.remove('highlighted');
+              targets.forEach(t => t.classList.remove('highlighted'));
             }
           }, 1500);
         }
