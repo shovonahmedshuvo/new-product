@@ -1153,37 +1153,12 @@
     margin: 32px auto 56px;
     padding: 0 10px;
   }
-  .tech-tabs-nav {
+  .tech-workflow-stack {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 20px;
-    border-bottom: 1.5px solid var(--hairline);
-    padding-bottom: 12px;
+    flex-direction: column;
+    gap: 32px;
   }
-  .tech-tab-trigger {
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--muted);
-    background: transparent;
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .tech-tab-trigger:hover {
-    color: var(--ink);
-    background: rgba(0, 0, 0, 0.03);
-  }
-  .tech-tab-trigger.active {
-    color: var(--ink);
-    background: var(--surface);
-    border-color: var(--hairline);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-  }
-  .tech-workflow-svg-container {
+  .tech-workflow-card {
     border: 1.5px solid var(--hairline);
     background: var(--surface);
     border-radius: 12px;
@@ -1191,17 +1166,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.015);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
-  .tech-tab-pane {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  .tech-workflow-card:hover {
+    border-color: var(--ink);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+    transform: translateY(-2px);
   }
-  .tech-tab-pane.hidden {
-    display: none;
-  }
-  .tech-tab-pane svg {
+  .tech-workflow-card svg {
     max-width: 100%;
     height: auto;
     display: block;
@@ -2974,19 +2947,8 @@
   
   <h2>Technical workflow</h2>
   <div class="technical-workflow-section">
-    <div class="tech-tabs-nav">
-      <button class="tech-tab-trigger active" data-tech-tab="p1">Phase 1: Onboarding</button>
-      <button class="tech-tab-trigger" data-tech-tab="p2">Phase 2: Ingestion</button>
-      <button class="tech-tab-trigger" data-tech-tab="p3">Phase 3: AI Analysis</button>
-      <button class="tech-tab-trigger" data-tech-tab="p4">Phase 4: Package Match</button>
-      <button class="tech-tab-trigger" data-tech-tab="p5">Phase 5: Automation</button>
-      <button class="tech-tab-trigger" data-tech-tab="p6_7">Phase 6 &amp; 7: Editor</button>
-      <button class="tech-tab-trigger" data-tech-tab="p8">Phase 8: AI QC</button>
-      <button class="tech-tab-trigger" data-tech-tab="p9">Phase 9: Delivery</button>
-      <button class="tech-tab-trigger" data-tech-tab="p10">Phase 10: Revision</button>
-    </div>
-    <div class="tech-workflow-svg-container">
-<div id="tech-tab-pane-p1" class="tech-tab-pane ">
+    <div class="tech-workflow-stack">
+<div id="tech-workflow-card-p1" class="tech-workflow-card">
 <svg width="100%" viewBox="0 0 680 620" role="img" style="" xmlns="http://www.w3.org/2000/svg">
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Phase 1 — Onboarding technical diagram</title>
 <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Technical flow of merchant install, OAuth, catalog setup, and output spec locking</desc>
@@ -3068,7 +3030,7 @@
 </svg>
 </div>
 
-<div id="tech-tab-pane-p2" class="tech-tab-pane hidden">
+<div id="tech-workflow-card-p2" class="tech-workflow-card">
 <svg width="100%" viewBox="0 0 680 600" role="img" style="" xmlns="http://www.w3.org/2000/svg">
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Phase 2 — Image ingestion technical diagram</title>
 <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Technical flow of webhook triggers, GraphQL image pull, batch creation, and queue insertion</desc>
@@ -3156,7 +3118,7 @@
 </svg>
 </div>
 
-<div id="tech-tab-pane-p3" class="tech-tab-pane hidden">
+<div id="tech-workflow-card-p3" class="tech-workflow-card">
 <svg width="100%" viewBox="0 0 680 660" role="img" style="" xmlns="http://www.w3.org/2000/svg">
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Phase 3 — AI Analysis technical diagram</title>
 <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Technical flow of analysis worker, vision model call, structured JSON output, confidence gating and routing</desc>
@@ -3250,7 +3212,7 @@
 </svg>
 </div>
 
-<div id="tech-tab-pane-p4" class="tech-tab-pane hidden">
+<div id="tech-workflow-card-p4" class="tech-workflow-card">
 <svg width="100%" viewBox="0 0 680 580" role="img" style="" xmlns="http://www.w3.org/2000/svg">
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Phase 4 — Package matching technical diagram</title>
 <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Technical flow of rules engine mapping AI facts to services, splitting into auto and human lanes</desc>
@@ -3316,7 +3278,7 @@
 </svg>
 </div>
 
-<div id="tech-tab-pane-p5" class="tech-tab-pane hidden">
+<div id="tech-workflow-card-p5" class="tech-workflow-card">
 <svg width="100%" viewBox="0 0 680 580" role="img" style="" xmlns="http://www.w3.org/2000/svg">
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Phase 5 — Automation run technical diagram</title>
 <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Technical flow of auto service execution using Sharp.js, cutout API, upscale, S3 versioning, and queue routing</desc>
@@ -3396,7 +3358,7 @@
 </svg>
 </div>
 
-<div id="tech-tab-pane-p6_7" class="tech-tab-pane hidden">
+<div id="tech-workflow-card-p6_7" class="tech-workflow-card">
 <svg width="100%" viewBox="0 0 680 620" role="img" style="" xmlns="http://www.w3.org/2000/svg">
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Phase 6 and 7 — Editor assignment and editing technical diagram</title>
 <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Technical flow of editor assignment, brief generation, editing, upload and versioning</desc>
@@ -3468,7 +3430,7 @@
 </svg>
 </div>
 
-<div id="tech-tab-pane-p8" class="tech-tab-pane hidden">
+<div id="tech-workflow-card-p8" class="tech-workflow-card">
 <svg width="100%" viewBox="0 0 680 680" role="img" style="" xmlns="http://www.w3.org/2000/svg">
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Phase 8 — AI QC technical diagram</title>
 <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Technical flow of QC worker, vision model call, score gate, rework request generation, rework cap and escalation</desc>
@@ -3558,7 +3520,7 @@
 </svg>
 </div>
 
-<div id="tech-tab-pane-p9" class="tech-tab-pane hidden">
+<div id="tech-workflow-card-p9" class="tech-workflow-card">
 <svg width="100%" viewBox="0 0 680 580" role="img" style="" xmlns="http://www.w3.org/2000/svg">
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Phase 9 — Delivery technical diagram</title>
 <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Technical flow of delivery worker, Shopify GraphQL write-back, retry logic, notification and DB record</desc>
@@ -3638,7 +3600,7 @@
 </svg>
 </div>
 
-<div id="tech-tab-pane-p10" class="tech-tab-pane hidden">
+<div id="tech-workflow-card-p10" class="tech-workflow-card">
 <svg width="100%" viewBox="0 0 680 590" role="img" style="" xmlns="http://www.w3.org/2000/svg">
 <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Phase 10 — Revision request technical diagram</title>
 <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Technical flow of merchant revision request, direct editor routing, revision-aware QC and re-delivery</desc>
@@ -3717,25 +3679,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // ─── 1b. Technical Workflow Tab Switching ───
-    const techTabTriggers = document.querySelectorAll('.tech-tab-trigger');
-    const techTabPanes = document.querySelectorAll('.tech-tab-pane');
 
-    techTabTriggers.forEach(trigger => {
-      trigger.addEventListener('click', () => {
-        techTabTriggers.forEach(t => t.classList.remove('active'));
-        trigger.classList.add('active');
-
-        const targetTab = trigger.getAttribute('data-tech-tab');
-        techTabPanes.forEach(pane => {
-          if (pane.id === `tech-tab-pane-${targetTab}`) {
-            pane.classList.remove('hidden');
-          } else {
-            pane.classList.add('hidden');
-          }
-        });
-      });
-    });
 
     // ─── 1. Primary Tab Switching ───
     const tabTriggers = document.querySelectorAll('.tab-trigger');
