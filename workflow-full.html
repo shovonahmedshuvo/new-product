@@ -641,11 +641,40 @@
   .tech-section-title {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 24px;
-    font-weight: 400;
-    margin: 40px 0 16px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    margin: 64px auto 24px;
     text-align: center;
-    border-bottom: 1px solid var(--hairline);
+    border-bottom: 1.5px solid var(--hairline);
     padding-bottom: 12px;
+    max-width: 960px;
+  }
+
+  /* Section Divider Heading */
+  .section-divider-heading {
+    text-align: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    max-width: 960px;
+    margin: 80px auto 48px;
+    padding-top: 48px;
+    border-top: 1.5px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-divider-heading::after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 4px;
+    background: var(--ink);
+    border-radius: var(--pill);
   }
 
   /* Footer */
@@ -838,14 +867,14 @@
   }
 
   /* Filter dimming for flowchart */
-  .tab-content-pane.filter-auto .flowchart-card:not(.lane-auto),
-  .tab-content-pane.filter-auto .flowchart-diamond-container:not(.lane-auto) {
+  .container.filter-auto .flowchart-card:not(.lane-auto),
+  .container.filter-auto .flowchart-diamond-container:not(.lane-auto) {
     opacity: 0.12 !important;
     filter: grayscale(90%);
     pointer-events: none;
   }
-  .tab-content-pane.filter-human .flowchart-card:not(.lane-human),
-  .tab-content-pane.filter-human .flowchart-diamond-container:not(.lane-human) {
+  .container.filter-human .flowchart-card:not(.lane-human),
+  .container.filter-human .flowchart-diamond-container:not(.lane-human) {
     opacity: 0.12 !important;
     filter: grayscale(90%);
     pointer-events: none;
@@ -1872,7 +1901,7 @@
     </div>
 
   
-  <h2>System design</h2>
+  <h2 class="section-divider-heading">System design</h2>
   <div class="technical-workflow-section">
     <div class="tech-workflow-stack">
 <div id="tech-workflow-card-p1" class="tech-workflow-card">
@@ -2603,7 +2632,7 @@
 
   
     <!-- Top System Connection Map & Three Core Systems -->
-    <div class="tech-section-title">System Architecture</div>
+    <h2 class="tech-section-title">System Architecture</h2>
     <p style="text-align:center; margin-bottom:16px;">Hover over any system component below to trace its data endpoints and connections in real-time.</p>
     
     <div class="arch-map-wrapper">
@@ -2690,7 +2719,7 @@
     </div>
 
     <!-- Technical Specs Timeline -->
-    <div class="tech-section-title">Technical Phase Specifications</div>
+    <h2 class="tech-section-title">Technical Phase Specifications</h2>
     
     <div class="flow">
       <!-- 1. Onboarding -->
@@ -3199,7 +3228,7 @@
     </div>
 
     <!-- Database Status Trail Grid -->
-    <div class="tech-section-title">Database Status Trail Index</div>
+    <h2 class="tech-section-title">Database Status Trail Index</h2>
     <p style="text-align:center; margin-bottom:16px;">The complete status lifecycle tracked in PostgreSQL for every image job.</p>
     
     <div class="status-trail-flow">
@@ -3317,7 +3346,7 @@
     </div>
   </div>
 
-  <h2>Design principles</h2>
+  <h2 class="tech-section-title">Design principles</h2>
   <div class="principles">
     <div class="principle">
       <div class="principle-icon-wrapper">
@@ -3401,7 +3430,7 @@
     </div>
   </div>
 
-  <h2>Service mapping</h2>
+  <h2 class="tech-section-title">Service mapping</h2>
   <div class="services">
     <div class="service">
       <div class="service-illustration">
@@ -3500,7 +3529,7 @@
     </div>
   </div>
 
-  <h2>System layers</h2>
+  <h2 class="tech-section-title">System layers</h2>
   <div class="layer-stack">
     <div class="layer l5">
       <div class="layer-badge">WEB UI</div>
@@ -3539,7 +3568,7 @@
     </div>
   </div>
 
-  <h2>Tech stack</h2>
+  <h2 class="tech-section-title">Tech stack</h2>
   <div class="tech-grid">
     <div class="tech">
       <div class="tech-icon">
