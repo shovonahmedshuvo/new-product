@@ -78,8 +78,6 @@
     margin: 0 auto;
   }
 
-
-
   .filter-toolbar {
     display: inline-flex;
     background: #e9e9e2;
@@ -1152,15 +1150,11 @@
     <p class="sub">Onboarding through AI analysis, editing, QC, delivery, and customer revision</p>
   </div>
 
-
-  <!-- ─── Tab Content: Visual Pipeline ─── -->
     <!-- Legend -->
     <div class="legend">
       <span class="legend-item"><span class="legend-swatch" style="background:#e2ecd5;"></span> Setup &amp; Config</span>
       <span class="legend-item"><span class="legend-swatch" style="background:#dce6f1;"></span> Automated Lane</span>
       <span class="legend-item"><span class="legend-swatch" style="background:#fce6db;"></span> Human Lane</span>
-      <span class="legend-item" style="margin-left:auto;"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#c8e6c8;"></span> Auto lane</span>
-      <span class="legend-item"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e8d8a0;"></span> Human lane</span>
     </div>
 
     <!-- Overview diagram -->
@@ -1876,8 +1870,6 @@
         
       </div>
     </div>
-
-  <!-- ─── Tab Content: Technical Specs ─── -->
 
   
   <h2>Technical workflow</h2>
@@ -3633,10 +3625,9 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
 
-
-    // ─── 2. Visual View: Lane Filtering ───
+    // ─── 1. Visual View: Lane Filtering ───
     const filterButtons = document.querySelectorAll('.filter-btn');
-    const visualPane = document.getElementById('tab-content-visual');
+    const visualPane = document.querySelector('.flowchart-grid-wrapper') || document.querySelector('.container');
 
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -3651,7 +3642,7 @@
       });
     });
 
-    // ─── 3. Visual View: SVG Node & Timeline Card Linking ───
+    // ─── 2. Visual View: SVG Node & Timeline Card Linking ───
     const svgNodes = document.querySelectorAll('.svg-node');
     const phaseCards = document.querySelectorAll('.phase');
 
@@ -3696,7 +3687,7 @@
       }
     });
 
-    // ─── 4. Technical View: SVG System Connections Map highlights ───
+    // ─── 3. Technical View: SVG System Connections Map highlights ───
     const archNodes = document.querySelectorAll('.arch-node');
     const archLinks = document.querySelectorAll('.arch-link');
 
