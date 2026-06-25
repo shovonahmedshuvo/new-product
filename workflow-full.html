@@ -725,7 +725,7 @@
   .flowchart-grid {
     display: grid;
     grid-template-columns: 90px 1fr 1.2fr 1fr;
-    gap: 10px 20px;
+    gap: 10px 0;
     align-items: center;
     position: relative;
     max-width: 960px;
@@ -762,7 +762,9 @@
     border: 1.5px solid var(--hairline);
     border-radius: 10px;
     padding: 14px 16px;
-    width: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: auto;
     transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     position: relative;
     z-index: 2;
@@ -901,6 +903,83 @@
       margin: 8px 0;
     }
   }
+
+  /* ─── Visual Guide Section Styles ─── */
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+  @media (max-width: 900px) { .principles { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 640px) { .principles { grid-template-columns: 1fr; } }
+  .principle {
+    border: 1px solid var(--hairline);
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .principle .num {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .principle strong { display: block; font-size: 16px; margin-bottom: 6px; }
+  .principle p { margin: 0; font-size: 16px; color: var(--muted); }
+
+  .layer-stack {
+    display: grid;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .layer {
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .layer.l5 { background: #f5f3ff; }
+  .layer.l4 { background: #eff6ff; }
+  .layer.l3 { background: #f0fdfa; }
+  .layer.l2 { background: #fffbeb; }
+  .layer.l1 { background: #fef2f2; }
+
+  .services {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 14px;
+  }
+  @media (max-width: 760px) { .services { grid-template-columns: 1fr; } }
+  .service {
+    border: 1px solid var(--hairline);
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .service strong { display: block; font-size: 16px; margin-bottom: 4px; }
+  .service span { display: block; font-size: 16px; color: var(--muted); }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 14px;
+  }
+  @media (max-width: 760px) { .tech-grid { grid-template-columns: 1fr; } }
+  .tech {
+    border: 1px solid var(--hairline);
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .tech strong { display: block; margin-bottom: 4px; font-size: 16px; }
+  .tech span { font-size: 16px; color: var(--muted); }
 
   /* Responsive details */
   @media (max-width: 640px) {
@@ -1071,9 +1150,9 @@
         
         <!-- Row 2: Connector split -->
         <div class="flowchart-connector" style="grid-row: 2;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
             <defs><marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>
-            <path d="M 300,0 L 300,12 Q 300,20 280,20 L 120,20 Q 100,20 100,28 L 100,40 M 300,12 Q 300,20 320,20 L 480,20 Q 500,20 500,28 L 500,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <path d="M 320,0 L 320,12 Q 320,20 300,20 L 120,20 Q 100,20 100,28 L 100,40 M 320,12 Q 320,20 340,20 L 520,20 Q 540,20 540,28 L 540,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1096,8 +1175,8 @@
         
         <!-- Row 4: Connector merge -->
         <div class="flowchart-connector" style="grid-row: 4;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <path d="M 100,0 L 100,12 Q 100,20 120,20 L 280,20 Q 300,20 300,28 L 300,40 M 500,0 L 500,12 Q 500,20 480,20 L 320,20 Q 300,20 300,28 L 300,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <path d="M 100,0 L 100,12 Q 100,20 120,20 L 300,20 Q 320,20 320,28 L 320,40 M 540,0 L 540,12 Q 540,20 520,20 L 340,20 Q 320,20 320,28 L 320,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1112,8 +1191,8 @@
         
         <!-- Row 6: Connector straight -->
         <div class="flowchart-connector" style="grid-row: 6;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1128,8 +1207,8 @@
         
         <!-- Row 8: Connector split to trigger -->
         <div class="flowchart-connector" style="grid-row: 8;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <path d="M 300,0 L 300,12 Q 300,20 280,20 L 120,20 Q 100,20 100,28 L 100,40 M 300,12 Q 300,20 320,20 L 480,20 Q 500,20 500,28 L 500,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <path d="M 320,0 L 320,12 Q 320,20 300,20 L 120,20 Q 100,20 100,28 L 100,40 M 320,12 Q 320,20 340,20 L 520,20 Q 540,20 540,28 L 540,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1154,8 +1233,8 @@
         
         <!-- Row 10: Connector merge -->
         <div class="flowchart-connector" style="grid-row: 10;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <path d="M 100,0 L 100,12 Q 100,20 120,20 L 280,20 Q 300,20 300,28 L 300,40 M 500,0 L 500,12 Q 500,20 480,20 L 320,20 Q 300,20 300,28 L 300,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <path d="M 100,0 L 100,12 Q 100,20 120,20 L 280,20 Q 300,20 300,28 L 300,40 M 540,0 L 540,12 Q 540,20 520,20 L 340,20 Q 320,20 320,28 L 320,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1170,8 +1249,8 @@
         
         <!-- Row 12: Connector straight -->
         <div class="flowchart-connector" style="grid-row: 12;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1189,8 +1268,8 @@
         
         <!-- Row 14: Connector straight -->
         <div class="flowchart-connector" style="grid-row: 14;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1204,13 +1283,13 @@
         </div>
         
         <!-- Row 16: Connector 3-way split -->
-        <div class="flowchart-connector" style="grid-row: 16; height: 50px;">
-          <svg viewBox="0 0 600 50" preserveAspectRatio="none">
-            <path d="M 300,0 L 300,12 Q 300,20 280,20 L 120,20 Q 100,20 100,28 L 100,50 M 300,0 L 300,50 M 300,12 Q 300,20 320,20 L 480,20 Q 500,20 500,28 L 500,50" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
-            <text x="180" y="16" font-size="11" fill="#ef4444" font-weight="700" text-anchor="end">Low &lt; 0.50</text>
-            <text x="310" y="30" font-size="11" fill="#d97706" font-weight="700" text-anchor="start">Mid 0.50-0.79</text>
-            <text x="420" y="16" font-size="11" fill="#22c55e" font-weight="700" text-anchor="start">High &ge; 0.80</text>
+        <div class="flowchart-connector" style="grid-row: 16; height: 50px; position: relative;">
+          <svg viewBox="0 0 640 50" preserveAspectRatio="none" style="display:block; width:100%; height:100%;">
+            <path d="M 320,0 L 320,12 Q 320,20 300,20 L 120,20 Q 100,20 100,28 L 100,50 M 320,0 L 320,50 M 320,12 Q 320,20 340,20 L 520,20 Q 540,20 540,28 L 540,50" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
+          <div style="position: absolute; left: 0; width: calc(50% - 75px); text-align: right; top: 6px; font-size: 12px; font-weight: 700; color: #ef4444; pointer-events: none; font-family: sans-serif;">Low &lt; 0.50</div>
+          <div style="position: absolute; left: calc(50% + 10px); top: 20px; font-size: 12px; font-weight: 700; color: #d97706; pointer-events: none; font-family: sans-serif;">Mid 0.50-0.79</div>
+          <div style="position: absolute; left: calc(50% + 75px); top: 6px; font-size: 12px; font-weight: 700; color: #22c55e; pointer-events: none; font-family: sans-serif;">High &ge; 0.80</div>
         </div>
         
         <!-- Row 17: Triage Split Cards -->
@@ -1238,8 +1317,8 @@
         
         <!-- Row 18: Connector merge -->
         <div class="flowchart-connector" style="grid-row: 18;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <path d="M 100,0 L 100,12 Q 100,20 120,20 L 280,20 Q 300,20 300,28 L 300,40 M 300,0 L 300,40 M 500,0 L 500,12 Q 500,20 480,20 L 320,20 Q 300,20 300,28 L 300,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <path d="M 100,0 L 100,12 Q 100,20 120,20 L 280,20 Q 300,20 300,28 L 300,40 M 320,0 L 320,40 M 540,0 L 540,12 Q 540,20 520,20 L 340,20 Q 320,20 320,28 L 320,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1254,8 +1333,8 @@
         
         <!-- Row 20: Connector split to lanes -->
         <div class="flowchart-connector" style="grid-row: 20;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <path d="M 300,0 L 300,12 Q 300,20 280,20 L 120,20 Q 100,20 100,28 L 100,40 M 300,12 Q 300,20 320,20 L 480,20 Q 500,20 500,28 L 500,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <path d="M 320,0 L 320,12 Q 320,20 300,20 L 120,20 Q 100,20 100,28 L 100,40 M 320,12 Q 320,20 340,20 L 520,20 Q 540,20 540,28 L 540,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1280,9 +1359,9 @@
         
         <!-- Row 22: Connector split lane flows -->
         <div class="flowchart-connector" style="grid-row: 22;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
             <line x1="100" y1="0" x2="100" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
-            <line x1="500" y1="0" x2="500" y2="40" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="540" y1="0" x2="540" y2="40" stroke="#94a3b8" stroke-width="2"/>
           </svg>
         </div>
         
@@ -1304,9 +1383,9 @@
         
         <!-- Row 24: Connector split -->
         <div class="flowchart-connector" style="grid-row: 24;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
             <line x1="100" y1="0" x2="100" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
-            <line x1="500" y1="0" x2="500" y2="40" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="540" y1="0" x2="540" y2="40" stroke="#94a3b8" stroke-width="2"/>
           </svg>
         </div>
         
@@ -1324,17 +1403,17 @@
         </div>
         
         <!-- Row 26: Connector to editing merge & bypass -->
-        <div class="flowchart-connector" style="grid-row: 26;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <!-- Yes Path (center of diamond to Center column Editor assigned) -->
-            <path d="M 100,20 C 140,20 300,10 300,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
-            <!-- No Path (left of diamond to Left column bypass line at x=50) -->
+        <div class="flowchart-connector" style="grid-row: 26; position: relative;">
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none" style="display:block; width:100%; height:100%;">
+            <!-- Yes Path (diamond right 160 to Center column Editor assigned 320) -->
+            <path d="M 160,20 C 200,20 320,10 320,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <!-- No Path (diamond left 40 to Left column bypass line at x=50) -->
             <path d="M 40,20 L 50,20 L 50,40" fill="none" stroke="#94a3b8" stroke-width="2"/>
-            <!-- Human Lane Path (right column to Center column Editor assigned) -->
-            <path d="M 500,0 C 500,20 300,10 300,40" fill="none" stroke="#94a3b8" stroke-width="2"/>
-            <text x="140" y="15" font-size="11" fill="#d97706" font-weight="700">Yes</text>
-            <text x="70" y="15" font-size="11" fill="#22c55e" font-weight="700">No (skip to QC)</text>
+            <!-- Human Lane Path (right column 540 to Center column Editor assigned 320) -->
+            <path d="M 540,0 C 540,20 320,10 320,40" fill="none" stroke="#94a3b8" stroke-width="2"/>
           </svg>
+          <div style="position: absolute; left: 0; width: calc(15.625% - 65px); text-align: right; top: 8px; font-size: 12px; font-weight: 700; color: #22c55e; pointer-events: none; font-family: sans-serif;">No (skip to QC)</div>
+          <div style="position: absolute; left: calc(15.625% + 65px); top: 8px; font-size: 12px; font-weight: 700; color: #d97706; pointer-events: none; font-family: sans-serif;">Yes</div>
         </div>
         
         <!-- ================= EDIT PHASE ================= -->
@@ -1358,8 +1437,8 @@
         
         <!-- Row 28: Connector -->
         <div class="flowchart-connector" style="grid-row: 28;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
             <line x1="50" y1="0" x2="50" y2="40" stroke="#94a3b8" stroke-width="2"/>
             <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
@@ -1367,11 +1446,11 @@
         
         <!-- Row 29: Edit Level 2 (Rework connection) -->
         <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
-          <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
+          <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block; width:100%; height:100%;">
             <line x1="50" y1="0" x2="50" y2="80" stroke="#94a3b8" stroke-width="2"/>
             <path d="M 100,0 L 100,32 Q 100,40 120,40 L 200,40" fill="none" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-down)"/>
-            <text x="110" y="24" font-size="11" fill="#f87171" font-weight="700">rework</text>
           </svg>
+          <div style="position: absolute; left: 55%; top: 14px; font-size: 11px; color: #f87171; font-weight: 700; pointer-events: none; font-family: sans-serif;">rework</div>
         </div>
         <div class="flowchart-card fc-editor lane-human phase ph-7" style="grid-column: 3;" data-phase="7">
           <h3 style="display:flex; align-items:center; gap:8px;">
@@ -1383,8 +1462,8 @@
         
         <!-- Row 30: Connector -->
         <div class="flowchart-connector" style="grid-row: 30;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
             <line x1="50" y1="0" x2="50" y2="40" stroke="#94a3b8" stroke-width="2"/>
             <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
@@ -1407,10 +1486,10 @@
         
         <!-- Row 32: Connector to QC merge -->
         <div class="flowchart-connector" style="grid-row: 32;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
             <!-- Bypass line curves into center -->
-            <path d="M 50,0 L 50,15 C 50,30 300,20 300,40" fill="none" stroke="#94a3b8" stroke-width="2"/>
+            <path d="M 50,0 L 50,15 C 50,30 320,20 320,40" fill="none" stroke="#94a3b8" stroke-width="2"/>
             <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
@@ -1434,8 +1513,8 @@
         
         <!-- Row 34: Connector -->
         <div class="flowchart-connector" style="grid-row: 34;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
             <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
@@ -1455,16 +1534,16 @@
         </div>
         
         <!-- Row 36: Connector -->
-        <div class="flowchart-connector" style="grid-row: 36;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+        <div class="flowchart-connector" style="grid-row: 36; position: relative;">
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none" style="display:block; width:100%; height:100%;">
             <!-- Fail Path (straight down) -->
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
-            <!-- Pass Path (diamond to Right column Delivery) -->
-            <path d="M 350,15 C 400,15 500,15 500,40" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <!-- Pass Path (diamond right 378 to Right column Delivery 540) -->
+            <path d="M 378,15 C 420,15 540,15 540,40" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow-down)"/>
             <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
-            <text x="315" y="25" font-size="11" fill="#ef4444" font-weight="700">Fail</text>
-            <text x="420" y="12" font-size="11" fill="#22c55e" font-weight="700">Pass</text>
           </svg>
+          <div style="position: absolute; left: calc(50% + 10px); top: 15px; font-size: 12px; font-weight: 700; color: #ef4444; pointer-events: none; font-family: sans-serif;">Fail</div>
+          <div style="position: absolute; left: calc(50% + 70px); top: 2px; font-size: 12px; font-weight: 700; color: #22c55e; pointer-events: none; font-family: sans-serif;">Pass</div>
         </div>
         
         <!-- Row 37: Triage Level 3 -->
@@ -1490,9 +1569,9 @@
         
         <!-- Row 38: Connector -->
         <div class="flowchart-connector" style="grid-row: 38;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
-            <line x1="500" y1="0" x2="500" y2="40" stroke="#94a3b8" stroke-width="2"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <line x1="540" y1="0" x2="540" y2="40" stroke="#94a3b8" stroke-width="2"/>
             <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
@@ -1516,17 +1595,17 @@
         </div>
         
         <!-- Row 40: Connector split rework / loops -->
-        <div class="flowchart-connector" style="grid-row: 40;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <!-- Yes Path (diamond to Col 4 Human QC) -->
-            <path d="M 350,15 C 400,15 500,15 500,40" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-down)"/>
-            <!-- No Path (left of diamond to Left column rework loop line at x=100) -->
-            <path d="M 250,20 L 100,20 L 100,0" fill="none" stroke="#f87171" stroke-width="2"/>
+        <div class="flowchart-connector" style="grid-row: 40; position: relative;">
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none" style="display:block; width:100%; height:100%;">
+            <!-- Yes Path (diamond right 378 to Col 4 Human QC 540) -->
+            <path d="M 378,15 C 420,15 540,15 540,40" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <!-- No Path (diamond left 262 to Left column rework loop line at x=100) -->
+            <path d="M 262,20 L 100,20 L 100,0" fill="none" stroke="#f87171" stroke-width="2"/>
             <!-- Delivery Path (going down) -->
-            <line x1="500" y1="0" x2="500" y2="40" stroke="#22c55e" stroke-width="2"/>
-            <text x="380" y="12" font-size="11" fill="#ef4444" font-weight="700">Yes [3x]</text>
-            <text x="130" y="15" font-size="11" fill="#5f6368" font-weight="700">No (back to editor)</text>
+            <line x1="540" y1="0" x2="540" y2="40" stroke="#22c55e" stroke-width="2"/>
           </svg>
+          <div style="position: absolute; left: calc(50% + 70px); top: 2px; font-size: 12px; font-weight: 700; color: #ef4444; pointer-events: none; font-family: sans-serif;">Yes [3x]</div>
+          <div style="position: absolute; left: calc(15.625% + 30px); top: 5px; font-size: 12px; font-weight: 700; color: #5f6368; pointer-events: none; font-family: sans-serif;">No (back to editor)</div>
         </div>
         
         <!-- ================= DELIVER PHASE ================= -->
@@ -1549,9 +1628,9 @@
         
         <!-- Row 42: Connector merge to delivery -->
         <div class="flowchart-connector" style="grid-row: 42;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
             <!-- Merging Col 4 (Delivery path and Human QC path) to Center Delivered to Shopify -->
-            <path d="M 500,0 C 500,20 300,10 300,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <path d="M 540,0 C 540,20 320,10 320,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1567,8 +1646,8 @@
         
         <!-- Row 44: Connector straight -->
         <div class="flowchart-connector" style="grid-row: 44;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1583,8 +1662,8 @@
         
         <!-- Row 46: Connector straight -->
         <div class="flowchart-connector" style="grid-row: 46;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1602,8 +1681,8 @@
         
         <!-- Row 48: Connector straight -->
         <div class="flowchart-connector" style="grid-row: 48;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1613,13 +1692,13 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#d97706;"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
             Direct to editor
           </h3>
-          <p>Brief is re-routed directly to the active editor with full feedback context.</p>
+          <p>Revision brief is re-routed directly to the active editor with full feedback context.</p>
         </div>
         
         <!-- Row 50: Connector straight -->
         <div class="flowchart-connector" style="grid-row: 50;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -1634,8 +1713,8 @@
         
         <!-- Row 52: Connector straight -->
         <div class="flowchart-connector" style="grid-row: 52;">
-          <svg viewBox="0 0 600 40" preserveAspectRatio="none">
-            <line x1="300" y1="0" x2="300" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+          <svg viewBox="0 0 640 40" preserveAspectRatio="none">
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
         
@@ -2368,6 +2447,47 @@
         <p class="status-node-text">Customer rejected the delivery. Visual annotations are logged and the job is returned to editing.</p>
       </div>
     </div>
+  </div>
+
+  <h2>Design principles</h2>
+  <div class="principles">
+    <div class="principle"><span class="num">P1</span><strong>AI detects, code decides.</strong><p>Models output facts. The workflow engine chooses actions.</p></div>
+    <div class="principle"><span class="num">P2</span><strong>Same model analyzes and QCs.</strong><p>The checker already knows what fixed should look like.</p></div>
+    <div class="principle"><span class="num">P3</span><strong>Catalog is ground truth.</strong><p>All decisions compare against the customer's catalog and references.</p></div>
+    <div class="principle"><span class="num">P4</span><strong>Async by default.</strong><p>Heavy work runs in queues. The UI only reads state.</p></div>
+    <div class="principle"><span class="num">P5</span><strong>The source platform owns media.</strong><p>Your DB owns workflow, audit, and version history.</p></div>
+    <div class="principle"><span class="num">P6</span><strong>Every transition is logged.</strong><p>No silent status changes. The audit log tells the story.</p></div>
+  </div>
+
+  <h2>Service mapping</h2>
+  <div class="services">
+    <div class="service"><strong>Background removal</strong><span>Background is not pure white or does not match the catalog.</span></div>
+    <div class="service"><strong>Resolution upscale</strong><span>Image is below the target size.</span></div>
+    <div class="service"><strong>Color adjustment</strong><span>Color cast, saturation issue, or mismatch.</span></div>
+    <div class="service"><strong>Image retouch</strong><span>Dust, wrinkles, scratches, or reflections.</span></div>
+    <div class="service"><strong>Shadow add or edit</strong><span>Lighting or shadow is missing or unnatural.</span></div>
+    <div class="service"><strong>Straighten, center, crop</strong><span>Composition is off or the crop is not correct.</span></div>
+    <div class="service"><strong>Resize</strong><span>Final output does not match the output spec.</span></div>
+    <div class="service"><strong>Ghost mannequin</strong><span>Used when apparel needs a product-only mannequin-removed result.</span></div>
+  </div>
+
+  <h2>System layers</h2>
+  <div class="layer-stack">
+    <div class="layer l5">Layer 5: User UI - standalone web app with a clean scanning surface.</div>
+    <div class="layer l4">Layer 4: API - control plane endpoints and event webhooks.</div>
+    <div class="layer l3">Layer 3: Workers - analysis, editing prep, QC, delivery, billing.</div>
+    <div class="layer l2">Layer 2: AI gateway - one interface for all model calls.</div>
+    <div class="layer l1">Layer 1: Storage - PostgreSQL, Redis, and S3-compatible object storage.</div>
+  </div>
+
+  <h2>Tech stack</h2>
+  <div class="tech-grid">
+    <div class="tech"><strong>Frontend</strong><span>React web app with clean UI components.</span></div>
+    <div class="tech"><strong>Backend</strong><span>Node.js and TypeScript.</span></div>
+    <div class="tech"><strong>Database</strong><span>PostgreSQL for workflow, state, and audit.</span></div>
+    <div class="tech"><strong>Queue</strong><span>BullMQ and Redis for background jobs.</span></div>
+    <div class="tech"><strong>AI</strong><span>GPT-5.5, GPT-5.4-mini, and GPT Image 2 through one gateway.</span></div>
+    <div class="tech"><strong>Storage</strong><span>S3-compatible storage with signed URLs.</span></div>
   </div>
 
   <div class="footer">Product Image Pipeline</div>
