@@ -725,7 +725,7 @@
   .flowchart-grid {
     display: grid;
     grid-template-columns: 90px 1fr 1.2fr 1fr;
-    gap: 10px 0;
+    gap: 0;
     align-items: center;
     position: relative;
     max-width: 960px;
@@ -1151,7 +1151,10 @@
         <!-- Row 2: Connector split -->
         <div class="flowchart-connector" style="grid-row: 2;">
           <svg viewBox="0 0 640 40" preserveAspectRatio="none">
-            <defs><marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker></defs>
+            <defs>
+              <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
+              <marker id="arrow-down-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker>
+            </defs>
             <path d="M 320,0 L 320,12 Q 320,20 300,20 L 120,20 Q 100,20 100,28 L 100,40 M 320,12 Q 320,20 340,20 L 520,20 Q 540,20 540,28 L 540,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
         </div>
@@ -1424,7 +1427,6 @@
         <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block;">
             <line x1="50" y1="0" x2="50" y2="80" stroke="#94a3b8" stroke-width="2"/>
-            <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
         <div class="flowchart-card fc-editor lane-human phase ph-6" style="grid-column: 3;" data-phase="6">
@@ -1440,7 +1442,6 @@
           <svg viewBox="0 0 640 40" preserveAspectRatio="none">
             <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
             <line x1="50" y1="0" x2="50" y2="40" stroke="#94a3b8" stroke-width="2"/>
-            <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
         
@@ -1448,9 +1449,9 @@
         <div style="grid-column: 2; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <svg width="100%" height="100%" viewBox="0 0 200 80" preserveAspectRatio="none" style="display:block; width:100%; height:100%;">
             <line x1="50" y1="0" x2="50" y2="80" stroke="#94a3b8" stroke-width="2"/>
-            <path d="M 100,0 L 100,32 Q 100,40 120,40 L 200,40" fill="none" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-down)"/>
+            <path d="M 100,80 L 100,48 Q 100,40 120,40 L 200,40" fill="none" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-down-red)"/>
           </svg>
-          <div style="position: absolute; left: 55%; top: 14px; font-size: 11px; color: #f87171; font-weight: 700; pointer-events: none; font-family: sans-serif;">rework</div>
+          <div style="position: absolute; left: 55%; top: 44px; font-size: 11px; color: #f87171; font-weight: 700; pointer-events: none; font-family: sans-serif;">rework</div>
         </div>
         <div class="flowchart-card fc-editor lane-human phase ph-7" style="grid-column: 3;" data-phase="7">
           <h3 style="display:flex; align-items:center; gap:8px;">
@@ -1598,7 +1599,7 @@
         <div class="flowchart-connector" style="grid-row: 40; position: relative;">
           <svg viewBox="0 0 640 40" preserveAspectRatio="none" style="display:block; width:100%; height:100%;">
             <!-- Yes Path (diamond right 378 to Col 4 Human QC 540) -->
-            <path d="M 378,15 C 420,15 540,15 540,40" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <path d="M 378,15 C 420,15 540,15 540,40" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-down-red)"/>
             <!-- No Path (diamond left 262 to Left column rework loop line at x=100) -->
             <path d="M 262,20 L 100,20 L 100,0" fill="none" stroke="#f87171" stroke-width="2"/>
             <!-- Delivery Path (going down) -->
