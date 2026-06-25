@@ -947,6 +947,9 @@
   @media (max-width: 900px) { .principles { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 640px) { .principles { grid-template-columns: 1fr; } }
   .principle {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
     border: 1.5px solid var(--hairline);
     background: var(--surface);
     border-radius: 12px;
@@ -958,17 +961,33 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     transform: translateY(-2px);
   }
+  .principle-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: #fafaf5;
+    border: 1px solid var(--hairline);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+  }
+  .principle-icon-wrapper svg {
+    width: 24px;
+    height: 24px;
+  }
   .principle .num {
     display: inline-block;
-    margin-bottom: 10px;
-    font-size: 14px;
+    margin-bottom: 6px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--muted);
   }
   .principle strong { display: block; font-size: 16px; margin-bottom: 6px; }
-  .principle p { margin: 0; font-size: 16px; color: var(--muted); }
+  .principle p { margin: 0; font-size: 15px; color: var(--muted); line-height: 1.45; }
 
   .layer-stack {
     display: grid;
@@ -980,11 +999,12 @@
     padding: 0 10px;
   }
   .layer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
     border: 1.5px solid var(--hairline);
     border-radius: 12px;
     padding: 14px 16px;
-    font-size: 16px;
-    line-height: 1.45;
     transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
   .layer:hover {
@@ -992,6 +1012,26 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     transform: translateY(-2px);
   }
+  .layer-badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: rgba(0, 0, 0, 0.06);
+    color: var(--muted);
+    flex-shrink: 0;
+    min-width: 76px;
+    text-align: center;
+  }
+  .layer-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .layer-details strong { font-size: 16px; color: var(--ink); }
+  .layer-details span { font-size: 15px; color: var(--muted); }
   .layer.l5 { background: #f5f3ff; }
   .layer.l4 { background: #eff6ff; }
   .layer.l3 { background: #f0fdfa; }
@@ -1010,6 +1050,9 @@
   }
   @media (max-width: 760px) { .services { grid-template-columns: 1fr; } }
   .service {
+    display: flex;
+    align-items: center;
+    gap: 16px;
     border: 1.5px solid var(--hairline);
     background: var(--surface);
     border-radius: 12px;
@@ -1021,8 +1064,29 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     transform: translateY(-2px);
   }
-  .service strong { display: block; font-size: 16px; margin-bottom: 4px; }
-  .service span { display: block; font-size: 16px; color: var(--muted); }
+  .service-illustration {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: #fafaf5;
+    border: 1px solid var(--hairline);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+  }
+  .service-illustration svg {
+    width: 24px;
+    height: 24px;
+  }
+  .service-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .service strong { display: block; font-size: 16px; margin-bottom: 2px; }
+  .service span { display: block; font-size: 15px; color: var(--muted); }
 
   .tech-grid {
     display: grid;
@@ -1036,6 +1100,9 @@
   }
   @media (max-width: 760px) { .tech-grid { grid-template-columns: 1fr; } }
   .tech {
+    display: flex;
+    align-items: center;
+    gap: 16px;
     border: 1.5px solid var(--hairline);
     background: var(--surface);
     border-radius: 12px;
@@ -1047,8 +1114,29 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     transform: translateY(-2px);
   }
-  .tech strong { display: block; margin-bottom: 4px; font-size: 16px; }
-  .tech span { font-size: 16px; color: var(--muted); }
+  .tech-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: #fafaf5;
+    border: 1px solid var(--hairline);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+  }
+  .tech-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  .tech-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .tech strong { display: block; margin-bottom: 2px; font-size: 16px; }
+  .tech span { font-size: 15px; color: var(--muted); }
 
   /* Responsive details */
   @media (max-width: 640px) {
@@ -2522,43 +2610,303 @@
 
   <h2>Design principles</h2>
   <div class="principles">
-    <div class="principle"><span class="num">P1</span><strong>AI detects, code decides.</strong><p>Models output facts. The workflow engine chooses actions.</p></div>
-    <div class="principle"><span class="num">P2</span><strong>Same model analyzes and QCs.</strong><p>The checker already knows what fixed should look like.</p></div>
-    <div class="principle"><span class="num">P3</span><strong>Catalog is ground truth.</strong><p>All decisions compare against the customer's catalog and references.</p></div>
-    <div class="principle"><span class="num">P4</span><strong>Async by default.</strong><p>Heavy work runs in queues. The UI only reads state.</p></div>
-    <div class="principle"><span class="num">P5</span><strong>The source platform owns media.</strong><p>Your DB owns workflow, audit, and version history.</p></div>
-    <div class="principle"><span class="num">P6</span><strong>Every transition is logged.</strong><p>No silent status changes. The audit log tells the story.</p></div>
+    <div class="principle">
+      <div class="principle-icon-wrapper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v8M12 14v8M19 12H5M12 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z" />
+          <path d="m17 7 4 5-4 5M7 17l-4-5 4-5" />
+        </svg>
+      </div>
+      <div>
+        <span class="num">P1</span>
+        <strong>AI detects, code decides.</strong>
+        <p>Models output facts. The workflow engine chooses actions.</p>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-icon-wrapper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          <path d="m9 11 2 2 4-4"></path>
+        </svg>
+      </div>
+      <div>
+        <span class="num">P2</span>
+        <strong>Same model analyzes and QCs.</strong>
+        <p>The checker already knows what fixed should look like.</p>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-icon-wrapper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+          <path d="M6 6h10M6 10h10"></path>
+        </svg>
+      </div>
+      <div>
+        <span class="num">P3</span>
+        <strong>Catalog is ground truth.</strong>
+        <p>All decisions compare against the customer's catalog and references.</p>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-icon-wrapper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 12"></polyline>
+        </svg>
+      </div>
+      <div>
+        <span class="num">P4</span>
+        <strong>Async by default.</strong>
+        <p>Heavy work runs in queues. The UI only reads state.</p>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-icon-wrapper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+          <path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"></path>
+        </svg>
+      </div>
+      <div>
+        <span class="num">P5</span>
+        <strong>The source platform owns media.</strong>
+        <p>Your DB owns workflow, audit, and version history.</p>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-icon-wrapper">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+          <path d="M7 8h10M7 12h10M7 16h6"></path>
+        </svg>
+      </div>
+      <div>
+        <span class="num">P6</span>
+        <strong>Every transition is logged.</strong>
+        <p>No silent status changes. The audit log tells the story.</p>
+      </div>
+    </div>
   </div>
 
   <h2>Service mapping</h2>
   <div class="services">
-    <div class="service"><strong>Background removal</strong><span>Background is not pure white or does not match the catalog.</span></div>
-    <div class="service"><strong>Resolution upscale</strong><span>Image is below the target size.</span></div>
-    <div class="service"><strong>Color adjustment</strong><span>Color cast, saturation issue, or mismatch.</span></div>
-    <div class="service"><strong>Image retouch</strong><span>Dust, wrinkles, scratches, or reflections.</span></div>
-    <div class="service"><strong>Shadow add or edit</strong><span>Lighting or shadow is missing or unnatural.</span></div>
-    <div class="service"><strong>Straighten, center, crop</strong><span>Composition is off or the crop is not correct.</span></div>
-    <div class="service"><strong>Resize</strong><span>Final output does not match the output spec.</span></div>
-    <div class="service"><strong>Ghost mannequin</strong><span>Used when apparel needs a product-only mannequin-removed result.</span></div>
+    <div class="service">
+      <div class="service-illustration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="2 2"></rect>
+          <path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke-opacity="0.3"></path>
+          <circle cx="12" cy="12" r="6" fill="currentColor" fill-opacity="0.1"></circle>
+        </svg>
+      </div>
+      <div class="service-content">
+        <strong>Background removal</strong>
+        <span>Background is not pure white or does not match the catalog.</span>
+      </div>
+    </div>
+    <div class="service">
+      <div class="service-illustration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+        </svg>
+      </div>
+      <div class="service-content">
+        <strong>Resolution upscale</strong>
+        <span>Image is below the target size.</span>
+      </div>
+    </div>
+    <div class="service">
+      <div class="service-illustration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 2a10 10 0 0 0 0 20Z" fill="currentColor" fill-opacity="0.2"></path>
+        </svg>
+      </div>
+      <div class="service-content">
+        <strong>Color adjustment</strong>
+        <span>Color cast, saturation issue, or mismatch.</span>
+      </div>
+    </div>
+    <div class="service">
+      <div class="service-illustration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m15 4-2 2L6.5 12.5a2.12 2.12 0 1 0 3 3L16 9l2-2-3-3Z"></path>
+          <path d="m19 2 .5 1.5L21 4l-1.5.5L19 6l-.5-1.5L17 4l1.5-.5L19 2Z"></path>
+        </svg>
+      </div>
+      <div class="service-content">
+        <strong>Image retouch</strong>
+        <span>Dust, wrinkles, scratches, or reflections.</span>
+      </div>
+    </div>
+    <div class="service">
+      <div class="service-illustration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="18" rx="8" ry="3" stroke-dasharray="3 3"></ellipse>
+          <circle cx="12" cy="8" r="5"></circle>
+        </svg>
+      </div>
+      <div class="service-content">
+        <strong>Shadow add or edit</strong>
+        <span>Lighting or shadow is missing or unnatural.</span>
+      </div>
+    </div>
+    <div class="service">
+      <div class="service-illustration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2v16h16M2 6h16v16"></path>
+        </svg>
+      </div>
+      <div class="service-content">
+        <strong>Straighten, center, crop</strong>
+        <span>Composition is off or the crop is not correct.</span>
+      </div>
+    </div>
+    <div class="service">
+      <div class="service-illustration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="9" width="13" height="13" rx="2"></rect>
+          <rect x="9" y="2" width="13" height="13" rx="2" stroke-dasharray="2 2"></rect>
+        </svg>
+      </div>
+      <div class="service-content">
+        <strong>Resize</strong>
+        <span>Final output does not match the output spec.</span>
+      </div>
+    </div>
+    <div class="service">
+      <div class="service-illustration">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 7a2 2 0 1 0-2-2v4"></path>
+          <path d="M3 11a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1l-2 10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1L3 11Z" stroke-dasharray="3 3"></path>
+        </svg>
+      </div>
+      <div class="service-content">
+        <strong>Ghost mannequin</strong>
+        <span>Used when apparel needs a product-only mannequin-removed result.</span>
+      </div>
+    </div>
   </div>
 
   <h2>System layers</h2>
   <div class="layer-stack">
-    <div class="layer l5">Layer 5: User UI - standalone web app with a clean scanning surface.</div>
-    <div class="layer l4">Layer 4: API - control plane endpoints and event webhooks.</div>
-    <div class="layer l3">Layer 3: Workers - analysis, editing prep, QC, delivery, billing.</div>
-    <div class="layer l2">Layer 2: AI gateway - one interface for all model calls.</div>
-    <div class="layer l1">Layer 1: Storage - PostgreSQL, Redis, and S3-compatible object storage.</div>
+    <div class="layer l5">
+      <div class="layer-badge">WEB UI</div>
+      <div class="layer-details">
+        <strong>Layer 5: User UI</strong>
+        <span>Standalone web app with a clean scanning surface.</span>
+      </div>
+    </div>
+    <div class="layer l4">
+      <div class="layer-badge">REST API</div>
+      <div class="layer-details">
+        <strong>Layer 4: API Plane</strong>
+        <span>Control plane endpoints and event webhooks.</span>
+      </div>
+    </div>
+    <div class="layer l3">
+      <div class="layer-badge">WORKER</div>
+      <div class="layer-details">
+        <strong>Layer 3: Processing Workers</strong>
+        <span>Analysis, editing prep, QC, delivery, billing.</span>
+      </div>
+    </div>
+    <div class="layer l2">
+      <div class="layer-badge">GATEWAY</div>
+      <div class="layer-details">
+        <strong>Layer 2: AI Gateway</strong>
+        <span>One interface for all model calls.</span>
+      </div>
+    </div>
+    <div class="layer l1">
+      <div class="layer-badge">STORE</div>
+      <div class="layer-details">
+        <strong>Layer 1: Storage &amp; Queue</strong>
+        <span>PostgreSQL, Redis, and S3-compatible object storage.</span>
+      </div>
+    </div>
   </div>
 
   <h2>Tech stack</h2>
   <div class="tech-grid">
-    <div class="tech"><strong>Frontend</strong><span>React web app with clean UI components.</span></div>
-    <div class="tech"><strong>Backend</strong><span>Node.js and TypeScript.</span></div>
-    <div class="tech"><strong>Database</strong><span>PostgreSQL for workflow, state, and audit.</span></div>
-    <div class="tech"><strong>Queue</strong><span>BullMQ and Redis for background jobs.</span></div>
-    <div class="tech"><strong>AI</strong><span>GPT-5.5, GPT-5.4-mini, and GPT Image 2 through one gateway.</span></div>
-    <div class="tech"><strong>Storage</strong><span>S3-compatible storage with signed URLs.</span></div>
+    <div class="tech">
+      <div class="tech-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(30 12 12)"></ellipse>
+          <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(90 12 12)"></ellipse>
+          <ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(150 12 12)"></ellipse>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+        </svg>
+      </div>
+      <div class="tech-content">
+        <strong>Frontend</strong>
+        <span>React web app with clean UI components.</span>
+      </div>
+    </div>
+    <div class="tech">
+      <div class="tech-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+          <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+          <line x1="6" y1="6" x2="6.01" y2="6"></line>
+          <line x1="6" y1="18" x2="6.01" y2="18"></line>
+        </svg>
+      </div>
+      <div class="tech-content">
+        <strong>Backend</strong>
+        <span>Node.js and TypeScript.</span>
+      </div>
+    </div>
+    <div class="tech">
+      <div class="tech-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+          <path d="M3 9h18M3 15h18M9 9v12"></path>
+        </svg>
+      </div>
+      <div class="tech-content">
+        <strong>Database</strong>
+        <span>PostgreSQL for workflow, state, and audit.</span>
+      </div>
+    </div>
+    <div class="tech">
+      <div class="tech-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+        </svg>
+      </div>
+      <div class="tech-content">
+        <strong>Queue</strong>
+        <span>BullMQ and Redis for background jobs.</span>
+      </div>
+    </div>
+    <div class="tech">
+      <div class="tech-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+          <path d="m5 3 1 2.5L8.5 6 6 7 5 9.5 4 7 1.5 6 4 5.5 5 3Z" opacity="0.6" />
+        </svg>
+      </div>
+      <div class="tech-content">
+        <strong>AI</strong>
+        <span>GPT-5.5, GPT-5.4-mini, and GPT Image 2 through one gateway.</span>
+      </div>
+    </div>
+    <div class="tech">
+      <div class="tech-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.47 0-.89.09-1.3.27A6.47 6.47 0 0 0 8.5 8.5C4.9 8.5 2 11.4 2 15s2.9 6.5 6.5 6.5"></path>
+          <path d="M16 16l-4-4-4 4M12 12v9"></path>
+        </svg>
+      </div>
+      <div class="tech-content">
+        <strong>Storage</strong>
+        <span>S3-compatible storage with signed URLs.</span>
+      </div>
+    </div>
   </div>
 
   <div class="footer">Product Image Pipeline</div>
