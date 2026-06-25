@@ -1280,8 +1280,8 @@
         <div class="flowchart-diamond-container lane-auto" data-phase="3">
           <svg width="140" height="80" viewBox="0 0 140 80">
             <polygon points="70,2 138,40 70,78 2,40" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
-            <text x="70" y="38" text-anchor="middle" font-size="12" font-weight="700" fill="#1f2937">Confidence</text>
-            <text x="70" y="52" text-anchor="middle" font-size="11" font-weight="600" fill="#6b7280">gate?</text>
+            <text x="70" y="36" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">Confidence</text>
+            <text x="70" y="52" text-anchor="middle" font-size="13" font-weight="600" fill="#6b7280">gate?</text>
           </svg>
         </div>
         
@@ -1290,9 +1290,9 @@
           <svg viewBox="0 0 640 50" preserveAspectRatio="none" style="display:block; width:100%; height:100%;">
             <path d="M 320,0 L 320,12 Q 320,20 300,20 L 120,20 Q 100,20 100,28 L 100,50 M 320,0 L 320,50 M 320,12 Q 320,20 340,20 L 520,20 Q 540,20 540,28 L 540,50" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
-          <div style="position: absolute; left: 0; width: calc(50% - 75px); text-align: right; top: 6px; font-size: 12px; font-weight: 700; color: #ef4444; pointer-events: none; font-family: sans-serif;">Low &lt; 0.50</div>
-          <div style="position: absolute; left: calc(50% + 10px); top: 20px; font-size: 12px; font-weight: 700; color: #d97706; pointer-events: none; font-family: sans-serif;">Mid 0.50-0.79</div>
-          <div style="position: absolute; left: calc(50% + 75px); top: 6px; font-size: 12px; font-weight: 700; color: #22c55e; pointer-events: none; font-family: sans-serif;">High &ge; 0.80</div>
+          <div style="position: absolute; left: 20%; top: 8px; transform: translateX(-50%); font-size: 14px; font-weight: 700; color: #ef4444; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Low &lt; 0.50</div>
+          <div style="position: absolute; left: 50%; top: 22px; transform: translateX(-50%); font-size: 14px; font-weight: 700; color: #d97706; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Mid 0.50-0.79</div>
+          <div style="position: absolute; left: 80%; top: 8px; transform: translateX(-50%); font-size: 14px; font-weight: 700; color: #22c55e; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">High &ge; 0.80</div>
         </div>
         
         <!-- Row 17: Triage Split Cards -->
@@ -1396,8 +1396,8 @@
         <div class="flowchart-diamond-container col-2 lane-auto" data-phase="5">
           <svg width="120" height="70" viewBox="0 0 120 70">
             <polygon points="60,2 118,35 60,68 2,35" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
-            <text x="60" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">Human</text>
-            <text x="60" y="45" text-anchor="middle" font-size="10" font-weight="600" fill="#6b7280">needed?</text>
+            <text x="60" y="31" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">Human</text>
+            <text x="60" y="48" text-anchor="middle" font-size="13" font-weight="600" fill="#6b7280">needed?</text>
           </svg>
         </div>
         <!-- Right side vertical line for Human lane -->
@@ -1415,8 +1415,8 @@
             <!-- Human Lane Path (right column 540 to Center column Editor assigned 320) -->
             <path d="M 540,0 C 540,20 320,10 320,40" fill="none" stroke="#94a3b8" stroke-width="2"/>
           </svg>
-          <div style="position: absolute; left: 0; width: calc(15.625% - 65px); text-align: right; top: 8px; font-size: 12px; font-weight: 700; color: #22c55e; pointer-events: none; font-family: sans-serif;">No (skip to QC)</div>
-          <div style="position: absolute; left: calc(15.625% + 65px); top: 8px; font-size: 12px; font-weight: 700; color: #d97706; pointer-events: none; font-family: sans-serif;">Yes</div>
+          <div style="position: absolute; left: calc(15.625% - 75px); top: 8px; transform: translateX(-100%); font-size: 14px; font-weight: 700; color: #22c55e; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">No (skip to QC)</div>
+          <div style="position: absolute; left: calc(15.625% + 75px); top: 8px; font-size: 14px; font-weight: 700; color: #d97706; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Yes</div>
         </div>
         
         <!-- ================= EDIT PHASE ================= -->
@@ -1451,7 +1451,7 @@
             <line x1="50" y1="0" x2="50" y2="80" stroke="#94a3b8" stroke-width="2"/>
             <path d="M 100,80 L 100,48 Q 100,40 120,40 L 200,40" fill="none" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrow-down-red)"/>
           </svg>
-          <div style="position: absolute; left: 55%; top: 44px; font-size: 11px; color: #f87171; font-weight: 700; pointer-events: none; font-family: sans-serif;">rework</div>
+          <div style="position: absolute; left: 55%; top: 30px; font-size: 14px; color: #f87171; font-weight: 700; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">rework</div>
         </div>
         <div class="flowchart-card fc-editor lane-human phase ph-7" style="grid-column: 3;" data-phase="7">
           <h3 style="display:flex; align-items:center; gap:8px;">
@@ -1526,11 +1526,12 @@
             <line x1="100" y1="0" x2="100" y2="80" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
+        <!-- Row 35: Score Gate Diamond -->
         <div class="flowchart-diamond-container lane-auto" data-phase="8">
           <svg width="120" height="70" viewBox="0 0 120 70">
             <polygon points="60,2 118,35 60,68 2,35" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
-            <text x="60" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">Score</text>
-            <text x="60" y="45" text-anchor="middle" font-size="10" font-weight="600" fill="#6b7280">&ge; 90?</text>
+            <text x="60" y="31" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">Score</text>
+            <text x="60" y="48" text-anchor="middle" font-size="13" font-weight="600" fill="#6b7280">&ge; 90?</text>
           </svg>
         </div>
         
@@ -1543,8 +1544,8 @@
             <path d="M 378,15 C 420,15 540,15 540,40" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow-down)"/>
             <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
-          <div style="position: absolute; left: calc(50% + 10px); top: 15px; font-size: 12px; font-weight: 700; color: #ef4444; pointer-events: none; font-family: sans-serif;">Fail</div>
-          <div style="position: absolute; left: calc(50% + 70px); top: 2px; font-size: 12px; font-weight: 700; color: #22c55e; pointer-events: none; font-family: sans-serif;">Pass</div>
+          <div style="position: absolute; left: calc(50% + 15px); top: 10px; font-size: 14px; font-weight: 700; color: #ef4444; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Fail</div>
+          <div style="position: absolute; left: calc(50% + 75px); top: 2px; font-size: 14px; font-weight: 700; color: #22c55e; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Pass</div>
         </div>
         
         <!-- Row 37: Triage Level 3 -->
@@ -1586,8 +1587,8 @@
         <div class="flowchart-diamond-container lane-auto" data-phase="8">
           <svg width="120" height="70" viewBox="0 0 120 70">
             <polygon points="60,2 118,35 60,68 2,35" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
-            <text x="60" y="32" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2937">Rework</text>
-            <text x="60" y="45" text-anchor="middle" font-size="10" font-weight="600" fill="#6b7280">cap hit?</text>
+            <text x="60" y="31" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2937">Rework</text>
+            <text x="60" y="48" text-anchor="middle" font-size="13" font-weight="600" fill="#6b7280">cap hit?</text>
           </svg>
         </div>
         <!-- Right side vertical line for Delivery -->
@@ -1605,8 +1606,8 @@
             <!-- Delivery Path (going down) -->
             <line x1="540" y1="0" x2="540" y2="40" stroke="#22c55e" stroke-width="2"/>
           </svg>
-          <div style="position: absolute; left: calc(50% + 70px); top: 2px; font-size: 12px; font-weight: 700; color: #ef4444; pointer-events: none; font-family: sans-serif;">Yes [3x]</div>
-          <div style="position: absolute; left: calc(15.625% + 30px); top: 5px; font-size: 12px; font-weight: 700; color: #5f6368; pointer-events: none; font-family: sans-serif;">No (back to editor)</div>
+          <div style="position: absolute; left: calc(50% + 75px); top: 2px; font-size: 14px; font-weight: 700; color: #ef4444; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">Yes [3x]</div>
+          <div style="position: absolute; left: 30%; top: 5px; transform: translateX(-50%); font-size: 14px; font-weight: 700; color: #5f6368; background: #fafaf5; padding: 2px 6px; border-radius: 4px; pointer-events: none; font-family: sans-serif; white-space: nowrap;">No (back to editor)</div>
         </div>
         
         <!-- ================= DELIVER PHASE ================= -->
