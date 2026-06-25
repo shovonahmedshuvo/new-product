@@ -1,0 +1,1965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Image Pipeline Visualizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --canvas: #fbfbf5;
+    --surface: #ffffff;
+    --ink: #000000;
+    --text: #1f2937;
+    --muted: #5f6368;
+    --hairline: #e4e4e7;
+    --mint: #c1fbd4;
+    --pistachio: #d4f9e0;
+    --shade: #d4d4d8;
+    --pill: 9999px;
+    
+    /* Centering variables */
+    --timeline-w: 68px;
+    --circle-size: 34px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--canvas);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    letter-spacing: -0.015em;
+  }
+  .container { max-width: 1040px; margin: 0 auto; padding: 40px 24px 72px; }
+
+  /* ─── Header ─── */
+  .header { margin-bottom: 32px; text-align: center; }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 14px;
+    border-radius: var(--pill);
+    background: var(--mint);
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .pulse-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #1a6b3a;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(26, 107, 58, 0.4); }
+    50% { opacity: 0.5; box-shadow: 0 0 0 8px rgba(26, 107, 58, 0); }
+  }
+  h1 {
+    margin: 14px 0 6px;
+    font-family: "Plus Jakarta Sans", "Neue Haas Grotesk Display", Helvetica, Arial, sans-serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 18px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* ─── Tab Switcher ─── */
+  .primary-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 12px;
+  }
+  .tab-trigger {
+    border: none;
+    background: transparent;
+    padding: 10px 24px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  .tab-trigger:hover {
+    color: var(--ink);
+  }
+  .tab-trigger.active {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .tab-trigger.active::after {
+    content: '';
+    position: absolute;
+    bottom: -13px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--ink);
+  }
+  .tab-content-pane.hidden {
+    display: none !important;
+  }
+
+  /* ─── Visual elements ─── */
+  .filter-toolbar {
+    display: inline-flex;
+    background: #e9e9e2;
+    padding: 4px;
+    border-radius: var(--pill);
+    margin-bottom: 32px;
+    border: 1px solid var(--hairline);
+    position: relative;
+    z-index: 10;
+  }
+  .filter-btn {
+    border: none;
+    background: transparent;
+    padding: 8px 18px;
+    border-radius: var(--pill);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .filter-btn:hover {
+    color: var(--ink);
+  }
+  .filter-btn.active {
+    background: var(--surface);
+    color: var(--ink);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    font-weight: 600;
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 32px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .legend-swatch {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* Flow */
+  .flow { position: relative; }
+  .flow::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--timeline-w) / 2);
+    top: 36px;
+    bottom: 50px;
+    width: 2px;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, var(--shade), rgba(212, 212, 216, 0.1));
+    z-index: 1;
+  }
+
+  /* Phase block */
+  .phase {
+    position: relative;
+    padding-left: var(--timeline-w);
+    padding-bottom: 40px;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: phase-in 0.5s ease-out forwards;
+    transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
+  }
+  .phase:last-child { padding-bottom: 0; }
+  
+  .phase:nth-child(1) { animation-delay: 0.05s; }
+  .phase:nth-child(2) { animation-delay: 0.1s; }
+  .phase:nth-child(3) { animation-delay: 0.15s; }
+  .phase:nth-child(4) { animation-delay: 0.2s; }
+  .phase:nth-child(5) { animation-delay: 0.25s; }
+  .phase:nth-child(6) { animation-delay: 0.3s; }
+  .phase:nth-child(7) { animation-delay: 0.35s; }
+  .phase:nth-child(8) { animation-delay: 0.4s; }
+  .phase:nth-child(9) { animation-delay: 0.45s; }
+  .phase:nth-child(10) { animation-delay: 0.5s; }
+
+  @keyframes phase-in {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Filter state dimming */
+  .flow.filter-auto .phase:not(.lane-auto) {
+    opacity: 0.12 !important;
+    filter: grayscale(90%);
+    pointer-events: none;
+  }
+  .flow.filter-human .phase:not(.lane-human) {
+    opacity: 0.12 !important;
+    filter: grayscale(90%);
+    pointer-events: none;
+  }
+
+  .phase-circle {
+    position: absolute;
+    left: calc(var(--timeline-w) / 2);
+    top: 18px;
+    width: var(--circle-size);
+    height: var(--circle-size);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ink);
+    z-index: 3;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .phase:hover .phase-circle { transform: translateX(-50%) scale(1.12); }
+
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    padding: 20px 22px;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
+    z-index: 2;
+  }
+  .phase-card:hover {
+    border-color: #bbb;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+    transform: translateX(3px);
+  }
+
+  /* Card highlight from SVG hover */
+  .phase.highlighted .phase-card {
+    border-color: var(--ink);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transform: translateX(6px);
+  }
+  .phase.highlighted .phase-circle {
+    transform: translateX(-50%) scale(1.18);
+    box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px var(--shade);
+  }
+
+  .phase-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .phase-top h2 {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .phase-tag {
+    margin-left: auto;
+    padding: 2px 10px;
+    border-radius: var(--pill);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    background: var(--shade);
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  /* Phase colors */
+  .ph-1 .phase-circle { background: #c1fbd4; }
+  .ph-2 .phase-circle { background: #b8d4f0; }
+  .ph-3 .phase-circle { background: #d4f9e0; }
+  .ph-4 .phase-circle { background: #f0d4f0; }
+  .ph-5 .phase-circle { background: #f0d4f0; }
+  .ph-6 .phase-circle { background: #fce7c8; }
+  .ph-7 .phase-circle { background: #fdd; }
+  .ph-8 .phase-circle { background: #d4f9e0; }
+  .ph-9 .phase-circle { background: #b8d4f0; }
+  .ph-10 .phase-circle { background: #fce7c8; }
+
+  .ph-1 .phase-card { border-left: 3px solid #86d9a0; }
+  .ph-2 .phase-card { border-left: 3px solid #86b8d9; }
+  .ph-3 .phase-card { border-left: 3px solid #86d9a0; }
+  .ph-4 .phase-card { border-left: 3px solid #c886c8; }
+  .ph-5 .phase-card { border-left: 3px solid #c886c8; }
+  .ph-6 .phase-card { border-left: 3px solid #d9b886; }
+  .ph-7 .phase-card { border-left: 3px solid #d98686; }
+  .ph-8 .phase-card { border-left: 3px solid #86d9a0; }
+  .ph-9 .phase-card { border-left: 3px solid #86b8d9; }
+  .ph-10 .phase-card { border-left: 3px solid #d9b886; }
+
+  .phase-body { font-size: 16px; color: var(--text); }
+  .step-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+  .step-chip {
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    background: var(--canvas);
+    border: 1px solid var(--hairline);
+  }
+  .step-chip.arr { border: none; background: none; color: var(--shade); padding: 4px 2px; font-size: 15px; }
+
+  .lane-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  @media (max-width: 700px) { .lane-row { grid-template-columns: 1fr; } }
+
+  .lane {
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 15px;
+    transition: all 0.15s;
+  }
+  .lane.auto-l {
+    background: #f0faf0;
+    border: 1px solid #c8e6c8;
+  }
+  .lane.human-l {
+    background: #fffbf0;
+    border: 1px solid #e8d8a0;
+  }
+  .lane.db-l {
+    background: #f5f3ff;
+    border: 1px solid #e9d5ff;
+  }
+  .lane.api-l {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+  }
+  .lane h4 {
+    margin: 0 0 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .lane h4 svg {
+    flex-shrink: 0;
+  }
+  .lane ul { margin: 3px 0 0; padding-left: 16px; }
+  .lane li { margin-bottom: 2px; font-size: 14px; color: var(--text); }
+
+  .callout {
+    margin-top: 8px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    background: #f0faf0;
+    border: 1px solid #c8e6c8;
+    color: var(--text);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 8px 0;
+  }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+  .info-box {
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: var(--surface);
+  }
+  .info-box h4 {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .info-box ul { margin: 3px 0 0; padding-left: 16px; }
+  .info-box li { font-size: 15px; margin-bottom: 1px; }
+
+  /* Connector */
+  .connector {
+    position: absolute;
+    bottom: 8px;
+    left: calc(var(--timeline-w) / 2);
+    transform: translateX(-50%);
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--shade);
+    animation: conn-pulse 2s ease-in-out infinite;
+    z-index: 3;
+    transition: opacity 0.3s ease;
+  }
+  @keyframes conn-pulse {
+    0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+    50% { opacity: 0.8; transform: translateX(-50%) translateY(3px); }
+  }
+
+  /* ─── Tech Tab Styles ─── */
+  /* Tech Badges */
+  .tech-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .tech-badge {
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-family: 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    background: #f0f0eb;
+    color: var(--text);
+    border: 1px solid var(--hairline);
+  }
+
+  /* Collapsible JSON details */
+  details.tech-details-payload {
+    margin-top: 12px;
+    border: 1px solid var(--hairline);
+    border-radius: 8px;
+    background: #181816;
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+  details.tech-details-payload[open] {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  details.tech-details-payload summary {
+    padding: 10px 14px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    background: #f1f1eb;
+    border-bottom: 1px solid var(--hairline);
+    outline: none;
+    user-select: none;
+    transition: background 0.2s;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  details.tech-details-payload summary::-webkit-details-marker {
+    display: none;
+  }
+  details.tech-details-payload summary::before {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 6px solid var(--muted);
+    transition: transform 0.2s;
+  }
+  details.tech-details-payload[open] summary::before {
+    transform: rotate(90deg);
+  }
+  details.tech-details-payload summary:hover {
+    background: #e5e5dd;
+  }
+  details.tech-details-payload pre {
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    padding: 14px;
+    font-size: 13px;
+    color: #f8f8f2;
+    overflow-x: auto;
+  }
+  pre, code {
+    font-family: 'Fira Code', 'JetBrains Mono', monospace;
+  }
+  code {
+    background: #e9e9e2;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 90%;
+    color: #c026d3;
+    font-weight: 500;
+  }
+
+  /* Plain Terms Box */
+  .plain-terms-box {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 10px;
+    padding: 16px;
+    margin-top: 14px;
+  }
+  .plain-terms-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #b45309;
+    margin-bottom: 6px;
+  }
+  .plain-terms-icon {
+    color: #d97706;
+    flex-shrink: 0;
+  }
+  .plain-terms-box p {
+    margin: 0;
+    font-size: 14px;
+    color: #78350f;
+    line-height: 1.5;
+  }
+
+  /* Three Parts Cards */
+  .three-parts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  @media (max-width: 768px) {
+    .three-parts-grid { grid-template-columns: 1fr; }
+  }
+  .part-card {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .part-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--ink);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+  }
+  .part-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #e9e9e2;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .part-card h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .part-card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* SVG Connections Map styling */
+  .arch-map-wrapper {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+  }
+  .arch-node {
+    cursor: pointer;
+  }
+  .arch-node rect {
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .arch-node:hover rect,
+  .arch-node.active rect {
+    filter: brightness(0.96);
+    stroke-width: 2.5px;
+  }
+  .arch-link {
+    transition: all 0.2s ease;
+  }
+  .arch-link.active {
+    stroke: var(--ink) !important;
+    stroke-width: 3px !important;
+    marker-end: url(#arrow-active) !important;
+  }
+
+  /* Database Status Trail styling */
+  .status-trail-flow {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  @media (max-width: 768px) {
+    .status-trail-flow { grid-template-columns: 1fr; }
+  }
+  .status-trail-node {
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 16px;
+    transition: all 0.2s ease;
+  }
+  .status-trail-node:hover {
+    border-color: var(--ink);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    transform: translateY(-2px);
+  }
+  .status-node-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .status-node-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #e9e9e2;
+    color: var(--text);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .status-code {
+    font-size: 13px;
+    color: #c026d3;
+    background: #f3f4f6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .status-node-text {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Section Title (Tech Spec View) */
+  .tech-section-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 40px 0 16px;
+    text-align: center;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 12px;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 40px;
+    padding-top: 14px;
+    border-top: 1px solid var(--hairline);
+    text-align: center;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  /* Responsive details */
+  @media (max-width: 640px) {
+    :root {
+      --timeline-w: 52px;
+      --circle-size: 30px;
+    }
+    .phase-card { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <span class="eyebrow"><span class="pulse-dot"></span> Pipeline · 10 phases</span>
+    <h1>Product Image<br>Processing Pipeline</h1>
+    <p class="sub">Onboarding through AI analysis, editing, QC, delivery, and customer revision</p>
+  </div>
+
+  <!-- Primary View Tabs -->
+  <div class="primary-tabs">
+    <button class="tab-trigger active" data-tab="visual">Visual Pipeline</button>
+    <button class="tab-trigger" data-tab="technical">Technical Specs</button>
+  </div>
+
+  <!-- ─── Tab Content: Visual Pipeline ─── -->
+  <div id="tab-content-visual" class="tab-content-pane">
+    <!-- Legend -->
+    <div class="legend">
+      <span class="legend-item"><span class="legend-swatch" style="background:#c1fbd4;"></span> Setup</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#b8d4f0;"></span> Shopify</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#d4f9e0;"></span> AI</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#f0d4f0;"></span> Rules</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#fce7c8;"></span> Human</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:#fdd;"></span> Editor</span>
+      <span class="legend-item" style="margin-left:auto;"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#c8e6c8;"></span> Auto lane</span>
+      <span class="legend-item"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e8d8a0;"></span> Human lane</span>
+    </div>
+
+    <!-- Overview diagram -->
+    <svg viewBox="0 0 1020 130" style="width:100%;height:auto;margin-bottom:32px;display:block;" xmlns="http://www.w3.org/2000/svg" font-family="Inter, -apple-system, sans-serif">
+      <defs>
+        <marker id="ov-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0c0c0"/></marker>
+        <linearGradient id="ov-line" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#c1fbd4"/><stop offset="100%" stop-color="#b8d4f0"/></linearGradient>
+      </defs>
+      <!-- connector line -->
+      <line x1="50" y1="60" x2="970" y2="60" stroke="url(#ov-line)" stroke-width="2" stroke-dasharray="6 4" opacity="0.5"/>
+      <!-- phases -->
+      <g class="svg-node" data-phase="1" style="cursor: pointer;">
+        <rect x="10" y="30" width="80" height="60" rx="10" fill="#c1fbd4" stroke="#86d9a0" stroke-width="1.5"/>
+        <text x="50" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">1.</text>
+        <text x="50" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Onboarding</text>
+      </g>
+      <line x1="90" y1="60" x2="108" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <g class="svg-node" data-phase="2" style="cursor: pointer;">
+        <rect x="112" y="30" width="80" height="60" rx="10" fill="#b8d4f0" stroke="#86b8d9" stroke-width="1.5"/>
+        <text x="152" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">2.</text>
+        <text x="152" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Ingestion</text>
+      </g>
+      <line x1="192" y1="60" x2="210" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <g class="svg-node" data-phase="3" style="cursor: pointer;">
+        <rect x="214" y="30" width="80" height="60" rx="10" fill="#d4f9e0" stroke="#86d9a0" stroke-width="1.5"/>
+        <text x="254" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">3.</text>
+        <text x="254" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">AI Analysis</text>
+      </g>
+      <line x1="294" y1="60" x2="312" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <g class="svg-node" data-phase="4" style="cursor: pointer;">
+        <rect x="316" y="30" width="80" height="60" rx="10" fill="#f0d4f0" stroke="#c886c8" stroke-width="1.5"/>
+        <text x="356" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">4.</text>
+        <text x="356" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Match</text>
+      </g>
+      <line x1="396" y1="60" x2="414" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <g class="svg-node" data-phase="5" style="cursor: pointer;">
+        <rect x="418" y="30" width="80" height="60" rx="10" fill="#f0d4f0" stroke="#c886c8" stroke-width="1.5"/>
+        <text x="458" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">5.</text>
+        <text x="458" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Automation</text>
+      </g>
+      <line x1="498" y1="60" x2="516" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <g class="svg-node" data-phase="6" style="cursor: pointer;">
+        <rect x="520" y="30" width="80" height="60" rx="10" fill="#fce7c8" stroke="#d9b886" stroke-width="1.5"/>
+        <text x="560" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">6.</text>
+        <text x="560" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Assign</text>
+      </g>
+      <line x1="600" y1="60" x2="618" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <g class="svg-node" data-phase="7" style="cursor: pointer;">
+        <rect x="622" y="30" width="80" height="60" rx="10" fill="#fdd" stroke="#d98686" stroke-width="1.5"/>
+        <text x="662" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">7.</text>
+        <text x="662" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Editing</text>
+      </g>
+      <line x1="702" y1="60" x2="720" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <g class="svg-node" data-phase="8" style="cursor: pointer;">
+        <rect x="724" y="30" width="80" height="60" rx="10" fill="#d4f9e0" stroke="#86d9a0" stroke-width="1.5"/>
+        <text x="764" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">8.</text>
+        <text x="764" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">QC</text>
+      </g>
+      <line x1="804" y1="60" x2="822" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <g class="svg-node" data-phase="9" style="cursor: pointer;">
+        <rect x="826" y="30" width="80" height="60" rx="10" fill="#b8d4f0" stroke="#86b8d9" stroke-width="1.5"/>
+        <text x="866" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">9.</text>
+        <text x="866" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Delivery</text>
+      </g>
+      <line x1="906" y1="60" x2="924" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <g class="svg-node" data-phase="10" style="cursor: pointer;">
+        <rect x="928" y="30" width="80" height="60" rx="10" fill="#fce7c8" stroke="#d9b886" stroke-width="1.5"/>
+        <text x="968" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">10.</text>
+        <text x="968" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Revision</text>
+      </g>
+      <!-- rework loop arrow -->
+      <path d="M810 95 L810 112 L500 112 L500 95" fill="none" stroke="#f87171" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ov-arrow)"/>
+      <text x="655" y="108" text-anchor="middle" font-size="9" fill="#f87171" font-weight="600">rework (max 3×)</text>
+      <!-- labels below -->
+      <text x="50" y="120" text-anchor="middle" font-size="8" fill="#999">Setup</text>
+      <text x="152" y="120" text-anchor="middle" font-size="8" fill="#999">Shopify</text>
+      <text x="254" y="120" text-anchor="middle" font-size="8" fill="#999">AI</text>
+      <text x="356" y="120" text-anchor="middle" font-size="8" fill="#999">Rules</text>
+      <text x="458" y="120" text-anchor="middle" font-size="8" fill="#999">Rules</text>
+      <text x="560" y="120" text-anchor="middle" font-size="8" fill="#999">Human</text>
+      <text x="662" y="120" text-anchor="middle" font-size="8" fill="#999">Editor</text>
+      <text x="764" y="120" text-anchor="middle" font-size="8" fill="#999">AI</text>
+      <text x="866" y="120" text-anchor="middle" font-size="8" fill="#999">Shopify</text>
+      <text x="968" y="120" text-anchor="middle" font-size="8" fill="#999">Human</text>
+    </svg>
+
+    <!-- Lane Filter Toolbar -->
+    <div style="display: flex; justify-content: center;">
+      <div class="filter-toolbar">
+        <button class="filter-btn active" data-filter="all">All Phases</button>
+        <button class="filter-btn" data-filter="auto">Automated Lane</button>
+        <button class="filter-btn" data-filter="human">Human Lane</button>
+      </div>
+    </div>
+
+    <!-- Pipeline Timeline -->
+    <div class="flow">
+      <!-- 1 -->
+      <div class="phase ph-1 lane-auto lane-human">
+        <div class="phase-circle">1</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Onboarding</h2><span class="phase-tag">Customer + Admin</span></div>
+          <div class="phase-body">
+            <div class="step-row">
+              <span class="step-chip">Shopify OAuth</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Catalog assigned</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">References uploaded</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Output spec locked</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane auto-l"><h4>Catalog source</h4><ul><li>Admin sets catalog</li><li>Customer selects their own</li><li>No catalog? AI infers from store</li></ul></div>
+              <div class="lane human-l"><h4>Locked spec</h4><ul><li>Dimensions, format, color profile</li><li>Customer done — app takes over</li></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="phase ph-2 lane-auto">
+        <div class="phase-circle">2</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Image Ingestion</h2><span class="phase-tag">Shopify</span></div>
+          <div class="phase-body">
+            <div class="step-row">
+              <span class="step-chip">Webhook: new/updated</span>
+              <span class="step-chip arr">or</span>
+              <span class="step-chip">On-demand request</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Pulled from Shopify</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Organized + queued</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane auto-l"><h4>Organization</h4><ul><li>Grouped by SKU</li><li>Tagged by shot type</li><li>Duplicates skipped</li><li>Missing angles flagged</li></ul></div>
+              <div class="lane human-l"><h4>Corrupt images?</h4><ul><li>Quarantined, admin notified</li><li>Rest continues</li></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="phase ph-3 lane-auto">
+        <div class="phase-circle">3</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>AI Analysis</h2><span class="phase-tag">AI</span></div>
+          <div class="phase-body">
+            <div style="margin-bottom:8px;color:var(--muted);font-size:15px;">Each image measured against catalog + customer references</div>
+            <div class="grid-2">
+              <div class="info-box"><h4>AI checks</h4><ul><li>Background issues</li><li>Color accuracy</li><li>Defects (dust, wrinkles, reflections)</li><li>Framing &amp; alignment</li><li>Resolution</li><li>Lighting &amp; shadows</li><li>Overall deviation score</li></ul></div>
+              <div class="info-box"><h4>Confidence gate</h4><ul><li><strong>High (≥0.80)</strong> → auto proceed</li><li><strong>Medium (0.50–0.79)</strong> → coordinator reviews</li><li><strong>Low (&lt;0.50)</strong> → manual triage</li></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="phase ph-4 lane-auto">
+        <div class="phase-circle">4</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Package Matching</h2><span class="phase-tag">Rules Engine</span></div>
+          <div class="phase-body">
+            <div style="margin-bottom:8px;color:var(--muted);font-size:15px;">Deterministic rules — not AI — map facts to services</div>
+            <div class="lane-row">
+              <div class="lane auto-l"><h4>Auto — runs immediately</h4><ul><li>Background removal</li><li>Resolution upscale</li><li>Straightening &amp; crop</li><li>Resize to spec</li><li>Basic color normalization</li></ul></div>
+              <div class="lane human-l"><h4>Human — needs editor</h4><ul><li>Image retouch</li><li>Ghost mannequin</li><li>Shadow add / edit</li><li>Complex color work</li></ul></div>
+            </div>
+            <div class="callout">Auto lane: no approval needed. Human lane: assigned to editor.</div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="phase ph-5 lane-auto">
+        <div class="phase-circle">5</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Automation Run</h2><span class="phase-tag">Auto</span></div>
+          <div class="phase-body">
+            <div class="step-row">
+              <span class="step-chip">Background cutout</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Upscale</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Straighten + crop</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Resize</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Color normalize</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Saved as v1</span>
+            </div>
+            <div class="callout">No human services needed? → skip to QC. Otherwise → editor assignment.</div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="phase ph-6 lane-human">
+        <div class="phase-circle">6</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Editor Assignment</h2><span class="phase-tag">Human</span></div>
+          <div class="phase-body">
+            <div class="lane-row">
+              <div class="lane auto-l"><h4>Assignment by</h4><ul><li>Skill match (specialist per job type)</li><li>Workload capacity</li><li>Priority</li></ul></div>
+              <div class="lane human-l"><h4>Brief includes</h4><ul><li>Original + auto-processed image</li><li>AI findings with regions highlighted</li><li>Remaining services checklist</li><li>Catalog + references side by side</li><li>Output spec</li></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="phase ph-7 lane-human">
+        <div class="phase-circle">7</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Editing</h2><span class="phase-tag">Editor</span></div>
+          <div class="phase-body">
+            <div class="step-row">
+              <span class="step-chip">Review auto output</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Fix errors if any</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Apply human services</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Submit final</span>
+            </div>
+            <div class="grid-2">
+              <div class="info-box"><h4>Editor does</h4><ul><li>Checks automation — corrects if wrong</li><li>Retouch, ghost mannequin, shadow, color</li></ul></div>
+              <div class="info-box"><h4>Versioning</h4><ul><li>Original never overwritten</li><li>Submitted as versioned edit</li></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="phase ph-8 lane-auto">
+        <div class="phase-circle">8</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>AI QC</h2><span class="phase-tag">AI</span></div>
+          <div class="phase-body">
+            <div style="margin-bottom:8px;color:var(--muted);font-size:15px;">Same model that did analysis checks the edited result</div>
+            <div class="grid-2">
+              <div class="info-box"><h4>Checks against</h4><ul><li>Original issues — were they fixed?</li><li>Catalog standard</li><li>Customer references</li><li>Batch consistency</li></ul></div>
+              <div class="info-box"><h4>Score</h4><ul><li><strong>≥ 90</strong> → passes → delivery</li><li><strong>&lt; 90</strong> → fails → rework</li></ul></div>
+            </div>
+            <div class="note"><strong>Rework:</strong> exact issues + region annotations + reference → editor. <strong>Cap: 3 cycles.</strong> Still failing → human QC reviewer.</div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 9 -->
+      <div class="phase ph-9 lane-auto">
+        <div class="phase-circle">9</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Delivery</h2><span class="phase-tag">Shopify</span></div>
+          <div class="phase-body">
+            <div class="step-row">
+              <span class="step-chip">Written to Shopify (GraphQL)</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Replaces original</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Customer notified</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Before/after logged</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane auto-l"><h4>On success</h4><ul><li>In-app + email notification</li><li>Delivery record saved</li></ul></div>
+              <div class="lane human-l"><h4>Write-back fails</h4><ul><li>Auto-retry 3×</li><li>Still failing → admin alerted</li></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 10 -->
+      <div class="phase ph-10 lane-human">
+        <div class="phase-circle">10</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Customer Revision</h2><span class="phase-tag">Customer + Editor</span></div>
+          <div class="phase-body">
+            <div class="step-row">
+              <span class="step-chip">Select image</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Annotate region</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Pick category</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Add comment</span>
+              <span class="step-chip arr">→</span>
+              <span class="step-chip">Sent to editor</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane auto-l"><h4>Customer submits</h4><ul><li>Select specific image</li><li>Mark region on image</li><li>Category (shadow, color, bg, retouch)</li><li>Free text comment</li></ul></div>
+              <div class="lane human-l"><h4>Editor + QC</h4><ul><li>Editor gets annotation + context</li><li>QC: request addressed? New issues? Still meets standard?</li><li>Passes → delivered. Fails → rework (3 cycles)</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── Tab Content: Technical Specs ─── -->
+  <div id="tab-content-technical" class="tab-content-pane hidden">
+    
+    <!-- Top System Connection Map & Three Core Systems -->
+    <div class="tech-section-title">System Architecture</div>
+    <p style="text-align:center; margin-bottom:16px;">Hover over any system component below to trace its data endpoints and connections in real-time.</p>
+    
+    <div class="arch-map-wrapper">
+      <svg viewBox="0 0 800 450" style="width:100%; height:auto;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+            <path d="M0,0 L10,4 L0,8 Z" fill="#94a3b8"/>
+          </marker>
+          <marker id="arrow-active" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+            <path d="M0,0 L10,4 L0,8 Z" fill="#000000"/>
+          </marker>
+        </defs>
+
+        <!-- Links / Paths -->
+        <path id="path-fe-be-1" d="M 260 50 L 530 50" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arrow)" class="arch-link"/>
+        <path id="path-fe-be-2" d="M 540 80 L 270 80" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arrow)" class="arch-link"/>
+        <path id="path-be-db" d="M 540 100 L 200 180" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arrow)" class="arch-link"/>
+        <path id="path-be-queue" d="M 590 100 L 460 180" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arrow)" class="arch-link"/>
+        <path id="path-be-s3" d="M 650 100 L 650 180" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arrow)" class="arch-link"/>
+        <path id="path-queue-ai" d="M 350 260 L 200 340" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arrow)" class="arch-link"/>
+        <path id="path-queue-shopify" d="M 400 260 L 400 340" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arrow)" class="arch-link"/>
+        <path id="path-queue-image" d="M 450 260 L 600 340" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arrow)" class="arch-link"/>
+
+        <!-- Nodes -->
+        <g id="node-fe" class="arch-node" data-node="fe">
+          <rect x="40" y="30" width="220" height="70" rx="12" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="150" y="60" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700" fill="#1d4ed8">1. FRONTEND</text>
+          <text x="150" y="80" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" fill="#1e40af">(React app)</text>
+        </g>
+        <g id="node-be" class="arch-node" data-node="be">
+          <rect x="540" y="30" width="220" height="70" rx="12" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+          <text x="650" y="60" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700" fill="#15803d">2. BACKEND</text>
+          <text x="650" y="80" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" fill="#166534">(Node.js)</text>
+        </g>
+        <g id="node-db" class="arch-node" data-node="db">
+          <rect x="40" y="190" width="220" height="70" rx="12" fill="#faf5ff" stroke="#a855f7" stroke-width="1.5"/>
+          <text x="150" y="220" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700" fill="#7e22ce">3. DATABASE</text>
+          <text x="150" y="240" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" fill="#6b21a8">(PostgreSQL)</text>
+        </g>
+        <g id="node-queue" class="arch-node" data-node="queue">
+          <rect x="290" y="190" width="220" height="70" rx="12" fill="#fff5f5" stroke="#f87171" stroke-width="1.5"/>
+          <text x="400" y="220" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700" fill="#b91c1c">4. JOB QUEUE</text>
+          <text x="400" y="240" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" fill="#991b1b">(BullMQ &amp; Redis)</text>
+        </g>
+        <g id="node-s3" class="arch-node" data-node="s3">
+          <rect x="540" y="190" width="220" height="70" rx="12" fill="#ecfeff" stroke="#06b6d4" stroke-width="1.5"/>
+          <text x="650" y="220" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700" fill="#0369a1">5. S3 STORAGE</text>
+          <text x="650" y="240" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" fill="#075985">(Images/Files)</text>
+        </g>
+        <g id="node-ai" class="arch-node" data-node="ai">
+          <rect x="40" y="350" width="220" height="70" rx="12" fill="#f5f3ff" stroke="#6366f1" stroke-width="1.5"/>
+          <text x="150" y="380" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700" fill="#4338ca">6. AI MODELS</text>
+          <text x="150" y="400" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" fill="#3730a3">(OpenAI Vision)</text>
+        </g>
+        <g id="node-shopify" class="arch-node" data-node="shopify">
+          <rect x="290" y="350" width="220" height="70" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+          <text x="400" y="380" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700" fill="#047857">7. SHOPIFY API</text>
+          <text x="400" y="400" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" fill="#065f46">(GraphQL)</text>
+        </g>
+        <g id="node-sharp" class="arch-node" data-node="sharp">
+          <rect x="540" y="350" width="220" height="70" rx="12" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+          <text x="650" y="380" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700" fill="#b45309">8. IMAGE TOOLS</text>
+          <text x="650" y="400" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" fill="#78350f">(sharp.js engine)</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="three-parts-grid">
+      <div class="part-card">
+        <div class="part-num">1</div>
+        <h3>Frontend</h3>
+        <p>React dashboard displaying active batches, annotations, and revision controls for editors and clients.</p>
+      </div>
+      <div class="part-card">
+        <div class="part-num">2</div>
+        <h3>Backend</h3>
+        <p>Node.js &amp; TypeScript service running API controllers, matching rules, and dispatching queue workers.</p>
+      </div>
+      <div class="part-card">
+        <div class="part-num">3</div>
+        <h3>Database</h3>
+        <p>PostgreSQL handles relational records (jobs, tokens, spec data), while Redis stores BullMQ queue lines.</p>
+      </div>
+    </div>
+
+    <!-- Technical Specs Timeline -->
+    <div class="tech-section-title">Technical Phase Specifications</div>
+    
+    <div class="flow">
+      <!-- 1. Onboarding -->
+      <div class="phase ph-1">
+        <div class="phase-circle">1</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Onboarding (Install + Spec Setup)</h2><span class="phase-tag">Setup</span></div>
+          <div class="phase-body">
+            <div class="tech-badges">
+              <span class="tech-badge">Shopify OAuth</span>
+              <span class="tech-badge">PostgreSQL</span>
+              <span class="tech-badge">AWS S3</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane db-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-2.239 10-5V7c0-2.761-4.477-5-10-5S2 4.239 2 7v10c0 2.761 4.477 5 10 5z"></path><path d="M2 7c0 2.761 4.477 5 10 5s10-2.239 10-5"></path><path d="M2 12c0 2.761 4.477 5 10 5s10-2.239 10-5"></path></svg>
+                  Database Writes
+                </h4>
+                <ul>
+                  <li>Save Merchant metadata &amp; domain</li>
+                  <li>Save encrypted Shopify access token</li>
+                  <li>S3 file paths &amp; spec records locked to Merchant ID</li>
+                </ul>
+              </div>
+              <div class="lane api-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                  Server &amp; API Actions
+                </h4>
+                <ul>
+                  <li>Execute OAuth handshake exchange</li>
+                  <li>Register Shopify webhook listeners</li>
+                  <li>Push catalog reference specs to S3 storage</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="plain-terms-box">
+              <div class="plain-terms-header">
+                <svg class="plain-terms-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>In Plain Terms</span>
+              </div>
+              <p>Think of Shopify OAuth like clicking "Login with Google". Instead of giving the app your password, Google confirms who you are and hands over a key (access token) that only unlocks specific parts of your account. Same here, Shopify hands over a digital key to manage the store catalog.</p>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 2. Image Ingestion -->
+      <div class="phase ph-2">
+        <div class="phase-circle">2</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Image Ingestion</h2><span class="phase-tag">Shopify</span></div>
+          <div class="phase-body">
+            <div class="tech-badges">
+              <span class="tech-badge">Shopify Webhooks</span>
+              <span class="tech-badge">GraphQL API</span>
+              <span class="tech-badge">BullMQ</span>
+              <span class="tech-badge">Redis</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane db-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-2.239 10-5V7c0-2.761-4.477-5-10-5S2 4.239 2 7v10c0 2.761 4.477 5 10 5z"></path><path d="M2 7c0 2.761 4.477 5 10 5s10-2.239 10-5"></path><path d="M2 12c0 2.761 4.477 5 10 5s10-2.239 10-5"></path></svg>
+                  Database Writes
+                </h4>
+                <ul>
+                  <li>Write <code>batch</code> tracking record</li>
+                  <li>Write individual <code>image_job</code> records</li>
+                  <li>Set status defaults to <code>QUEUED_FOR_ANALYSIS</code></li>
+                </ul>
+              </div>
+              <div class="lane api-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                  Server &amp; API Actions
+                </h4>
+                <ul>
+                  <li>Verify security signature on webhook payloads</li>
+                  <li>Query Shopify GraphQL product endpoints</li>
+                  <li>Enqueue job array to Redis BullMQ worker list</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="plain-terms-box">
+              <div class="plain-terms-header">
+                <svg class="plain-terms-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>In Plain Terms</span>
+              </div>
+              <p>A queue is like a deli counter ticket dispenser. Each image gets a ticket number. Workers handle tickets in order. If the system crashes, ticket numbers aren't lost — they sit safely in Redis waiting for workers to restart.</p>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 3. AI Analysis -->
+      <div class="phase ph-3">
+        <div class="phase-circle">3</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>AI Analysis &amp; Confidence Gate</h2><span class="phase-tag">AI</span></div>
+          <div class="phase-body">
+            <div class="tech-badges">
+              <span class="tech-badge">OpenAI Vision API</span>
+              <span class="tech-badge">PostgreSQL</span>
+              <span class="tech-badge">JSON Schema</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane db-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-2.239 10-5V7c0-2.761-4.477-5-10-5S2 4.239 2 7v10c0 2.761 4.477 5 10 5z"></path><path d="M2 7c0 2.761 4.477 5 10 5s10-2.239 10-5"></path><path d="M2 12c0 2.761 4.477 5 10 5s10-2.239 10-5"></path></svg>
+                  Database Writes
+                </h4>
+                <ul>
+                  <li>Save raw structured AI findings to job row</li>
+                  <li>Update status: <code>ANALYZED</code>, <code>TRIAGE_PENDING</code>, or <code>MANUAL_REVIEW</code></li>
+                </ul>
+              </div>
+              <div class="lane api-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                  Server &amp; API Actions
+                </h4>
+                <ul>
+                  <li>Assemble images + references in OpenAI vision call</li>
+                  <li>Verify JSON facts against validation schema</li>
+                  <li>Apply score logic thresholds (0.80 / 0.50 gates)</li>
+                </ul>
+              </div>
+            </div>
+
+            <details class="tech-details-payload">
+              <summary>View JSON Facts Payload</summary>
+              <pre><code>{
+  "background_is_white": false,
+  "color_cast": "warm",
+  "defects": ["dust", "wrinkle"],
+  "confidence": 0.85
+}</code></pre>
+            </details>
+            
+            <div class="plain-terms-box">
+              <div class="plain-terms-header">
+                <svg class="plain-terms-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>In Plain Terms</span>
+              </div>
+              <p>The worker is like an assistant who picks up a file (image), hands it to an inspector (AI) to check, and files the report (JSON) in the cabinet (database). The AI doesn't decide what happens next; code evaluates the score and routes the job.</p>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 4. Package Matching -->
+      <div class="phase ph-4">
+        <div class="phase-circle">4</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Package Matching</h2><span class="phase-tag">Rules Engine</span></div>
+          <div class="phase-body">
+            <div class="tech-badges">
+              <span class="tech-badge">Rules Engine</span>
+              <span class="tech-badge">PostgreSQL</span>
+              <span class="tech-badge">Node.js Logic</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane db-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-2.239 10-5V7c0-2.761-4.477-5-10-5S2 4.239 2 7v10c0 2.761 4.477 5 10 5z"></path><path d="M2 7c0 2.761 4.477 5 10 5s10-2.239 10-5"></path><path d="M2 12c0 2.761 4.477 5 10 5s10-2.239 10-5"></path></svg>
+                  Database Writes
+                </h4>
+                <ul>
+                  <li>Save <code>service_selection</code> arrays</li>
+                  <li>Update status to <code>READY_FOR_AUTOMATION</code></li>
+                </ul>
+              </div>
+              <div class="lane api-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                  Server &amp; API Actions
+                </h4>
+                <ul>
+                  <li>Read analyzed facts from database</li>
+                  <li>Execute deterministic rule checks (plain code)</li>
+                  <li>Divide selections into <code>autoServices</code> &amp; <code>humanServices</code></li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="plain-terms-box">
+              <div class="plain-terms-header">
+                <svg class="plain-terms-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>In Plain Terms</span>
+              </div>
+              <p>This is a plain code checklist. There is no AI involved. If X is true, choose Y. It is predictable and fast, always generating identical outputs for identical input facts.</p>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 5. Automation Run -->
+      <div class="phase ph-5">
+        <div class="phase-circle">5</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Automation Run</h2><span class="phase-tag">Auto</span></div>
+          <div class="phase-body">
+            <div class="tech-badges">
+              <span class="tech-badge">sharp.js library</span>
+              <span class="tech-badge">AWS S3</span>
+              <span class="tech-badge">Cutout / Upscale APIs</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane db-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-2.239 10-5V7c0-2.761-4.477-5-10-5S2 4.239 2 7v10c0 2.761 4.477 5 10 5z"></path><path d="M2 7c0 2.761 4.477 5 10 5s10-2.239 10-5"></path><path d="M2 12c0 2.761 4.477 5 10 5s10-2.239 10-5"></path></svg>
+                  Database Writes
+                </h4>
+                <ul>
+                  <li>Save paths of files to S3 against job ID</li>
+                  <li>Update status: <code>QUEUED_FOR_EDITOR</code> or <code>QUEUED_FOR_QC</code></li>
+                </ul>
+              </div>
+              <div class="lane api-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                  Server &amp; API Actions
+                </h4>
+                <ul>
+                  <li>Call Cutout &amp; Upscale APIs for pixel-level fixes</li>
+                  <li>Invoke <code>sharp.js</code> to crop, straighten, and resize</li>
+                  <li>Save final automated output to S3 as <code>version_1</code></li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="plain-terms-box">
+              <div class="plain-terms-header">
+                <svg class="plain-terms-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>In Plain Terms</span>
+              </div>
+              <p>Sharp.js is a very fast image processing library for Node.js. Think of it like automated, server-run Photoshop that handles resizing and format changes in milliseconds without a human UI.</p>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 6. Editor Assignment -->
+      <div class="phase ph-6">
+        <div class="phase-circle">6</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Editor Assignment</h2><span class="phase-tag">Human</span></div>
+          <div class="phase-body">
+            <div class="tech-badges">
+              <span class="tech-badge">Assignment Algorithm</span>
+              <span class="tech-badge">PostgreSQL</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane db-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-2.239 10-5V7c0-2.761-4.477-5-10-5S2 4.239 2 7v10c0 2.761 4.477 5 10 5z"></path><path d="M2 7c0 2.761 4.477 5 10 5s10-2.239 10-5"></path><path d="M2 12c0 2.761 4.477 5 10 5s10-2.239 10-5"></path></svg>
+                  Database Writes
+                </h4>
+                <ul>
+                  <li>Log designer assignment row details</li>
+                  <li>Save Compiled Editor Brief JSON</li>
+                  <li>Update status to <code>QUEUED_FOR_EDITOR</code></li>
+                </ul>
+              </div>
+              <div class="lane api-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                  Server &amp; API Actions
+                </h4>
+                <ul>
+                  <li>Query active workload sizes and skill categories</li>
+                  <li>Match job attributes to best designer fit</li>
+                  <li>Compile images, references, and spec sheets to brief</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 7. Editing -->
+      <div class="phase ph-7">
+        <div class="phase-circle">7</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Editing</h2><span class="phase-tag">Editor</span></div>
+          <div class="phase-body">
+            <div class="tech-badges">
+              <span class="tech-badge">React Dashboard</span>
+              <span class="tech-badge">AWS S3</span>
+              <span class="tech-badge">Photoshop Integration</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane db-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-2.239 10-5V7c0-2.761-4.477-5-10-5S2 4.239 2 7v10c0 2.761 4.477 5 10 5z"></path><path d="M2 7c0 2.761 4.477 5 10 5s10-2.239 10-5"></path><path d="M2 12c0 2.761 4.477 5 10 5s10-2.239 10-5"></path></svg>
+                  Database Writes
+                </h4>
+                <ul>
+                  <li>Save paths of files to S3 against job ID</li>
+                  <li>Update status to <code>QUEUED_FOR_QC</code></li>
+                </ul>
+              </div>
+              <div class="lane api-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                  Server &amp; API Actions
+                </h4>
+                <ul>
+                  <li>Read brief items and stream image buffers to UI</li>
+                  <li>Editor performs manual corrections (Photoshop)</li>
+                  <li>Saves editor upload payload to S3 as <code>version_2</code></li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="plain-terms-box">
+              <div class="plain-terms-header">
+                <svg class="plain-terms-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>In Plain Terms</span>
+              </div>
+              <p>The editor dashboard is a React interface reading and writing database records. Uploading is like attaching a file to an email. The image goes directly to secure cloud storage (AWS S3) and the database stores its new link.</p>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 8. AI QC -->
+      <div class="phase ph-8">
+        <div class="phase-circle">8</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>AI QC Verification</h2><span class="phase-tag">AI</span></div>
+          <div class="phase-body">
+            <div class="tech-badges">
+              <span class="tech-badge">OpenAI Vision API</span>
+              <span class="tech-badge">Rework Logic</span>
+              <span class="tech-badge">PostgreSQL</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane db-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-2.239 10-5V7c0-2.761-4.477-5-10-5S2 4.239 2 7v10c0 2.761 4.477 5 10 5z"></path><path d="M2 7c0 2.761 4.477 5 10 5s10-2.239 10-5"></path><path d="M2 12c0 2.761 4.477 5 10 5s10-2.239 10-5"></path></svg>
+                  Database Writes
+                </h4>
+                <ul>
+                  <li>Save QC score, failure checklist &amp; coordinates</li>
+                  <li>Create <code>rework_request</code> log if checks fail</li>
+                  <li>Update status: <code>READY_FOR_DELIVERY</code> or <code>QUEUED_FOR_EDITOR</code></li>
+                </ul>
+              </div>
+              <div class="lane api-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                  Server &amp; API Actions
+                </h4>
+                <ul>
+                  <li>Send original, edited, catalog, &amp; specs to vision API</li>
+                  <li>Evaluate score values against standard threshold (90)</li>
+                  <li>Route based on rework cycle counter limits (3x cap)</li>
+                </ul>
+              </div>
+            </div>
+
+            <details class="tech-details-payload">
+              <summary>View JSON QC Result Payload</summary>
+              <pre><code>{
+  "score": 87,
+  "pass_fail": "fail",
+  "failed_checks": ["shadow_unnatural", "edge_halo"],
+  "feedback": [
+    "Shadow direction wrong — should angle right",
+    "Halo on upper-left collar edge — refine cutout"
+  ],
+  "regions": [{ "label": "collar", "x": 120, "y": 60 }]
+}</code></pre>
+            </details>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 9. Delivery -->
+      <div class="phase ph-9">
+        <div class="phase-circle">9</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Delivery</h2><span class="phase-tag">Shopify</span></div>
+          <div class="phase-body">
+            <div class="tech-badges">
+              <span class="tech-badge">Shopify GraphQL</span>
+              <span class="tech-badge">BullMQ Retries</span>
+              <span class="tech-badge">Sendgrid API</span>
+              <span class="tech-badge">WebSockets</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane db-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-2.239 10-5V7c0-2.761-4.477-5-10-5S2 4.239 2 7v10c0 2.761 4.477 5 10 5z"></path><path d="M2 7c0 2.761 4.477 5 10 5s10-2.239 10-5"></path><path d="M2 12c0 2.761 4.477 5 10 5s10-2.239 10-5"></path></svg>
+                  Database Writes
+                </h4>
+                <ul>
+                  <li>Save delivery timestamps &amp; Shopify transaction IDs</li>
+                  <li>Save final comparative before/after reference links</li>
+                  <li>Update status to <code>DELIVERED</code> (or alert flag if failed)</li>
+                </ul>
+              </div>
+              <div class="lane api-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                  Server &amp; API Actions
+                </h4>
+                <ul>
+                  <li>Call Shopify GraphQL mutation <code>productCreateMedia</code></li>
+                  <li>Overwrite the original target catalog media URL</li>
+                  <li>Dispatch socket alerts and email notifications</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="plain-terms-box">
+              <div class="plain-terms-header">
+                <svg class="plain-terms-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>In Plain Terms</span>
+              </div>
+              <p>If Shopify's API is temporarily down, the worker fails gracefully. BullMQ automatically retries the delivery up to 3 times with exponential backoff delays. If it still fails, it flags a warning on the admin dashboard while keeping the file safely stored in S3.</p>
+            </div>
+          </div>
+        </div>
+        <div class="connector">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <!-- 10. Customer Revision -->
+      <div class="phase ph-10">
+        <div class="phase-circle">10</div>
+        <div class="phase-card">
+          <div class="phase-top"><h2>Customer Revision Request</h2><span class="phase-tag">Revision</span></div>
+          <div class="phase-body">
+            <div class="tech-badges">
+              <span class="tech-badge">Annotation Canvas</span>
+              <span class="tech-badge">API Route</span>
+              <span class="tech-badge">BullMQ Loop</span>
+            </div>
+            <div class="lane-row">
+              <div class="lane db-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-2.239 10-5V7c0-2.761-4.477-5-10-5S2 4.239 2 7v10c0 2.761 4.477 5 10 5z"></path><path d="M2 7c0 2.761 4.477 5 10 5s10-2.239 10-5"></path><path d="M2 12c0 2.761 4.477 5 10 5s10-2.239 10-5"></path></svg>
+                  Database Writes
+                </h4>
+                <ul>
+                  <li>Write new <code>revision_request</code> record</li>
+                  <li>Log coordinates, categories &amp; text notes</li>
+                  <li>Update status: <code>QUEUED_FOR_EDITOR (revision)</code></li>
+                </ul>
+              </div>
+              <div class="lane api-l">
+                <h4>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+                  Server &amp; API Actions
+                </h4>
+                <ul>
+                  <li>Receive feedback JSON via API endpoint</li>
+                  <li>Inject revision metadata back into editor brief</li>
+                  <li>Run comparative AI checking with revision context</li>
+                </ul>
+              </div>
+            </div>
+
+            <details class="tech-details-payload">
+              <summary>View JSON Revision Payload</summary>
+              <pre><code>{
+  "image_id": "img_123",
+  "category": "shadow",
+  "annotation": { "x": 200, "y": 150, "note": "shadow looks wrong here" },
+  "comment": "The shadow looks unnatural on the left side"
+}</code></pre>
+            </details>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Database Status Trail Grid -->
+    <div class="tech-section-title">Database Status Trail Index</div>
+    <p style="text-align:center; margin-bottom:16px;">The complete status lifecycle tracked in PostgreSQL for every image job.</p>
+    
+    <div class="status-trail-flow">
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">1</span>
+          <code class="status-code">QUEUED_FOR_ANALYSIS</code>
+        </div>
+        <p class="status-node-text">Job created and queued in BullMQ. Waiting for an AI analysis worker to pick it up.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">2</span>
+          <code class="status-code">ANALYZING</code>
+        </div>
+        <p class="status-node-text">An AI worker has picked up the job and is calling the OpenAI Vision API with the image and references.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">3</span>
+          <code class="status-code">ANALYZED</code>
+        </div>
+        <p class="status-node-text">AI analysis is complete. Structured JSON facts describing detected features are saved to the database.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">4</span>
+          <code class="status-code">PACKAGE_MATCHED</code>
+        </div>
+        <p class="status-node-text">Rules engine has mapped detected facts to services, dividing them into auto vs human task lists.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">5</span>
+          <code class="status-code">QUEUED_FOR_AUTOMATION</code>
+        </div>
+        <p class="status-node-text">Enqueued to automated image workers for cutout and cropping tasks.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">6</span>
+          <code class="status-code">AUTOMATION_RUNNING</code>
+        </div>
+        <p class="status-node-text">The sharp.js code engine is executing automated cutouts, resizing, and upscaling tasks.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">7</span>
+          <code class="status-code">QUEUED_FOR_EDITOR</code>
+        </div>
+        <p class="status-node-text">Requires manual correction (e.g. mannequin/shadows). Assigned to an editor's inbox brief.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">8</span>
+          <code class="status-code">IN_EDITING</code>
+        </div>
+        <p class="status-node-text">The assigned designer has checked out the brief and is currently editing the image.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">9</span>
+          <code class="status-code">QUEUED_FOR_QC</code>
+        </div>
+        <p class="status-node-text">Designer upload complete. Image is placed in the QC worker queue for automated checking.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">10</span>
+          <code class="status-code">QC_RUNNING</code>
+        </div>
+        <p class="status-node-text">AI vision checks the edited version against original defect arrays and style catalogs.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">11</span>
+          <code class="status-code">READY_FOR_DELIVERY</code>
+        </div>
+        <p class="status-node-text">Image passed quality checks (score &ge; 90) and is queued for Shopify sync workers.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">12</span>
+          <code class="status-code">DELIVERING</code>
+        </div>
+        <p class="status-node-text">GraphQL media synchronization with the Shopify merchant store catalog is currently running.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">13</span>
+          <code class="status-code">DELIVERED</code>
+        </div>
+        <p class="status-node-text">Shopify write-back successful. Merchant alerted via Sendgrid and socket notifications.</p>
+      </div>
+
+      <div class="status-trail-node">
+        <div class="status-node-header">
+          <span class="status-node-num">14</span>
+          <code class="status-code">REVISION_REQUESTED</code>
+        </div>
+        <p class="status-node-text">Merchant rejected the delivery. Visual annotations are logged and the job is returned to editing.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Product Image Pipeline</div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // ─── 1. Primary Tab Switching ───
+    const tabTriggers = document.querySelectorAll('.tab-trigger');
+    const tabPanes = document.querySelectorAll('.tab-content-pane');
+
+    tabTriggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        tabTriggers.forEach(t => t.classList.remove('active'));
+        trigger.classList.add('active');
+
+        const targetTab = trigger.getAttribute('data-tab');
+        tabPanes.forEach(pane => {
+          if (pane.id === `tab-content-${targetTab}`) {
+            pane.classList.remove('hidden');
+          } else {
+            pane.classList.add('hidden');
+          }
+        });
+      });
+    });
+
+    // ─── 2. Visual View: Lane Filtering ───
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const flowContainer = document.querySelector('.flow');
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filterValue = btn.getAttribute('data-filter');
+        flowContainer.className = 'flow'; // Reset
+        if (filterValue !== 'all') {
+          flowContainer.classList.add('filter-' + filterValue);
+        }
+      });
+    });
+
+    // ─── 3. Visual View: SVG Node & Timeline Card Linking ───
+    const svgNodes = document.querySelectorAll('.svg-node');
+    const phaseCards = document.querySelectorAll('.phase');
+
+    svgNodes.forEach(node => {
+      const phaseNum = node.getAttribute('data-phase');
+      const targetCard = document.querySelector(`.phase.ph-${phaseNum}`);
+
+      node.addEventListener('mouseenter', () => {
+        if (targetCard) targetCard.classList.add('highlighted');
+      });
+
+      node.addEventListener('mouseleave', () => {
+        if (targetCard) targetCard.classList.remove('highlighted');
+      });
+
+      node.addEventListener('click', () => {
+        if (targetCard) {
+          targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          targetCard.classList.add('highlighted');
+          setTimeout(() => {
+            if (!node.matches(':hover')) {
+              targetCard.classList.remove('highlighted');
+            }
+          }, 1500);
+        }
+      });
+    });
+
+    phaseCards.forEach(card => {
+      const phaseClass = Array.from(card.classList).find(c => c.startsWith('ph-'));
+      if (phaseClass) {
+        const phaseNum = phaseClass.split('-')[1];
+        const svgNode = document.querySelector(`.svg-node[data-phase="${phaseNum}"]`);
+
+        card.addEventListener('mouseenter', () => {
+          if (svgNode) svgNode.classList.add('active-highlight');
+        });
+
+        card.addEventListener('mouseleave', () => {
+          if (svgNode) svgNode.classList.remove('active-highlight');
+        });
+      }
+    });
+
+    // ─── 4. Technical View: SVG System Connections Map highlights ───
+    const archNodes = document.querySelectorAll('.arch-node');
+    const archLinks = document.querySelectorAll('.arch-link');
+
+    const archConnections = {
+      fe: {
+        nodes: ['node-fe', 'node-be'],
+        links: ['path-fe-be-1', 'path-fe-be-2']
+      },
+      be: {
+        nodes: ['node-be', 'node-fe', 'node-db', 'node-queue', 'node-s3'],
+        links: ['path-fe-be-1', 'path-fe-be-2', 'path-be-db', 'path-be-queue', 'path-be-s3']
+      },
+      db: {
+        nodes: ['node-db', 'node-be'],
+        links: ['path-be-db']
+      },
+      queue: {
+        nodes: ['node-queue', 'node-be', 'node-ai', 'node-shopify', 'node-sharp'],
+        links: ['path-be-queue', 'path-queue-ai', 'path-queue-shopify', 'path-queue-image']
+      },
+      s3: {
+        nodes: ['node-s3', 'node-be'],
+        links: ['path-be-s3']
+      },
+      ai: {
+        nodes: ['node-ai', 'node-queue'],
+        links: ['path-queue-ai']
+      },
+      shopify: {
+        nodes: ['node-shopify', 'node-queue'],
+        links: ['path-queue-shopify']
+      },
+      sharp: {
+        nodes: ['node-sharp', 'node-queue'],
+        links: ['path-queue-image']
+      }
+    };
+
+    archNodes.forEach(node => {
+      node.addEventListener('mouseenter', () => {
+        const nodeId = node.getAttribute('data-node');
+        const activeGroup = archConnections[nodeId];
+        
+        if (activeGroup) {
+          archNodes.forEach(n => n.style.opacity = '0.35');
+          archLinks.forEach(l => l.style.opacity = '0.15');
+
+          activeGroup.nodes.forEach(id => {
+            const targetNode = document.getElementById(id);
+            if (targetNode) {
+              targetNode.style.opacity = '1.0';
+              targetNode.classList.add('active');
+            }
+          });
+
+          activeGroup.links.forEach(id => {
+            const targetLink = document.getElementById(id);
+            if (targetLink) {
+              targetLink.style.opacity = '1.0';
+              targetLink.classList.add('active');
+            }
+          });
+        }
+      });
+
+      node.addEventListener('mouseleave', () => {
+        archNodes.forEach(n => {
+          n.style.opacity = '1.0';
+          n.classList.remove('active');
+        });
+        archLinks.forEach(l => {
+          l.style.opacity = '1.0';
+          l.classList.remove('active');
+        });
+      });
+    });
+  });
+</script>
+</body>
+</html>
