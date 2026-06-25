@@ -700,6 +700,18 @@
     color: var(--muted);
   }
 
+  /* SVG Pipeline Node Hover Transitions */
+  .svg-node circle {
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), stroke-width 0.2s ease;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .svg-node:hover circle,
+  .svg-node.active-highlight circle {
+    transform: scale(1.15);
+    stroke-width: 2.5px;
+  }
+
   /* Responsive details */
   @media (max-width: 640px) {
     :root {
@@ -740,85 +752,106 @@
     <!-- Overview diagram -->
     <svg viewBox="0 0 1020 130" style="width:100%;height:auto;margin-bottom:32px;display:block;" xmlns="http://www.w3.org/2000/svg" font-family="Inter, -apple-system, sans-serif">
       <defs>
-        <marker id="ov-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#c0c0c0"/></marker>
+        <marker id="ov-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#94a3b8"/></marker>
+        <marker id="ov-arrow-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#f87171"/></marker>
         <linearGradient id="ov-line" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#e2ecd5"/><stop offset="100%" stop-color="#dce6f1"/></linearGradient>
       </defs>
-      <!-- connector line -->
-      <line x1="50" y1="60" x2="970" y2="60" stroke="url(#ov-line)" stroke-width="2" stroke-dasharray="6 4" opacity="0.5"/>
-      <!-- phases -->
+
+      <!-- Connecting arrows between nodes -->
+      <line x1="68" y1="45" x2="134" y2="45" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <line x1="170" y1="45" x2="236" y2="45" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <line x1="272" y1="45" x2="338" y2="45" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <line x1="374" y1="45" x2="440" y2="45" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <line x1="476" y1="45" x2="542" y2="45" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <line x1="578" y1="45" x2="644" y2="45" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <line x1="680" y1="45" x2="746" y2="45" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <line x1="782" y1="45" x2="848" y2="45" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+      <line x1="884" y1="45" x2="950" y2="45" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+
+      <!-- Rework Loop Arrow (curves above nodes) -->
+      <path d="M 764,25 C 720,0 500,0 458,25" fill="none" stroke="#f87171" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ov-arrow-red)"/>
+      <text x="611" y="11" text-anchor="middle" font-size="9" fill="#f87171" font-weight="600">rework loop (max 3&times;)</text>
+
+      <!-- Nodes -->
+      <!-- 1 -->
       <g class="svg-node" data-phase="1" style="cursor: pointer;">
-        <rect x="10" y="30" width="80" height="60" rx="10" fill="#e2ecd5" stroke="#b2cbb2" stroke-width="1.5"/>
-        <text x="50" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">1.</text>
-        <text x="50" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Onboarding</text>
+        <circle cx="50" cy="45" r="18" fill="#e2ecd5" stroke="#b2cbb2" stroke-width="1.5"/>
+        <text x="50" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f0f0f">1</text>
+        <text x="50" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">Onboarding</text>
+        <text x="50" y="96" text-anchor="middle" font-size="9" font-weight="500" fill="#999">Setup</text>
       </g>
-      <line x1="90" y1="60" x2="108" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+
+      <!-- 2 -->
       <g class="svg-node" data-phase="2" style="cursor: pointer;">
-        <rect x="112" y="30" width="80" height="60" rx="10" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
-        <text x="152" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">2.</text>
-        <text x="152" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Ingestion</text>
+        <circle cx="152" cy="45" r="18" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
+        <text x="152" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f0f0f">2</text>
+        <text x="152" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">Ingestion</text>
+        <text x="152" y="96" text-anchor="middle" font-size="9" font-weight="500" fill="#999">Auto</text>
       </g>
-      <line x1="192" y1="60" x2="210" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+
+      <!-- 3 -->
       <g class="svg-node" data-phase="3" style="cursor: pointer;">
-        <rect x="214" y="30" width="80" height="60" rx="10" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
-        <text x="254" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">3.</text>
-        <text x="254" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">AI Analysis</text>
+        <circle cx="254" cy="45" r="18" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
+        <text x="254" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f0f0f">3</text>
+        <text x="254" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">AI Analysis</text>
+        <text x="254" y="96" text-anchor="middle" font-size="9" font-weight="500" fill="#999">Auto</text>
       </g>
-      <line x1="294" y1="60" x2="312" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+
+      <!-- 4 -->
       <g class="svg-node" data-phase="4" style="cursor: pointer;">
-        <rect x="316" y="30" width="80" height="60" rx="10" fill="#e2ecd5" stroke="#b2cbb2" stroke-width="1.5"/>
-        <text x="356" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">4.</text>
-        <text x="356" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Match</text>
+        <circle cx="356" cy="45" r="18" fill="#e2ecd5" stroke="#b2cbb2" stroke-width="1.5"/>
+        <text x="356" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f0f0f">4</text>
+        <text x="356" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">Match</text>
+        <text x="356" y="96" text-anchor="middle" font-size="9" font-weight="500" fill="#999">Setup</text>
       </g>
-      <line x1="396" y1="60" x2="414" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+
+      <!-- 5 -->
       <g class="svg-node" data-phase="5" style="cursor: pointer;">
-        <rect x="418" y="30" width="80" height="60" rx="10" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
-        <text x="458" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">5.</text>
-        <text x="458" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Automation</text>
+        <circle cx="458" cy="45" r="18" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
+        <text x="458" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f0f0f">5</text>
+        <text x="458" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">Automation</text>
+        <text x="458" y="96" text-anchor="middle" font-size="9" font-weight="500" fill="#999">Auto</text>
       </g>
-      <line x1="498" y1="60" x2="516" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+
+      <!-- 6 -->
       <g class="svg-node" data-phase="6" style="cursor: pointer;">
-        <rect x="520" y="30" width="80" height="60" rx="10" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
-        <text x="560" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">6.</text>
-        <text x="560" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Assign</text>
+        <circle cx="560" cy="45" r="18" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
+        <text x="560" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f0f0f">6</text>
+        <text x="560" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">Assign</text>
+        <text x="560" y="96" text-anchor="middle" font-size="9" font-weight="500" fill="#999">Auto</text>
       </g>
-      <line x1="600" y1="60" x2="618" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+
+      <!-- 7 -->
       <g class="svg-node" data-phase="7" style="cursor: pointer;">
-        <rect x="622" y="30" width="80" height="60" rx="10" fill="#fce6db" stroke="#e2b4a1" stroke-width="1.5"/>
-        <text x="662" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">7.</text>
-        <text x="662" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Editing</text>
+        <circle cx="662" cy="45" r="18" fill="#fce6db" stroke="#e2b4a1" stroke-width="1.5"/>
+        <text x="662" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f0f0f">7</text>
+        <text x="662" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">Editing</text>
+        <text x="662" y="96" text-anchor="middle" font-size="9" font-weight="500" fill="#999">Human</text>
       </g>
-      <line x1="702" y1="60" x2="720" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+
+      <!-- 8 -->
       <g class="svg-node" data-phase="8" style="cursor: pointer;">
-        <rect x="724" y="30" width="80" height="60" rx="10" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
-        <text x="764" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">8.</text>
-        <text x="764" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">QC</text>
+        <circle cx="764" cy="45" r="18" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
+        <text x="764" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f0f0f">8</text>
+        <text x="764" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">QC</text>
+        <text x="764" y="96" text-anchor="middle" font-size="9" font-weight="500" fill="#999">Auto</text>
       </g>
-      <line x1="804" y1="60" x2="822" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+
+      <!-- 9 -->
       <g class="svg-node" data-phase="9" style="cursor: pointer;">
-        <rect x="826" y="30" width="80" height="60" rx="10" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
-        <text x="866" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">9.</text>
-        <text x="866" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Delivery</text>
+        <circle cx="866" cy="45" r="18" fill="#dce6f1" stroke="#a2b9d2" stroke-width="1.5"/>
+        <text x="866" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f0f0f">9</text>
+        <text x="866" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">Delivery</text>
+        <text x="866" y="96" text-anchor="middle" font-size="9" font-weight="500" fill="#999">Auto</text>
       </g>
-      <line x1="906" y1="60" x2="924" y2="60" stroke="#c0c0c0" stroke-width="1.5" marker-end="url(#ov-arrow)"/>
+
+      <!-- 10 -->
       <g class="svg-node" data-phase="10" style="cursor: pointer;">
-        <rect x="928" y="30" width="80" height="60" rx="10" fill="#fce6db" stroke="#e2b4a1" stroke-width="1.5"/>
-        <text x="968" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#0f0f0f">10.</text>
-        <text x="968" y="70" text-anchor="middle" font-size="10" font-weight="500" fill="#1f2937">Revision</text>
+        <circle cx="968" cy="45" r="18" fill="#fce6db" stroke="#e2b4a1" stroke-width="1.5"/>
+        <text x="968" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#0f0f0f">10</text>
+        <text x="968" y="80" text-anchor="middle" font-size="11" font-weight="600" fill="#1f2937">Revision</text>
+        <text x="968" y="96" text-anchor="middle" font-size="9" font-weight="500" fill="#999">Human</text>
       </g>
-      <!-- rework loop arrow -->
-      <path d="M810 95 L810 112 L500 112 L500 95" fill="none" stroke="#f87171" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ov-arrow)"/>
-      <text x="655" y="108" text-anchor="middle" font-size="9" fill="#f87171" font-weight="600">rework (max 3&times;)</text>
-      <!-- labels below -->
-      <text x="50" y="120" text-anchor="middle" font-size="8" fill="#999">Setup</text>
-      <text x="152" y="120" text-anchor="middle" font-size="8" fill="#999">Auto</text>
-      <text x="254" y="120" text-anchor="middle" font-size="8" fill="#999">Auto</text>
-      <text x="356" y="120" text-anchor="middle" font-size="8" fill="#999">Setup</text>
-      <text x="458" y="120" text-anchor="middle" font-size="8" fill="#999">Auto</text>
-      <text x="560" y="120" text-anchor="middle" font-size="8" fill="#999">Auto</text>
-      <text x="662" y="120" text-anchor="middle" font-size="8" fill="#999">Human</text>
-      <text x="764" y="120" text-anchor="middle" font-size="8" fill="#999">Auto</text>
-      <text x="866" y="120" text-anchor="middle" font-size="8" fill="#999">Auto</text>
-      <text x="968" y="120" text-anchor="middle" font-size="8" fill="#999">Human</text>
     </svg>
 
     <!-- Lane Filter Toolbar -->
