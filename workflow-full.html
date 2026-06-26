@@ -1667,6 +1667,7 @@
             <defs>
               <marker id="arrow-down" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
               <marker id="arrow-down-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker>
+              <marker id="arrow-down-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#22c55e"/></marker>
             </defs>
             <path d="M 320,0 L 320,12 Q 320,20 300,20 L 120,20 Q 100,20 100,28 L 100,40 M 320,12 Q 320,20 340,20 L 520,20 Q 540,20 540,28 L 540,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
           </svg>
@@ -2054,7 +2055,7 @@
             <!-- Fail Path (straight down) -->
             <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
             <!-- Pass Path (diamond right 378 to Right column Delivery 540) -->
-            <path d="M 378,15 C 420,15 540,15 540,40" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <path d="M 378,15 C 420,15 540,15 540,40" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow-down-green)"/>
             <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
           <div class="flowchart-connector-label" style="left: calc(50% + 15px); top: 10px; color: #ef4444;">Fail</div>
@@ -2086,7 +2087,7 @@
         <div class="flowchart-connector" style="grid-row: 38;">
           <svg viewBox="0 0 640 40" preserveAspectRatio="none">
             <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
-            <line x1="540" y1="0" x2="540" y2="40" stroke="#94a3b8" stroke-width="2"/>
+            <line x1="540" y1="0" x2="540" y2="40" stroke="#22c55e" stroke-width="2"/>
             <line x1="100" y1="0" x2="100" y2="40" stroke="#f87171" stroke-width="2" stroke-dasharray="4 3"/>
           </svg>
         </div>
@@ -2112,14 +2113,14 @@
         <!-- Row 40: Connector split rework / loops -->
         <div class="flowchart-connector" style="grid-row: 40; position: relative;">
           <svg viewBox="0 0 640 40" preserveAspectRatio="none" style="display:block; width:100%; height:100%;">
-            <!-- Yes Path (diamond right 378 to Col 4 Human QC 540) -->
-            <path d="M 378,15 C 420,15 540,15 540,40" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-down-red)"/>
+            <!-- Yes Path (diamond right 378 to Center Col 3 Human QC 320) -->
+            <path d="M 378,20 C 378,30 320,30 320,40" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-down-red)"/>
             <!-- No Path (diamond left 262 to Left column rework loop line at x=100) -->
             <path d="M 262,20 L 100,20 L 100,0" fill="none" stroke="#f87171" stroke-width="2"/>
-            <!-- Delivery Path (going down) -->
+            <!-- Delivery Path (going down column 4) -->
             <line x1="540" y1="0" x2="540" y2="40" stroke="#22c55e" stroke-width="2"/>
           </svg>
-          <div class="flowchart-connector-label" style="left: calc(50% + 75px); top: 2px; color: #ef4444;">Yes [3x]</div>
+          <div class="flowchart-connector-label" style="left: calc(50% + 40px); top: 2px; color: #ef4444;">Yes [3x]</div>
           <div class="flowchart-connector-label" style="left: 30%; top: 5px; transform: translateX(-50%); color: #5f6368;">No (back to editor)</div>
         </div>
         
@@ -2130,22 +2131,25 @@
         <div style="grid-column: 2; grid-row: 41; align-self: stretch; display: flex; position: relative; z-index: 1;">
           <!-- Empty column 2 -->
         </div>
-        <div style="grid-column: 3; grid-row: 41; align-self: stretch; display: flex; position: relative; z-index: 1;">
-          <!-- Empty column 3 -->
-        </div>
-        <div class="flowchart-card fc-human lane-human phase ph-8" style="grid-column: 4; grid-row: 41;" data-phase="8">
+        <div class="flowchart-card fc-human lane-human phase ph-8" style="grid-column: 3; grid-row: 41;" data-phase="8">
           <h3>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#e05c3c;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             Human QC
           </h3>
           <p>Manual review fallback completed by a senior coordinator (max rework cap hit).</p>
         </div>
+        <!-- Column 4 green Delivery path vertical line -->
+        <div style="grid-column: 4; grid-row: 41; align-self: stretch; display: flex; justify-content: center; z-index: 1;">
+          <svg width="2" height="100%"><line x1="1" y1="0" x2="1" y2="100%" stroke="#22c55e" stroke-width="2"/></svg>
+        </div>
         
         <!-- Row 42: Connector merge to delivery -->
         <div class="flowchart-connector" style="grid-row: 42;">
           <svg viewBox="0 0 640 40" preserveAspectRatio="none">
-            <!-- Merging Col 4 (Delivery path and Human QC path) to Center Delivered to Shopify -->
-            <path d="M 540,0 C 540,20 320,10 320,40" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow-down)"/>
+            <!-- Green delivery path curves from Col 4 to Center with green arrowhead -->
+            <path d="M 540,0 C 540,20 320,15 320,40" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#arrow-down-green)"/>
+            <!-- Human QC path goes straight down to Center without arrowhead to avoid overlapping -->
+            <line x1="320" y1="0" x2="320" y2="40" stroke="#94a3b8" stroke-width="2"/>
           </svg>
         </div>
         
