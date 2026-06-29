@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product Image Pipeline — Presentation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root {
+  --canvas:   #faf9ff;
+  --ink:      #1E1A33;
+  --muted:    #6B6484;
+  --line:     #DDD9EC;
+  --primary:  #9B93EE;
+  --secondary:#282294;
+
+  /* lane fills */
+  --setup:    #ECEAFC;
+  --auto:     #E3F0FD;
+  --human:    #FDEDE9;
+  --ai:       #FFFAEB;
+  --deliver:  #EDFBF3;
+  --db:       #E9F8F1;
+  --ok:       #E9F8F1;
+  --warn:     #FFF8E1;
+  --error:    #FEF0EF;
+
+  /* lane ink */
+  --setup-ink:   #4238A8;
+  --auto-ink:    #2469A8;
+  --human-ink:   #B83330;
+  --ai-ink:      #9A6B00;
+  --deliver-ink: #1A7A4A;
+  --db-ink:      #1A7A4A;
+  --ok-ink:      #1A7A4A;
+  --error-ink:   #B83330;
+
+  --sans: 'Inter', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --shadow: 0 1px 4px rgba(30,26,51,.06), 0 4px 16px rgba(30,26,51,.07);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: var(--sans);
+  background: #e8e7f0;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── SLIDE ── */
+.page {
+  width: 1480px;
+  height: 980px;
+  background: var(--canvas);
+  display: none;
+  flex-direction: column;
+  padding: 44px 60px 32px;
+  overflow: hidden;
+  position: relative;
+}
+.page.active {
+  display: flex;
+  position: fixed;
+  transform-origin: top left;
+}
+
+/* ── HEADER ── */
+.sh { flex-shrink: 0; text-align: center; margin-bottom: 20px; }
+.eyebrow {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--primary); margin-bottom: 8px;
+}
+.sh h1 { font-size: 52px; font-weight: 800; letter-spacing: -.5px; line-height: 1.05; color: var(--ink); }
+.sh h2 { font-size: 32px; font-weight: 700; letter-spacing: -.3px; color: var(--ink); }
+.sh .sub { font-size: 16px; color: var(--muted); margin-top: 7px; line-height: 1.5; }
+
+/* ── BODY + FOOTER ── */
+.sb { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.sf {
+  flex-shrink: 0; border-top: 1px solid var(--line);
+  padding-top: 10px; margin-top: 12px;
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--muted); font-weight: 500;
+}
+.sf .pn { font-family: var(--mono); color: var(--primary); font-weight: 700; }
+
+/* ── PHASE STRIP ── */
+.phase-strip {
+  display: grid; border: 1px solid var(--line);
+  border-radius: 14px; overflow: hidden;
+  background: #fff; flex-shrink: 0; margin-bottom: 18px;
+}
+.pb {
+  padding: 16px 12px; text-align: center;
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.pb:last-child { border-right: 0; }
+.pb-num  { font-size: 32px; font-weight: 300; line-height: 1; color: var(--ink); }
+.pb-name { font-size: 14px; font-weight: 700; color: var(--ink); }
+.pb-lane { font-size: 12px; color: var(--muted); font-weight: 600; }
+.ph-setup   { background: var(--setup); }
+.ph-auto    { background: var(--auto); }
+.ph-human   { background: var(--human); }
+.ph-deliver { background: var(--deliver); }
+
+/* ── NOTE BAR ── */
+.note-bar {
+  flex-shrink: 0; background: var(--error);
+  border-radius: 10px; padding: 10px 18px;
+  font-size: 14px; font-weight: 600;
+  color: var(--error-ink); text-align: center; margin-bottom: 16px;
+}
+
+/* ── OVERVIEW CARDS ── */
+.card {
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 16px; padding: 24px 26px; box-shadow: var(--shadow);
+}
+.card h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: var(--ink); }
+.card ul  { padding-left: 18px; }
+.card li  { font-size: 15px; color: var(--muted); margin: 8px 0; line-height: 1.6; }
+.card li b { color: var(--ink); font-weight: 600; }
+.two-col   { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+/* ── LEGEND ── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center; margin-bottom: 16px; flex-shrink: 0;
+}
+.leg {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 14px; background: #fff;
+  border: 1px solid var(--line); border-radius: 999px;
+  font-size: 13px; font-weight: 600; color: var(--muted);
+}
+.dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+/* ── FLOW GRID ── */
+.flow-grid {
+  display: grid; align-items: stretch; flex: 1; min-height: 0;
+}
+.flow-col { display: flex; flex-direction: column; min-height: 0; }
+.col-hd {
+  font-size: 12px; font-weight: 800; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--secondary);
+  text-align: center; padding-bottom: 10px;
+  border-bottom: 2px solid var(--line); margin-bottom: 10px; flex-shrink: 0;
+}
+.col-steps {
+  flex: 1; min-height: 0; display: flex;
+  flex-direction: column; justify-content: space-evenly; gap: 6px;
+}
+
+/* ── STEP CARD — clean, no left border ── */
+.step {
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 13px; box-shadow: var(--shadow);
+}
+.step b     { display: block; font-size: 13px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+.step small { display: block; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+
+/* lane tints — background only, no border gimmick */
+.step.s-setup   { background: var(--setup); }
+.step.s-auto    { background: var(--auto); }
+.step.s-human   { background: var(--human); }
+.step.s-ai      { background: var(--ai); }
+.step.s-deliver { background: var(--deliver); }
+.step.s-db      { background: var(--db); }
+.step.s-ok      { background: var(--ok); }
+
+/* ── DECISION ── */
+.decision {
+  background: var(--warn); border: 1.5px solid #e8c84a;
+  border-radius: 10px; padding: 10px 13px;
+}
+.decision b     { display: block; font-size: 13px; font-weight: 800; color: var(--ink); }
+.decision small { display: block; font-size: 12px; color: var(--ai-ink); margin-top: 3px; line-height: 1.4; }
+
+/* ── STEP ROW wrapper ── */
+.col-steps > div {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* ── BADGE ── */
+.badge {
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  padding: 3px 7px; border-radius: 999px;
+  flex-shrink: 0; margin-top: 3px; margin-bottom: 0;
+  white-space: nowrap;
+}
+.bd-step { background: var(--secondary); color: #fff; }
+.bd-db   { background: var(--db);   color: var(--db-ink);    border: 1px solid #8ad5b5; }
+.bd-dec  { background: var(--warn); color: var(--ai-ink);    border: 1px solid #e8c84a; }
+
+/* ── FLOW ARROW ── */
+.flow-arr { display: flex; align-items: center; justify-content: center; }
+
+/* ── ARCHITECTURE ── */
+.layers { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; }
+.layer  { display: grid; grid-template-columns: 130px 1fr; gap: 12px; align-items: stretch; flex: 1; }
+.layer-lbl {
+  border-radius: 12px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  border: 1px solid var(--line); font-weight: 800; font-size: 14px; color: var(--ink); gap: 3px; padding: 10px;
+}
+.layer-lbl small { font-size: 12px; color: var(--muted); font-weight: 600; }
+.components { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.component {
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow);
+}
+.component b     { display: block; font-size: 14px; font-weight: 700; color: var(--ink); }
+.component small { display: block; font-size: 13px; color: var(--muted); margin-top: 5px; line-height: 1.5; }
+.arch-note {
+  flex-shrink: 0; margin-top: 10px; background: #fff;
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 11px 18px; font-size: 13px; color: var(--muted); text-align: center; font-weight: 600;
+}
+
+/* ── STATE MACHINE ── */
+.state-grid { display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0; }
+.state-row  { display: flex; align-items: center; gap: 7px; flex-shrink: 0; }
+.state-chip {
+  background: #fff; border: 1px solid var(--line); border-radius: 8px;
+  padding: 8px 13px; font-family: var(--mono); font-size: 11px;
+  font-weight: 700; color: var(--ink); white-space: nowrap; box-shadow: var(--shadow);
+}
+.sc-ok      { background: var(--ok);     color: var(--ok-ink);     border-color: #8ad5b5; }
+.sc-warn    { background: var(--warn);   color: var(--ai-ink);     border-color: #e8c84a; }
+.sc-error   { background: var(--error);  color: var(--error-ink);  border-color: #f5a09f; }
+.sc-human   { background: var(--human);  color: var(--human-ink);  border-color: #f5a09f; }
+.sc-auto    { background: var(--auto);   color: var(--auto-ink);   border-color: #89c4f0; }
+.sc-deliver { background: var(--deliver);color: var(--deliver-ink);border-color: #8ad5b5; }
+.state-arr  { color: var(--primary); font-size: 16px; font-weight: 700; flex-shrink: 0; }
+
+.branch-panel { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; flex-shrink: 0; }
+.branch {
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 10px; padding: 12px 14px; box-shadow: var(--shadow);
+}
+.branch b { display: block; font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--ink); }
+.branch p { font-size: 13px; color: var(--muted); margin-top: 5px; line-height: 1.4; }
+.b-ok    { background: var(--ok);    } .b-ok    b { color: var(--ok-ink);    }
+.b-warn  { background: var(--warn);  } .b-warn  b { color: var(--ai-ink);    }
+.b-error { background: var(--error); } .b-error b { color: var(--error-ink); }
+.b-human { background: var(--human); } .b-human b { color: var(--human-ink); }
+.b-auto  { background: var(--auto);  } .b-auto  b { color: var(--auto-ink);  }
+
+/* ── TECH GRID ── */
+.tech-grid { display: grid; gap: 12px; flex: 1; min-height: 0; }
+.tech-item {
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow);
+}
+.tech-item b     { display: block; font-size: 15px; font-weight: 700; color: var(--ink); }
+.tech-item small { display: block; font-size: 13px; color: var(--muted); margin-top: 5px; line-height: 1.5; }
+
+/* ── LANE TAG (replaces left border) ── */
+.lane-tag {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: 2px 8px; border-radius: 999px; margin-bottom: 5px;
+}
+.lt-setup   { background: var(--setup);   color: var(--setup-ink);   }
+.lt-auto    { background: var(--auto);    color: var(--auto-ink);    }
+.lt-human   { background: var(--human);   color: var(--human-ink);   }
+.lt-ai      { background: var(--ai);      color: var(--ai-ink);      }
+.lt-deliver { background: var(--deliver); color: var(--deliver-ink); }
+.lt-db      { background: var(--db);      color: var(--db-ink);      }
+
+/* ── CONTROLS ── */
+.controls {
+  position: fixed; bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,.97); border: 1px solid var(--line);
+  border-radius: 14px; padding: 6px 14px;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 8px 32px rgba(30,26,51,.12);
+  z-index: 9999; backdrop-filter: blur(12px); user-select: none;
+}
+.ctrl-btn {
+  background: var(--secondary); color: #fff; border: 0;
+  border-radius: 8px; min-width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-weight: 700; font-size: 15px;
+  font-family: var(--sans); transition: background .15s;
+}
+.ctrl-btn:hover    { background: var(--primary); }
+.ctrl-btn:disabled { background: var(--line); color: var(--muted); cursor: not-allowed; }
+.ctrl-btn.wide     { padding: 0 14px; font-size: 12px; }
+.slide-counter     { font-size: 13px; font-weight: 700; font-family: var(--mono); color: var(--ink); min-width: 52px; text-align: center; }
+
+/* ── EXPORT ── */
+.export-btn {
+  position: absolute; top: 14px; right: 14px;
+  background: #fff; color: var(--muted);
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 5px 12px; font-size: 11px; font-weight: 700;
+  cursor: pointer; z-index: 10; font-family: var(--sans);
+  transition: color .15s, border-color .15s;
+}
+.export-btn:hover { color: var(--secondary); border-color: var(--primary); }
+
+/* ── PRINT ── */
+@media print {
+  .controls, .export-btn { display: none !important; }
+  .page { display: flex !important; position: static !important; transform: none !important; page-break-after: always; break-after: page; width: 100%; height: auto; }
+  @page { size: A3 landscape; margin: 8mm; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════
+     SLIDE 1 — OVERVIEW
+════════════════════════════════ -->
+<section class="page">
+<button class="export-btn" onclick="exportSVG(this,1)">↓ SVG</button>
+
+<div class="sh">
+  <div class="eyebrow">Pipeline — 4 Complete Stages</div>
+  <h1>Product Image<br>Processing Pipeline</h1>
+  <p class="sub">4-stage blueprint spanning onboarding, automation, human editing, and delivery.</p>
+</div>
+
+<div class="sb">
+  <div class="phase-strip" style="grid-template-columns:repeat(4,1fr);">
+    <div class="pb ph-setup"><div class="pb-num">1</div><div class="pb-name">Onboarding &amp; Ingestion</div><div class="pb-lane">Setup</div></div>
+    <div class="pb ph-auto"><div class="pb-num">2</div><div class="pb-name">AI &amp; Automation</div><div class="pb-lane">Auto</div></div>
+    <div class="pb ph-human"><div class="pb-num">3</div><div class="pb-name">Human Editing &amp; QC</div><div class="pb-lane">Human</div></div>
+    <div class="pb ph-deliver"><div class="pb-num">4</div><div class="pb-name">Delivery &amp; Revisions</div><div class="pb-lane">Deliver</div></div>
+  </div>
+
+  <div class="note-bar">Rework loop: editor assignment → Photoshop editing → AI QC. Failed QC loops back up to 3 cycles, then escalates to senior QC.</div>
+
+  <div class="two-col" style="flex:1; align-items:start; margin-top:4px;">
+    <div class="card">
+      <h3>What is now complete</h3>
+      <ul>
+        <li>All confidence gates labeled: <b>C &lt; 0.50</b>, <b>0.50 ≤ C ≤ 0.79</b>, and <b>C ≥ 0.80</b></li>
+        <li>Human-needed gate explicit — human services → <b>editorQueue</b>, pure automation → <b>qcQueue</b></li>
+        <li>AI QC includes pass/fail scoring, rework generation, max rework cap, escalation, and delivery routing</li>
+        <li>Delivery contains Shopify write-back retry, dead-letter quarantine, notifications, audit logging</li>
+        <li>Revision bypasses re-analysis and routes directly to the editor with annotation context</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Completed diagram set</h3>
+      <ul>
+        <li>System architecture layers</li>
+        <li>Simplified 4-stage technical blueprint</li>
+        <li>Core image processing &amp; QC flowchart</li>
+        <li>Database status lifecycle</li>
+        <li>Service and technology mapping</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="sf"><span>Product Image Processing Pipeline — Overview</span><span class="pn">01 / 06</span></div>
+</section>
+
+
+<!-- ════════════════════════════════
+     SLIDE 2 — CORE FLOW
+════════════════════════════════ -->
+<section class="page">
+<button class="export-btn" onclick="exportSVG(this,2)">↓ SVG</button>
+
+<div class="sh">
+  <div class="eyebrow">Pipeline — Complete Flowchart</div>
+  <h2>Core Image Processing &amp; QC Flowchart</h2>
+  <p class="sub">Deterministic routing, AI analysis, confidence gating, human editing, and delivery retry queues.</p>
+</div>
+
+<div class="legend">
+  <span class="leg"><i class="dot" style="background:var(--setup-ink);opacity:.7"></i>Setup</span>
+  <span class="leg"><i class="dot" style="background:var(--auto-ink);opacity:.7"></i>Automated</span>
+  <span class="leg"><i class="dot" style="background:var(--human-ink);opacity:.7"></i>Human</span>
+  <span class="leg"><i class="dot" style="background:var(--ai-ink);opacity:.7"></i>AI</span>
+  <span class="leg"><i class="dot" style="background:var(--deliver-ink);opacity:.7"></i>Deliver</span>
+  <span class="leg" style="background:var(--warn);">◆ Decision</span>
+</div>
+
+<div class="sb">
+<div class="flow-grid" style="grid-template-columns: 1fr 24px 1fr 24px 1fr 24px 1fr 24px 1fr 24px 1fr; flex:1;">
+
+  <div class="flow-col">
+    <div class="col-hd">1. Onboarding</div>
+    <div class="col-steps">
+      <div><div class="badge bd-step">1.1</div><div class="step s-setup"><b>Customer installs app</b><small>OAuth handshake, registers webhooks</small></div></div>
+      <div><div class="badge bd-step">1.2</div><div class="step s-setup"><b>Reference guidelines</b><small>Brand profile &amp; references uploaded to S3</small></div></div>
+      <div><div class="badge bd-step">1.3</div><div class="step s-setup"><b>Output specs locked</b><small>File naming, sizing, ratios, formats</small></div></div>
+    </div>
+  </div>
+
+  <div class="flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><polyline points="12 2 22 12 12 22"/></svg></div>
+
+  <div class="flow-col">
+    <div class="col-hd">2. Ingestion</div>
+    <div class="col-steps">
+      <div><div class="badge bd-step">2.1</div><div class="step s-auto"><b>Auto webhook trigger</b><small>Fires on products/create or update</small></div></div>
+      <div><div class="badge bd-step">2.2</div><div class="step s-auto"><b>On-demand trigger</b><small>Manual API or batch upload via admin</small></div></div>
+      <div><div class="badge bd-step">2.3</div><div class="step s-auto"><b>Fetch source image</b><small>Downloads URL, SKU grouping, pHash dedupe</small></div></div>
+    </div>
+  </div>
+
+  <div class="flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><polyline points="12 2 22 12 12 22"/></svg></div>
+
+  <div class="flow-col">
+    <div class="col-hd">3. AI Analysis</div>
+    <div class="col-steps">
+      <div><div class="badge bd-step">3.1</div><div class="step s-ai"><b>analyzeImage</b><small>Detects defects, ghosts, models, color casts</small></div></div>
+      <div><div class="badge bd-dec">3.2</div><div class="decision"><b>Confidence Gate</b><small>&lt;50% → Editor Queue<br>50–79% → Editor Queue<br>≥80% → Rules mapping</small></div></div>
+    </div>
+  </div>
+
+  <div class="flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><polyline points="12 2 22 12 12 22"/></svg></div>
+
+  <div class="flow-col">
+    <div class="col-hd">4. Automation</div>
+    <div class="col-steps">
+      <div><div class="badge bd-step">4.1</div><div class="step s-setup"><b>Rules engine mapping</b><small>Deterministic facts → catalog matches</small></div></div>
+      <div><div class="badge bd-step">4.2</div><div class="step s-auto"><b>Automation worker</b><small>remove.bg, ESRGAN, sharp.js resize</small></div></div>
+      <div><div class="badge bd-dec">4.3</div><div class="decision"><b>Human edit needed?</b><small>Yes → Editor Queue<br>No → AI QC check</small></div></div>
+    </div>
+  </div>
+
+  <div class="flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><polyline points="12 2 22 12 12 22"/></svg></div>
+
+  <div class="flow-col">
+    <div class="col-hd">5. Human &amp; QC</div>
+    <div class="col-steps">
+      <div><div class="badge bd-step">5.1</div><div class="step s-human"><b>Editor Queue</b><small>V1 + AI findings brief for assigned editor</small></div></div>
+      <div><div class="badge bd-step">5.2</div><div class="step s-human"><b>Photoshop corrections</b><small>Manual retouching, ghost mannequin, lighting</small></div></div>
+      <div><div class="badge bd-step">5.3</div><div class="step s-ai"><b>AI QC cross-check</b><small>ai-gateway wraps vision checking logic</small></div></div>
+      <div><div class="badge bd-dec">5.4</div><div class="decision"><b>Score ≥ 90?</b><small>Yes → Shopify write-back<br>No ↩ Editor Queue</small></div></div>
+    </div>
+  </div>
+
+  <div class="flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><polyline points="12 2 22 12 12 22"/></svg></div>
+
+  <div class="flow-col">
+    <div class="col-hd">6. Delivery</div>
+    <div class="col-steps">
+      <div><div class="badge bd-step">6.1</div><div class="step s-ok"><b>Shopify write-back</b><small>GraphQL productCreateMedia + exponential backoff</small></div></div>
+      <div><div class="badge bd-step">6.2</div><div class="step s-deliver"><b>Merchant notified</b><small>In-app alert, SendGrid email, socket update</small></div></div>
+      <div><div class="badge bd-step">6.3</div><div class="step s-human"><b>Merchant logs revision</b><small>Canvas annotations → direct to Editor Queue</small></div></div>
+    </div>
+  </div>
+
+</div>
+
+<div style="flex-shrink:0; margin-top:10px; padding-top:8px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-size:13px; font-weight:600; color:var(--muted);">
+  <span>Flow: Onboarding → Ingestion → AI Analysis → Automation → Human &amp; QC → Delivery</span>
+  <span style="color:var(--human-ink);">QC rework &amp; revision loops shown above</span>
+</div>
+</div>
+
+<div class="sf"><span>Product Image Processing Pipeline — Core Flow</span><span class="pn">02 / 06</span></div>
+</section>
+
+
+<!-- ════════════════════════════════
+     SLIDE 3 — ARCHITECTURE
+════════════════════════════════ -->
+<section class="page">
+<button class="export-btn" onclick="exportSVG(this,3)">↓ SVG</button>
+
+<div class="sh">
+  <div class="eyebrow">Pipeline — System Architecture</div>
+  <h2>System Architecture — Complete 5-Layer Diagram</h2>
+  <p class="sub">Decoupled UI, API, workers, AI gateway, and storage/queue foundations.</p>
+</div>
+
+<div class="sb">
+<div class="layers">
+  <div class="layer">
+    <div class="layer-lbl" style="background:var(--setup);">Layer 5<small>Web UI</small></div>
+    <div class="components">
+      <div class="component"><b>Merchant Admin Dashboard</b><small>Catalog setup, batch triggers, revision requests</small></div>
+      <div class="component"><b>Editor Workspace</b><small>Briefs, assignments, uploads, QC feedback</small></div>
+      <div class="component"><b>HTML5 Revision Canvas</b><small>Coordinate annotations over delivered images</small></div>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-lbl" style="background:var(--auto);">Layer 4<small>API Plane</small></div>
+    <div class="components">
+      <div class="component"><b>Shopify OAuth Handlers</b><small>Install flow, token exchange, encrypted sessions</small></div>
+      <div class="component"><b>Webhook Receivers</b><small>HMAC validation for product/update and app events</small></div>
+      <div class="component"><b>Internal Control Endpoints</b><small>Catalog, references, editor submissions, revision API</small></div>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-lbl" style="background:var(--ok);">Layer 3<small>Workers</small></div>
+    <div class="components">
+      <div class="component"><b>Organizer + Analysis</b><small>batch-organizer, analysis-worker</small></div>
+      <div class="component"><b>Rules + Automation</b><small>package-engine, automation-worker</small></div>
+      <div class="component"><b>Human / QC / Delivery</b><small>editor-queue-service, qc-worker, delivery-worker</small></div>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-lbl" style="background:var(--ai);">Layer 2<small>AI Gateway</small></div>
+    <div class="components">
+      <div class="component"><b>ai-gateway.ts Wrapper</b><small>Swappable API wrapper, prompts, schema normalization</small></div>
+      <div class="component"><b>GPT-5.5 Vision API</b><small>Structured analysis and QC verification</small></div>
+      <div class="component"><b>GPT-4o-mini API</b><small>Lightweight shot-type tagging and organization support</small></div>
+    </div>
+  </div>
+  <div class="layer">
+    <div class="layer-lbl" style="background:var(--db);">Layer 1<small>Storage &amp; Queue</small></div>
+    <div class="components">
+      <div class="component"><b>PostgreSQL</b><small>Relational job, result, assignment, delivery, audit tables</small></div>
+      <div class="component"><b>Redis + BullMQ</b><small>Crash-safe queue state, retries, worker locks</small></div>
+      <div class="component"><b>AWS S3</b><small>Original images, reference assets, versioned outputs</small></div>
+    </div>
+  </div>
+</div>
+<div class="arch-note">Core principle: AI detects and reports structured facts — deterministic code decides routing, service matching, retries, and escalations.</div>
+</div>
+
+<div class="sf"><span>Product Image Processing Pipeline — System Architecture</span><span class="pn">03 / 06</span></div>
+</section>
+
+
+<!-- ════════════════════════════════
+     SLIDE 4 — 4-STAGE BLUEPRINT
+════════════════════════════════ -->
+<section class="page">
+<button class="export-btn" onclick="exportSVG(this,4)">↓ SVG</button>
+
+<div class="sh">
+  <div class="eyebrow">Pipeline — 4-Stage Blueprint</div>
+  <h2>4-Stage Technical Flow Blueprint</h2>
+  <p class="sub">Chronological progression — database transitions, vision API calls, worker actions, and retry loops.</p>
+</div>
+
+<div class="sb">
+<div class="flow-grid" style="grid-template-columns: 1fr 24px 1fr 24px 1fr 24px 1fr; flex:1;">
+
+  <div class="flow-col">
+    <div class="col-hd">1. Ingestion</div>
+    <div class="col-steps">
+      <div><div class="badge bd-step">1.1</div><div class="step s-setup"><b>Shopify App Install</b><small>OAuth handshake, registers webhooks</small></div></div>
+      <div><div class="badge bd-db">1.2</div><div class="step s-db"><b>Session Setup</b><small>Saves auth tokens, sets up merchant profile</small></div></div>
+      <div><div class="badge bd-db">1.3</div><div class="step s-db"><b>Refs Saved to S3</b><small>Guidelines &amp; reference assets stored</small></div></div>
+      <div><div class="badge bd-step">1.4</div><div class="step s-setup"><b>Register Webhooks</b><small>Endpoints saved to Shopify API</small></div></div>
+      <div><div class="badge bd-db">1.5</div><div class="step s-db"><b>Job Init &amp; Redis Push</b><small>Enqueues job in crash-safe Redis queue</small></div></div>
+      <div><div class="badge bd-step">1.6</div><div class="step s-auto"><b>Webhook Import</b><small>HMAC validated trigger fetches source media</small></div></div>
+    </div>
+  </div>
+
+  <div class="flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><polyline points="12 2 22 12 12 22"/></svg></div>
+
+  <div class="flow-col">
+    <div class="col-hd">2. Automation</div>
+    <div class="col-steps">
+      <div><div class="badge bd-db">2.1</div><div class="step s-db"><b>Save Analysis Result</b><small>Visual defect facts saved to Postgres</small></div></div>
+      <div><div class="badge bd-db">2.2</div><div class="step s-db"><b>service_selection</b><small>Flags background, resize, retouch options</small></div></div>
+      <div><div class="badge bd-step">2.3</div><div class="step s-auto"><b>Analysis Worker</b><small>Orchestrates data &amp; enqueues AI requests</small></div></div>
+      <div><div class="badge bd-step">2.4</div><div class="step s-setup"><b>Package Engine Rules</b><small>bg.white==false → BG Removal · res.low==true → Upscale</small></div></div>
+      <div><div class="badge bd-step">2.5</div><div class="step s-auto"><b>Automation Worker</b><small>Runs remove.bg, ESRGAN, &amp; sharp.js</small></div></div>
+      <div><div class="badge bd-step">2.6</div><div class="step s-ai"><b>ai-gateway.analyzeImage</b><small>Extracts schema-enforced structured facts</small></div></div>
+      <div><div class="badge bd-dec">2.7</div><div class="decision"><b>Confidence Gate</b><small>&lt;50% Triage · 50–79% Review · ≥80% Auto</small></div></div>
+    </div>
+  </div>
+
+  <div class="flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><polyline points="12 2 22 12 12 22"/></svg></div>
+
+  <div class="flow-col">
+    <div class="col-hd">3. Editing &amp; QC</div>
+    <div class="col-steps">
+      <div><div class="badge bd-step">3.1</div><div class="step s-human"><b>Photoshop Manual Edits</b><small>Mannequins, lighting, &amp; retouching fixes</small></div></div>
+      <div><div class="badge bd-step">3.2</div><div class="step s-human"><b>Submit V2 to QC</b><small>Editor output version uploaded to S3</small></div></div>
+      <div><div class="badge bd-db">3.3</div><div class="step s-db"><b>Save edit_version V2</b><small>Maps S3 key to editor performance logs</small></div></div>
+      <div><div class="badge bd-db">3.4</div><div class="step s-db"><b>Save qc_result</b><small>Stores pass/fail &amp; AI QC metric logs</small></div></div>
+      <div><div class="badge bd-step">3.5</div><div class="step s-human"><b>editor-queue-service</b><small>Aggregates briefings &amp; triggers tasks</small></div></div>
+      <div><div class="badge bd-step">3.6</div><div class="step s-auto"><b>QC Worker Starts</b><small>Triggers check on V2 upload events</small></div></div>
+      <div><div class="badge bd-step">3.7</div><div class="step s-ai"><b>ai-gateway.qcImage</b><small>AI checks alignment, specs, &amp; defects</small></div></div>
+      <div><div class="badge bd-dec">3.8</div><div class="decision"><b>QC Pass (Score ≥ 90)?</b><small>Yes → Writeback · No → Rework loop</small></div></div>
+    </div>
+  </div>
+
+  <div class="flow-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="2" y1="12" x2="22" y2="12"/><polyline points="12 2 22 12 12 22"/></svg></div>
+
+  <div class="flow-col">
+    <div class="col-hd">4. Delivery</div>
+    <div class="col-steps">
+      <div><div class="badge bd-step">4.1</div><div class="step s-deliver"><b>delivery-worker</b><small>S3 source to Shopify + exponential backoffs</small></div></div>
+      <div><div class="badge bd-step">4.2</div><div class="step s-deliver"><b>Merchant Alert</b><small>App notification &amp; SendGrid email</small></div></div>
+      <div><div class="badge bd-step">4.3</div><div class="step s-human"><b>Merchant logs Revision</b><small>Annotations on HTML5 canvas overlay</small></div></div>
+      <div><div class="badge bd-db">4.4</div><div class="step s-db"><b>revision_request</b><small>Stores annotations coordinate payload</small></div></div>
+      <div><div class="badge bd-db">4.5</div><div class="step s-db"><b>Status DELIVERED</b><small>Shopify writeback state transition</small></div></div>
+      <div><div class="badge bd-step">4.6</div><div class="step s-human"><b>Direct Editor Queue</b><small>Bypasses initial vision analysis pipeline</small></div></div>
+      <div><div class="badge bd-step">4.7</div><div class="step s-deliver"><b>Shopify API Writeback</b><small>GraphQL productCreateMedia</small></div></div>
+      <div><div class="badge bd-step">4.8</div><div class="step s-ai"><b>Revision-aware QC</b><small>Checks if canvas defects are resolved</small></div></div>
+    </div>
+  </div>
+
+</div>
+<div class="note-bar" style="margin-top:10px;">Failed QC → rework request to editor (up to 3 cycles, then senior escalation). Revisions skip analysis and re-enter at the editor queue.</div>
+</div>
+
+<div class="sf"><span>Product Image Processing Pipeline — 4-Stage Blueprint</span><span class="pn">04 / 06</span></div>
+</section>
+
+
+<!-- ════════════════════════════════
+     SLIDE 5 — STATUS LIFECYCLE
+════════════════════════════════ -->
+<section class="page">
+<button class="export-btn" onclick="exportSVG(this,5)">↓ SVG</button>
+
+<div class="sh">
+  <div class="eyebrow">Pipeline — Status Lifecycle</div>
+  <h2>Database Status Lifecycle — State Machine</h2>
+  <p class="sub">Standard transition steps including confidence branching, rework loops, retry paths, escalation, and revision.</p>
+</div>
+
+<div class="sb">
+<div class="state-grid">
+  <div class="state-row">
+    <div class="state-chip sc-auto">QUEUED_FOR_ANALYSIS</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-auto">ANALYZING</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-auto">ANALYZED</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-warn">CONFIDENCE_GATE</div>
+  </div>
+  <div class="branch-panel">
+    <div class="branch b-error"><b>MANUAL_REVIEW</b><p>C &lt; 0.50 — human triage required.</p></div>
+    <div class="branch b-warn"><b>COORDINATOR_REVIEW</b><p>0.50 ≤ C ≤ 0.79</p></div>
+    <div class="branch b-ok"><b>PACKAGE_MATCHED</b><p>C ≥ 0.80 or approved.</p></div>
+  </div>
+  <div class="state-row">
+    <div class="state-chip">PACKAGE_MATCHED</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-auto">QUEUED_FOR_AUTOMATION</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-auto">AUTOMATION_RUNNING</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-warn">HUMAN_LANE_GATE</div>
+  </div>
+  <div class="branch-panel">
+    <div class="branch b-human"><b>QUEUED_FOR_EDITOR</b><p>Editor task or rework assignment.</p></div>
+    <div class="branch b-auto"><b>QUEUED_FOR_QC</b><p>Pure automation or editor submitted.</p></div>
+    <div class="branch b-human"><b>IN_EDITING</b><p>Editor manual corrections in progress.</p></div>
+  </div>
+  <div class="state-row">
+    <div class="state-chip sc-auto">QUEUED_FOR_QC</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-auto">QC_RUNNING</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-warn">QC_EVALUATION_GATE</div>
+  </div>
+  <div class="branch-panel">
+    <div class="branch b-ok"><b>READY_FOR_DELIVERY</b><p>QC score ≥ 90.</p></div>
+    <div class="branch b-error"><b>QUEUED_FOR_EDITOR</b><p>QC score &lt; 90 (rework &lt; 3).</p></div>
+    <div class="branch b-error"><b>ESCALATED</b><p>QC score &lt; 90 (rework ≥ 3).</p></div>
+  </div>
+  <div class="state-row">
+    <div class="state-chip sc-ok">READY_FOR_DELIVERY</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-deliver">DELIVERING</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-warn">RETRY_GATE</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-ok">DELIVERED</div>
+    <div class="state-arr">→</div>
+    <div class="state-chip sc-human">REVISION_REQUESTED</div>
+  </div>
+</div>
+<div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:14px; flex-shrink:0;">
+  <div class="branch b-error"><b>QUARANTINED</b><p>Corrupt image or API failure exhaustion.</p></div>
+  <div class="branch b-warn"><b>DELIVERING</b><p>Retry with exponential backoff.</p></div>
+  <div class="branch b-ok"><b>DELIVERED</b><p>Successful Shopify store write-back.</p></div>
+  <div class="branch b-human"><b>REVISION_REQUESTED</b><p>Direct editor queue, bypasses analysis.</p></div>
+</div>
+</div>
+
+<div class="sf"><span>Product Image Processing Pipeline — Status Lifecycle</span><span class="pn">05 / 06</span></div>
+</section>
+
+
+<!-- ════════════════════════════════
+     SLIDE 6 — TECHNOLOGY MAP
+════════════════════════════════ -->
+<section class="page">
+<button class="export-btn" onclick="exportSVG(this,6)">↓ SVG</button>
+
+<div class="sh">
+  <div class="eyebrow">Pipeline — Service &amp; Technology Map</div>
+  <h2>Service &amp; Technology Mapping</h2>
+  <p class="sub">Full technology stack — third-party services, internal workers, and infrastructure.</p>
+</div>
+
+<div class="sb">
+<div style="flex:1; min-height:0; display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:repeat(4,1fr); gap:12px;">
+  <div class="tech-item"><div class="lane-tag lt-setup">Setup</div><b>Shopify OAuth + Webhooks</b><small>Install flow, HMAC-validated product/update events, token exchange via encrypted sessions</small></div>
+  <div class="tech-item"><div class="lane-tag lt-auto">Queue</div><b>BullMQ + Redis</b><small>Crash-safe job queue, worker locks, exponential backoff retries, dead-letter routing</small></div>
+  <div class="tech-item"><div class="lane-tag lt-db">Storage</div><b>PostgreSQL</b><small>Relational tables for jobs, results, assignments, delivery records, audit logs, and revisions</small></div>
+  <div class="tech-item"><div class="lane-tag lt-db">Storage</div><b>AWS S3</b><small>Versioned storage for original images, brand reference assets, V1/V2 editor outputs</small></div>
+  <div class="tech-item"><div class="lane-tag lt-ai">AI</div><b>ai-gateway.ts</b><small>Swappable wrapper normalizing prompts &amp; enforcing JSON schema output across providers</small></div>
+  <div class="tech-item"><div class="lane-tag lt-ai">AI</div><b>GPT-5.5 Vision API</b><small>Structured defect analysis, QC verification, confidence scoring, rework report generation</small></div>
+  <div class="tech-item"><div class="lane-tag lt-ai">AI</div><b>GPT-4o-mini API</b><small>Lightweight shot-type tagging, SKU grouping, and batch organization support</small></div>
+  <div class="tech-item"><div class="lane-tag lt-auto">Automation</div><b>remove.bg + ESRGAN</b><small>Automated background removal and AI super-resolution upscaling via automation-worker</small></div>
+  <div class="tech-item"><div class="lane-tag lt-auto">Automation</div><b>sharp.js</b><small>High-performance Node.js image cropping, resizing, format conversion, spec enforcement</small></div>
+  <div class="tech-item"><div class="lane-tag lt-deliver">Notify</div><b>SendGrid</b><small>Transactional email for merchant alerts on job completion, rework, and escalation events</small></div>
+  <div class="tech-item"><div class="lane-tag lt-setup">Realtime</div><b>WebSocket (Socket.IO)</b><small>Real-time in-app status updates, QC score pushes, and revision confirmation signals</small></div>
+  <div class="tech-item"><div class="lane-tag lt-human">Human</div><b>HTML5 Canvas Overlay</b><small>Coordinate-based annotation tool for merchant revision requests, bypasses re-analysis</small></div>
+</div>
+</div>
+
+<div class="sf"><span>Product Image Processing Pipeline — Technology Map</span><span class="pn">06 / 06</span></div>
+</section>
+
+
+<script>
+const SLIDE_W = 1480, SLIDE_H = 980;
+let current = 0, pages = [];
+
+function scaleSlide() {
+  const p = pages[current]; if (!p) return;
+  const scale = Math.min(window.innerWidth / SLIDE_W, window.innerHeight / SLIDE_H);
+  const sw = SLIDE_W * scale, sh = SLIDE_H * scale;
+  p.style.width = SLIDE_W + "px"; p.style.height = SLIDE_H + "px";
+  p.style.left = Math.round((window.innerWidth - sw) / 2) + "px";
+  p.style.top  = Math.round((window.innerHeight - sh) / 2) + "px";
+  p.style.transform = "scale(" + scale + ")";
+}
+function showSlide(idx) {
+  pages.forEach(p => p.classList.remove("active"));
+  current = Math.max(0, Math.min(idx, pages.length - 1));
+  pages[current].classList.add("active");
+  if (window._counter) {
+    window._counter.textContent = (current + 1) + " / " + pages.length;
+    window._prev.disabled = current === 0;
+    window._next.disabled = current === pages.length - 1;
+  }
+  scaleSlide();
+}
+function buildControls() {
+  const bar = document.createElement("div"); bar.className = "controls";
+  const prev = document.createElement("button"); prev.className = "ctrl-btn"; prev.innerHTML = "&#8592;"; prev.onclick = () => showSlide(current - 1);
+  const ctr  = document.createElement("div");  ctr.className = "slide-counter";
+  const next = document.createElement("button"); next.className = "ctrl-btn"; next.innerHTML = "&#8594;"; next.onclick = () => showSlide(current + 1);
+  const fs   = document.createElement("button"); fs.className = "ctrl-btn wide"; fs.textContent = "Fullscreen";
+  fs.onclick = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+  bar.append(prev, ctr, next, fs); document.body.appendChild(bar);
+  window._prev = prev; window._next = next; window._counter = ctr;
+}
+document.addEventListener("keydown", e => {
+  if (["ArrowRight"," ","PageDown"].includes(e.key)) { e.preventDefault(); showSlide(current + 1); }
+  if (["ArrowLeft","PageUp"].includes(e.key)) { e.preventDefault(); showSlide(current - 1); }
+  if (e.key === "Home") showSlide(0);
+  if (e.key === "End")  showSlide(pages.length - 1);
+});
+window.addEventListener("resize", scaleSlide);
+document.addEventListener("fullscreenchange", () => {
+  const b = document.querySelector(".ctrl-btn.wide");
+  if (b) b.textContent = document.fullscreenElement ? "Exit" : "Fullscreen";
+  setTimeout(scaleSlide, 50);
+});
+function exportSVG(btn, n) {
+  const s = btn.closest("section.page");
+  let css = ""; try { css = [...document.styleSheets].flatMap(sh => { try { return [...sh.cssRules]; } catch(e){ return []; } }).map(r => r.cssText).join("\n"); } catch(e) {}
+  const svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+  svg.setAttribute("xmlns","http://www.w3.org/2000/svg"); svg.setAttribute("viewBox",`0 0 ${SLIDE_W} ${SLIDE_H}`); svg.setAttribute("width",SLIDE_W); svg.setAttribute("height",SLIDE_H);
+  const st = document.createElementNS("http://www.w3.org/2000/svg","style"); st.textContent = css; svg.appendChild(st);
+  const fo = document.createElementNS("http://www.w3.org/2000/svg","foreignObject"); fo.setAttribute("x","0"); fo.setAttribute("y","0"); fo.setAttribute("width",SLIDE_W); fo.setAttribute("height",SLIDE_H);
+  const cl = s.cloneNode(true); cl.querySelector(".export-btn")?.remove();
+  const dv = document.createElement("div"); dv.setAttribute("xmlns","http://www.w3.org/1999/xhtml");
+  dv.style.cssText = `margin:0;width:${SLIDE_W}px;height:${SLIDE_H}px;box-sizing:border-box;background:#faf9ff;overflow:hidden;padding:44px 60px 32px;display:flex;flex-direction:column;`;
+  dv.innerHTML = cl.innerHTML; fo.appendChild(dv); svg.appendChild(fo);
+  const blob = new Blob([new XMLSerializer().serializeToString(svg)],{type:"image/svg+xml;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href = url; a.download = `slide_${n}.svg`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+function init() {
+  pages = [...document.querySelectorAll("section.page")]; if (!pages.length) return;
+  buildControls(); showSlide(0);
+}
+document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", init) : init();
+</script>
+</body>
+</html>
